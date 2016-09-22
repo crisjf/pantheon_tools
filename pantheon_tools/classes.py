@@ -11,153 +11,6 @@ try:
 except:
     import pickle
 
-def id_type(I):
-	if _isnum(I):
-		return 'curid'
-	elif I.isdigit():
-		return 'curid'
-	elif (I[0].lower() == 'q')&(I[1:].isdigit()):
-		return 'wdid'
-	else:
-		return 'title'
-
-
-class Occ(object):
-	def __init__(self):
-		'''
-		Occupation classifier based onf Wikipedia and Wikidata information.
-		'''
-		path = os.path.split(__file__)[0]+'/data/'
-		print 'Loading data from:\n'+path
-		f = open(path+'trained_classifier.pkl', 'rb')
-		self.classifier = pickle.load(f)
-		f.close()
-
-		self.lmt = WordNetLemmatizer()
-		self.sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
-
-		self.occ_vocab = set(open(path+'occ_vocab.txt').read().split('\n'))
-		self.tpc_vocab = set(open(path+'tpc_vocab.txt').read().split('\n'))
-
-		self.wdmap = defaultdict(lambda:'NA',dict([tuple(line[:-1].split('\t')) for line in open(path+"wd_occs_controlled.tsv")]))
-		self.bmap  = defaultdict(lambda:'NA',dict([tuple(line[:-1].split('\t')) for line in open(path+"box_controlled.tsv")]))
-
-		self.train = dict([tuple(line[:-1].split('\t')) for line in open(path+"train.tsv")])
-		self.train_keys = set(self.train.keys())
-
-	def classify(self,article,return_all=False):
-		'''
-		Classifier function
-
-		Parameters
-		----------
-		article : wiki_tools.article object
-			Article to classify.
-		return_all : boolean (False)
-			If True it will return the probabilities for all occupations.
-		'''	
-		if str(article.curid()) in self.train_keys:
-			return self.train[str(article.curid())],'trained'
-		else:
-			probs = self.classifier.prob_classify(self.feats(article))
-			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
-			prob_ratio = probs[0][1]/probs[1][1]
-			article._occ = (probs[0][0],prob_ratio)
-			if return_all:
-				return probs
-			else:
-				return probs[0][0],prob_ratio
-
-	def _normalize(self,text):
-		text_ = text.lower()
-		for word in self.occ_vocab:
-			if word.replace('-',' ') in text_:
-				text_ = text_.replace(word.replace('-',' '),word)
-		for word in self.tpc_vocab:
-			if word.replace('-',' ') in text_:
-				text_ = text_.replace(word.replace('-',' '),word)
-		return text_
-
-	def _wd_occs(self,article):
-		'''
-		Returns the occupations as reported in Wikidata using the vocabulary provided in occ_vocab.txt
-		'''
-		wd_occs = set([self.wdmap[o['id']] for o in article.wd_prop('P106')])
-		wd_occs.remove('NA')
-		return wd_occs
-
-	def _isa(self,article):
-		'''
-		Get the first and second occupation reported in the first sentence in Wikipedia, using the controlled vocabulary provided in box_controlled.tsv
-		'''
-		ex = article.extract()
-		sentences = self.sent_detector.tokenize(ex)
-		first_occ = ''
-		second_occ = ''
-		for sentence in sentences:
-			words = nltk.pos_tag(nltk.word_tokenize(sentence))
-			for i,(word,tag) in enumerate(words):
-				if tag[:2] == 'VB':
-					if self.lmt.lemmatize(word, pos='v') == 'be':
-						first_occ = 'NA'
-						second_occ = 'NA'
-						for ww in nltk.word_tokenize(self._normalize(' '.join([w for w,t in words[i+1:]]))):
-							if (ww in self.occ_vocab):
-								if (second_occ == 'NA')&(first_occ != 'NA'):
-									second_occ = ww
-								if (first_occ == 'NA'):
-									first_occ = ww
-						break
-			if first_occ != '':
-				return first_occ,second_occ
-		return 'NA','NA'
-
-	def _box_type(self,article):
-		'''
-		Gets the type of the first infobox of the provided Wikipedia page using the controlled vocabulary provided in box_controlled.tsv
-		'''
-		types = [self.bmap[val.replace('_',' ').strip().replace(' ','_')] for val in article.infobox().keys()]
-		try:
-			types.remove('NA')
-		except:
-			pass
-		if len(types) >=1:
-			return types[0]
-		else:
-			return 'NA'
-
-	def _topics(self,article):
-		'''
-		Gets the topic words from the Wikipedia extract of the provided article, using the vocabulary provided in tpc_controlled.txt
-		'''
-		words = set([])
-		ex = article.extract()
-		ex = self._normalize(ex)
-		ex_words = set(nltk.word_tokenize(ex))
-		for word in self.tpc_vocab:
-			if word in ex_words:
-				words.add(word)
-		return words
-
-	def feats(self,article):
-		if article._feats is None:
-			feats = defaultdict(lambda:False)
-			feats['btype'] = self._box_type(article)
-			isa = self._isa(article)
-			feats['isa1'] = isa[0]
-			feats['isa2'] = isa[1]
-			tpcs = self._topics(article)
-			for word in tpcs:
-				feats[word] = True
-			wd_occs = self._wd_occs(article)
-			for word in wd_occs:
-				feats[word] = True
-			article._feats = feats
-		return article._feats
-
-
-
-
 class article(object):
 	def __init__(self,I,Itype=None):
 		"""
@@ -595,3 +448,149 @@ class article(object):
 			self._occ = C.classify(article,return_all=return_all)
 		return self._occ
 
+
+class Occ(object):
+	def __init__(self):
+		'''
+		Occupation classifier based onf Wikipedia and Wikidata information.
+		'''
+		path = os.path.split(__file__)[0]+'/data/'
+		print 'Loading data from:\n'+path
+		f = open(path+'trained_classifier.pkl', 'rb')
+		self.classifier = pickle.load(f)
+		f.close()
+
+		self.lmt = WordNetLemmatizer()
+		self.sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+
+		self.occ_vocab = set(open(path+'occ_vocab.txt').read().split('\n'))
+		self.tpc_vocab = set(open(path+'tpc_vocab.txt').read().split('\n'))
+
+		self.wdmap = defaultdict(lambda:'NA',dict([tuple(line[:-1].split('\t')) for line in open(path+"wd_occs_controlled.tsv")]))
+		self.bmap  = defaultdict(lambda:'NA',dict([tuple(line[:-1].split('\t')) for line in open(path+"box_controlled.tsv")]))
+
+		self.train = dict([tuple(line[:-1].split('\t')) for line in open(path+"train.tsv")])
+		self.train_keys = set(self.train.keys())
+
+	def classify(self,article,return_all=False):
+		'''
+		Classifier function
+
+		Parameters
+		----------
+		article : wiki_tools.article object
+			Article to classify.
+		return_all : boolean (False)
+			If True it will return the probabilities for all occupations.
+		'''	
+		if str(article.curid()) in self.train_keys:
+			return self.train[str(article.curid())],'trained'
+		else:
+			probs = self.classifier.prob_classify(self.feats(article))
+			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
+			prob_ratio = probs[0][1]/probs[1][1]
+			article._occ = (probs[0][0],prob_ratio)
+			if return_all:
+				return probs
+			else:
+				return probs[0][0],prob_ratio
+
+	def _normalize(self,text):
+		text_ = text.lower()
+		for word in self.occ_vocab:
+			if word.replace('-',' ') in text_:
+				text_ = text_.replace(word.replace('-',' '),word)
+		for word in self.tpc_vocab:
+			if word.replace('-',' ') in text_:
+				text_ = text_.replace(word.replace('-',' '),word)
+		return text_
+
+	def _wd_occs(self,article):
+		'''
+		Returns the occupations as reported in Wikidata using the vocabulary provided in occ_vocab.txt
+		'''
+		wd_occs = set([self.wdmap[o['id']] for o in article.wd_prop('P106')])
+		wd_occs.remove('NA')
+		return wd_occs
+
+	def _isa(self,article):
+		'''
+		Get the first and second occupation reported in the first sentence in Wikipedia, using the controlled vocabulary provided in box_controlled.tsv
+		'''
+		ex = article.extract()
+		sentences = self.sent_detector.tokenize(ex)
+		first_occ = ''
+		second_occ = ''
+		for sentence in sentences:
+			words = nltk.pos_tag(nltk.word_tokenize(sentence))
+			for i,(word,tag) in enumerate(words):
+				if tag[:2] == 'VB':
+					if self.lmt.lemmatize(word, pos='v') == 'be':
+						first_occ = 'NA'
+						second_occ = 'NA'
+						for ww in nltk.word_tokenize(self._normalize(' '.join([w for w,t in words[i+1:]]))):
+							if (ww in self.occ_vocab):
+								if (second_occ == 'NA')&(first_occ != 'NA'):
+									second_occ = ww
+								if (first_occ == 'NA'):
+									first_occ = ww
+						break
+			if first_occ != '':
+				return first_occ,second_occ
+		return 'NA','NA'
+
+	def _box_type(self,article):
+		'''
+		Gets the type of the first infobox of the provided Wikipedia page using the controlled vocabulary provided in box_controlled.tsv
+		'''
+		types = [self.bmap[val.replace('_',' ').strip().replace(' ','_')] for val in article.infobox().keys()]
+		try:
+			types.remove('NA')
+		except:
+			pass
+		if len(types) >=1:
+			return types[0]
+		else:
+			return 'NA'
+
+	def _topics(self,article):
+		'''
+		Gets the topic words from the Wikipedia extract of the provided article, using the vocabulary provided in tpc_controlled.txt
+		'''
+		words = set([])
+		ex = article.extract()
+		ex = self._normalize(ex)
+		ex_words = set(nltk.word_tokenize(ex))
+		for word in self.tpc_vocab:
+			if word in ex_words:
+				words.add(word)
+		return words
+
+	def feats(self,article):
+		if article._feats is None:
+			feats = defaultdict(lambda:False)
+			feats['btype'] = self._box_type(article)
+			isa = self._isa(article)
+			feats['isa1'] = isa[0]
+			feats['isa2'] = isa[1]
+			tpcs = self._topics(article)
+			for word in tpcs:
+				feats[word] = True
+			wd_occs = self._wd_occs(article)
+			for word in wd_occs:
+				feats[word] = True
+			article._feats = feats
+		return article._feats
+
+
+
+
+def id_type(I):
+	if _isnum(I):
+		return 'curid'
+	elif I.isdigit():
+		return 'curid'
+	elif (I[0].lower() == 'q')&(I[1:].isdigit()):
+		return 'wdid'
+	else:
+		return 'title'

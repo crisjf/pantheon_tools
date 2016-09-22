@@ -13,6 +13,7 @@ def get_curid(title,as_df=False):
 	"""Gets the page curid given its title
 	DEPRECATED!!!
 	"""
+	print 'WARNING: This function is deprecated'
 	it = hasattr(title,"__iter__")
 	if it:
 		title = [t for t in title if t != 'NA']
@@ -46,6 +47,7 @@ def get_curid(title,as_df=False):
 def get_title(curid,wdid=None,as_df=False):
 	"""
 	Gets the title of the page given its curid.
+	DEPRECATED!!!
 
 	Parameters
 	----------
@@ -60,6 +62,7 @@ def get_title(curid,wdid=None,as_df=False):
 		If asked for a single page, it will return a string.
 		If asked by a list of pages it will return a dictionary by default or a pandas DataFrame if as_df=True.
 	"""
+	print 'WARNING: This function is deprecated'
 	if wdid is not None:
 		it = hasattr(wdid, "__iter__")
 		wdid = [_wd_id(wdid)] if not it else [_wd_id(w) for w in wdid]
@@ -95,9 +98,9 @@ def get_title(curid,wdid=None,as_df=False):
 
 def get_extract(title='',curid=None):
 	'''
-	This function is depreciated.
+	This function is deprecated.
 	'''
-	print 'Warning: Function depreciated.'
+	print 'WARNING: This function is deprecated'
 	if (title == '' and curid is None):
 		raise NameError("Either title or curid must be provided")
 	try:
@@ -115,6 +118,7 @@ def get_L(title=None,curid=None,as_df=False):
 	"""
 	Returns the number of language editions for the given curid or title.
 	If both title and curid are provided, it will disregard the title.
+	DEPRECATED!!!
 
 	Parameters
 	----------
@@ -131,6 +135,7 @@ def get_L(title=None,curid=None,as_df=False):
 		If asked for a single page, it will return an integer.
 		If asked by a list of pages (only as curids) it will return a dictionary by default or a pandas DataFrame if as_df=True.
 	"""
+	print 'WARNING: This function is deprecated'
 	if (title is None) & (curid is None):
 		raise NameError("Either title or curid must be provided")
 	if hasattr(title,"__iter__"):
@@ -161,7 +166,12 @@ def get_L(title=None,curid=None,as_df=False):
 		r = r['query']['pages'].values()[0]
 		return len(r['langlinks'])+1 if ('langlinks' in r.keys()) else 1
 
+
 def get_wdid(title='',curid=None,as_df=False):
+	"""
+	DEPRECATED!!!
+	"""
+	print 'WARNING: This module is deprecated'
 	if (title == '' and curid is None):
 		raise NameError("Either title or curid must be provided")
 	it = hasattr(curid, "__iter__")
@@ -182,6 +192,10 @@ def get_wdid(title='',curid=None,as_df=False):
 		r = requests.get(url).json()
 		wd_id = r[u'query'][u'pages'].values()[0][u'pageprops'][u'wikibase_item']
 		return wd_id
+
+
+
+
 
 def _wd_id(trigger):
     trigger = unicode(trigger).strip()
@@ -637,3 +651,5 @@ def read_article(file_name):
 	return out
 
 
+def chunker(seq, size):
+	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
