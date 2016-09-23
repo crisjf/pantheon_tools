@@ -413,14 +413,17 @@ class article(object):
 	def content(self):
 		if self._content is None:
 			r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
-			if ('missing' in r['query']['pages'].values()[0].keys())|('invalidreason' in r['query']['pages'].values()[0].keys()):
+			if ('interwiki' in r['query'].keys()):
+				self._missing_wp()
+				return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
+			elif ('missing' in r['query']['pages'].values()[0].keys())|('invalidreason' in r['query']['pages'].values()[0].keys()):
 				self._missing_wp()
 			else:
 				self._content = r['query']['pages'].values()[0]['revisions'][0]['*'] 
 		return self._content
 
 
-	def redirect(self):
+	def redirect(self,ret=False):
 		'''
 		Handles redirects if the page has one.
 		'''
@@ -431,7 +434,11 @@ class article(object):
 				red = red.split(']]')[0].split('[[')[1].strip()
 				if '|' in red:
 					red = red.split('|')[-1].strip()
-				self.__init__(red,Itype='title')
+				if self.no_wp:
+					self.I['title'] = red
+				else:
+					self.__init__(red,Itype='title')
+
 
 	def occupation(self,return_all=False):
 		'''

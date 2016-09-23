@@ -508,6 +508,7 @@ def wp_data(articles,ret=False):
 	pageids = [a.curid() for a in articles if (a._data['wp'] is None)&(a.curid()!='NA')]
 	if len(pageids) != 0:
 		r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':pageids})
+		print r
 		for i,a in enumerate(articles):
 			if (a._data['wd'] is None)&(a.curid()!='NA'):
 				articles[i]._data['wp'] = r['query']['pages'][str(a.curid())]
