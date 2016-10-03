@@ -50,6 +50,20 @@ class article(object):
 
 		self._revisions = None
 
+	def __repr__(self):
+		out = ''
+		out+= 'curid : '+str(self.I['curid'])+'\n' if self.I['curid'] is not None else 'curid : \n'
+		out+= 'title : '+self.I['title']+'\n' if self.I['title'] is not None else 'title : \n'
+		out+= 'wdid  : '+self.I['wdid'] if self.I['wdid'] is not None else 'wdid  : '
+		return out
+
+	def __str__(self):
+		out = ''
+		out+= 'curid : '+str(self.curid())+'\n'
+		out+= 'title : '+self.title()+'\n'
+		out+= 'wdid  : '+self.wdid()
+		return out
+
 	def _missing_wd(self):
 		'''
 		This function is used to signal that the article does not correspond to a Wikidata page.
