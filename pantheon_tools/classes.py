@@ -48,6 +48,8 @@ class article(object):
 		self.no_wp = False
 		self.no_wd = False
 
+		self._revisions = None
+
 	def _missing_wd(self):
 		'''
 		This function is used to signal that the article does not correspond to a Wikidata page.
@@ -454,6 +456,23 @@ class article(object):
 			self._feats = C.feats(article)
 			self._occ = C.classify(article,return_all=return_all)
 		return self._occ
+
+	def revisions(self,user=True):
+		'''
+		Gets the timestamps for the edit history of the Wikipedia article.
+
+		Parameters
+		----------
+		user : boolean (True)
+			If True it returns the user who made the edit as well as the edit timestamp.
+		'''
+		if self._revisions is None:
+			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user'],'rvlimit':'500'})
+			self._revisions = [(rev['timestamp'],rev['user']) for rev in r['query']['pages'].values()[0]['revisions']]
+		if user:
+			return self._revisions
+		else:
+			return [val[0] for val in self._revisions]
 
 
 class Occ(object):
