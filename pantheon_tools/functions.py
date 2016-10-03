@@ -493,7 +493,7 @@ def image_url(article,ret=False):
 		if ret:
 			return {a.curid():a._image_url for a in article}
 
-def wp_data(articles,ret=False):
+def wp_data(articles,ret=False,full=True):
 	'''
 	Gets all Wikipedia information about the provided list of articles.
 	It gets title, curid and wdid, as well as the extract and the infobox.
@@ -504,16 +504,18 @@ def wp_data(articles,ret=False):
 		List of wiki_tool article objects to query.
 	ret : boolean (False)
 		If True it will return a dictionary with curids as keys and the data as values.
+	full : boolean (True)
+		If True it gets the infobox an extract, if False it only gets the page metadata.
 	'''
 	pageids = [a.curid() for a in articles if (a._data['wp'] is None)&(a.curid()!='NA')]
 	if len(pageids) != 0:
 		r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':pageids})
-		print r
 		for i,a in enumerate(articles):
 			if (a._data['wd'] is None)&(a.curid()!='NA'):
 				articles[i]._data['wp'] = r['query']['pages'][str(a.curid())]
-	infobox(articles)
-	extract(articles)
+	if full:
+		infobox(articles)
+		extract(articles)
 	if ret:
 		return {a.curid():a._data['wp'] for a in articles}
 
@@ -532,6 +534,7 @@ def wd_data(articles,ret=False):
 	if any([(a.I['wdid'] is None) for a in articles]):
 		wp_data(articles)
 	wdids = [a.wdid() for a in articles if (a._data['wd'] is None)&(a.wdid()!='NA')]
+
 	if len(wdids) != 0:
 		r = wd_q({'languages':'en','ids':wdids})
 		for i,a in enumerate(articles):
