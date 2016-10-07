@@ -10,6 +10,9 @@ try:
     import cPickle as pickle
 except:
     import pickle
+import requests
+import datetime 
+from pandas import DataFrame
 
 class article(object):
 	def __init__(self,I,Itype=None):
@@ -49,6 +52,7 @@ class article(object):
 		self.no_wd = False
 
 		self._revisions = None
+		self._views = {}
 
 	def __repr__(self):
 		out = ''
@@ -492,6 +496,138 @@ class article(object):
 		else:
 			return [val[0] for val in self._revisions]
 
+	def pageviews(self,start_date,end_date=None,agg=True,lang='en',daily=False):
+		'''
+		Gets the pageviews between the provided dates for the given language editions.
+
+		Parameters
+		----------
+		start_date : str
+			Start date in format 'yyyy-mm'.
+			If start_date=None is passed, it will get all the pageviews for that edition.
+		end_date : str
+			End date in format 'yyyy-mm'. If it is not provided it will get pagviews until today.
+		lang : str ('en')
+			Language edition to get the pageviews for. 
+			If lang=None is passed, it will get the pageviews for all language editions.
+		daily : boolean (False)
+			If True it will return the daily pageviews.
+		agg : boolean (True)
+			If True it will sum all the pageviews.
+		'''
+		if start_date is not None:
+			m0,y0 = start_date.split('-')
+			m0,y0 = int(m0),int(y0)
+		else:
+			m0,y0 = None,None
+		if end_date is None:
+			yf = datetime.date.today().year
+			mf = datetime.date.today().month
+		else:
+			mf,yf = end_date.split('-')
+			mf,yf = int(mf),int(yf)
+		if lang is not None:
+			if (y0 < 2015)|((y0==2015)&(m0<7)):
+				print 'Warning: Using Grok'
+				return self._pageviews_grok(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+			else:
+				return self._pageviews_rest(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+		else:
+			out = {}
+			for lang in self.langlinks().keys():
+				if (y0 < 2015)|((y0==2015)&(m0<7)):
+					print 'Warning: Using Grok'
+					out[lang] = self._pageviews_grok(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+				else:
+					out[lang] = self._pageviews_rest(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+			return dict(out)
+
+	def _pageviews_rest(self,m0,y0,mf,yf,agg=True,daily=False,lang='en'):
+		if not lang in self._views.keys():
+			self._views[lang] = {}
+
+		mi = '07' if ((int(y0)<2015)|((int(y0)==2015)&(int(m0)<7))) else ('00'+str(m0))[-2:]
+		yi = '2015' if int(y0)< 2015 else str(y0)
+		sd = yi+mi+'01'
+		if int(mf) == 12:
+			fd = str(int(yf)+1)+'0101'
+		else:
+			fd = str(yf)+('00'+str(int(mf)+1))[-2:]+'01'
+
+		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
+		r = requests.get(url).json()
+		
+		monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
+		monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
+		if daily:
+			out = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]]
+		else:
+			out = monthly
+
+		if agg:
+			return sum([views for d,views in out])
+		else:
+			return dict(out)
+
+	def _pageviews_grok(self,m0,y0,mf,yf,agg=True,daily=False,lang='en'):
+		if not lang in self._views.keys():
+			self._views[lang] = {}
+		
+		title = self.langlinks(lang)
+		timestamp = self.creation_date(lang)
+		yy,mm = timestamp.split('-')[:2]
+		yy,mm = int(yy),int(mm)
+
+		if (y0 is not None):
+			mi = mm if (((yy==y0)&(mm<m0))|(yy>y0)) else m0
+			yi = yy if (yy>y0) else y0
+		else:
+			yi,mi = yy,mm
+		mi = 12 if yi <= 2007 else mi
+		yi = 2007 if yi < 2007 else yi
+
+		dates = []
+		if yf == yi:
+			dates = [(str(yi),('00'+str(mm))[-2:]) for mm in xrange(mi,mf+1)]
+		else:
+			dates += [(str(yi),('00'+str(mm))[-2:]) for mm in xrange(mi,13)]
+			for yy in xrange(yi+1,yf):
+				dates += [(str(yy),('00'+str(mm))[-2:]) for mm in xrange(1,13)]
+			dates += [(str(yf),('00'+str(mm))[-2:]) for mm in xrange(1,mf+1)]
+
+		out = []
+		for yy,mm in dates:
+			if ((yy+'-'+mm) in self._views[lang].keys())&(not daily):
+				if agg:
+					out.append(self._views[lang][yy+'-'+mm])
+				else:
+					out.append(((yy+'-'+mm),self._views[lang][yy+'-'+mm]))
+			else:
+				url = ('http://stats.grok.se/json/'+lang+'/'+yy+mm+'/'+title).replace(' ','_')
+				r = requests.get(url).json()
+				self._views[lang][yy+'-'+mm] = sum(r['daily_views'].values())
+				if agg:
+					out.append( sum(r['daily_views'].values()))
+				else:
+					if daily:
+						out +=r['daily_views'].items()
+					else:
+						out.append((yy+'-'+mm,sum(r['daily_views'].values())))
+
+		if agg:
+			return sum(out)
+		else:
+			return dict(out)
+
+
+
+
+
+
+
+
+
+
 
 class Occ(object):
 	def __init__(self):
@@ -626,6 +762,7 @@ class Occ(object):
 			article._feats = feats
 		return article._feats
 
+	
 
 
 
