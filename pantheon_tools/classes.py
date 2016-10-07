@@ -3,7 +3,7 @@ import json,os,operator,copy
 import nltk.data
 import nltk
 from query import wd_q,wp_q,_string,_isnum
-from functions import drop_comments
+from parse_functions import drop_comments
 from collections import defaultdict
 from nltk.stem import WordNetLemmatizer
 try:

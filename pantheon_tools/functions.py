@@ -1,4 +1,5 @@
 import requests
+from parse_functions import drop_comments
 from crisjfpy import chunker
 from pandas import DataFrame
 from query import wd_q,wp_q,chunker
@@ -353,14 +354,6 @@ def langlinks(articles,ret=False):
 					articles[i]._langlinks_dat = []
 	if ret:
 		return {a.curid():a.langlinks() for a in articles}
-
-
-def drop_comments(value):
-	'''Drops wikimarkup comments from the provided string.'''
-	while '<!--' in value:
-		comment = value[value.find('<!--'):].split('-->')[0]+'-->'
-		value = value.replace(comment,'')
-	return value
 
 def extract(articles,ret=False):
 	'''
