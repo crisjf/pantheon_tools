@@ -59,9 +59,9 @@ class article(object):
 
 	def __str__(self):
 		out = ''
-		out+= 'curid : '+str(self.curid())+'\n'
-		out+= 'title : '+self.title()+'\n'
-		out+= 'wdid  : '+self.wdid()
+		out+= 'curid : '+str(self.curid())+'\n' if self.title() != '' else 'curid : NA\n'
+		out+= 'title : '+self.title()+'\n' if self.title() != '' else 'title : NA\n'
+		out+= 'wdid  : '+self.wdid() if self.wdid() !='' else 'wdid  : NA'
 		return out
 
 	def _missing_wd(self):
@@ -151,9 +151,13 @@ class article(object):
 		>>> [a.wdid() for a in articles]
 		'''
 		if (self.I['wdid'] is None):
-			d = self.data_wp()['pageprops']
-			if 'wikibase_item' in d.keys():
-				self.I['wdid']  = d['wikibase_item']
+			d = self.data_wp()
+			if 'pageprops' in d:
+				d = self.data_wp()['pageprops']
+				if 'wikibase_item' in d.keys():
+					self.I['wdid']  = d['wikibase_item']
+				else:
+					self._missing_wd()
 			else:
 				self._missing_wd()
 		return self.I['wdid']

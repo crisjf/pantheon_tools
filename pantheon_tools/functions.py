@@ -3,6 +3,7 @@ from crisjfpy import chunker
 from pandas import DataFrame
 from query import wd_q,wp_q,chunker
 from itertools import chain
+from classes import article
 import os
 import json
 
@@ -507,6 +508,10 @@ def wp_data(articles,ret=False,full=True):
 	full : boolean (True)
 		If True it gets the infobox an extract, if False it only gets the page metadata.
 	'''
+
+	titles = [a.I['title'] for f in articles if a.I['curid'] is None]
+	#Get the curids for the provided titles (and normalize the title if necessary)
+
 	pageids = [a.curid() for a in articles if (a._data['wp'] is None)&(a.curid()!='NA')]
 	if len(pageids) != 0:
 		r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':pageids})
