@@ -65,7 +65,8 @@ class article(object):
 		out = ''
 		out+= 'curid : '+str(self.curid())+'\n' if self.title() != '' else 'curid : NA\n'
 		out+= 'title : '+self.title()+'\n' if self.title() != '' else 'title : NA\n'
-		out+= 'wdid  : '+self.wdid() if self.wdid() !='' else 'wdid  : NA'
+		out+= 'wdid  : '+self.wdid()+'\n' if self.wdid() !='' else 'wdid  : NA\n'
+		out+= 'L     : '+str(self.L()) 
 		return out
 
 	def _missing_wd(self):
@@ -319,7 +320,9 @@ class article(object):
 					self._creation_date[lang] = timestamp
 			return self._creation_date
 		else:
-			if lang not in self._creation_date.keys():
+			if lang not in self.langlinks().keys():
+				raise NameError('No edition for language: '+lang)
+			if (lang not in self._creation_date.keys()):
 				title = self.langlinks(lang=lang)
 				r = wp_q({'prop':'revisions','titles':title,'rvlimit':1,'rvdir':'newer'},lang=lang,continue_override=True)
 				try:
@@ -513,7 +516,7 @@ class article(object):
 		else:
 			return [val[0] for val in self._revisions]
 
-	def pageviews(self,start_date,end_date=None,agg=True,lang='en',daily=False):
+	def pageviews(self,start_date,end_date=None,agg=False,lang='en',daily=False):
 		'''
 		Gets the pageviews between the provided dates for the given language editions.
 
@@ -529,74 +532,50 @@ class article(object):
 			If lang=None is passed, it will get the pageviews for all language editions.
 		daily : boolean (False)
 			If True it will return the daily pageviews.
-		agg : boolean (True)
+		agg : boolean (False)
 			If True it will sum all the pageviews.
 		'''
+		if lang is None:
+			out = {}
+			for lang in self.langlinks().keys():
+				if agg:
+					out[lang] = sum(self._pageviews_lang(start_date,end_date=end_date,lang=lang).values())
+				else:
+					out[lang] = self._pageviews_lang(start_date,end_date=end_date,lang=lang)
+			return out
+		else:
+			out = self._pageviews_lang(start_date,end_date=end_date,lang=lang)
+			if agg:
+				return sum(out.values())
+			else:
+				return out
+
+	def _pageviews_lang(self,start_date,end_date=None,lang='en'):
 		if start_date is not None:
-			m0,y0 = start_date.split('-')
+			y0,m0 = start_date.split('-')
 			m0,y0 = int(m0),int(y0)
 		else:
 			m0,y0 = None,None
 		if end_date is None:
 			yf = datetime.date.today().year
 			mf = datetime.date.today().month
-		else:
-			mf,yf = end_date.split('-')
-			mf,yf = int(mf),int(yf)
-		if lang is not None:
-			if (y0 < 2015)|((y0==2015)&(m0<7)):
-				print 'Warning: Using Grok'
-				return self._pageviews_grok(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+			if mf == 1:
+				yf = yf-1
+				mf = 12
 			else:
-				return self._pageviews_rest(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
+				mf = mf-1
 		else:
-			out = {}
-			for lang in self.langlinks().keys():
-				if (y0 < 2015)|((y0==2015)&(m0<7)):
-					print 'Warning: Using Grok'
-					out[lang] = self._pageviews_grok(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
-				else:
-					out[lang] = self._pageviews_rest(m0,y0,mf,yf,agg=agg,daily=daily,lang=lang)
-			return dict(out)
+			yf,mf = end_date.split('-')
+			mf,yf = int(mf),int(yf)
 
-	def _pageviews_rest(self,m0,y0,mf,yf,agg=True,daily=False,lang='en'):
-		if not lang in self._views.keys():
+		if lang not in self._views.keys():
 			self._views[lang] = {}
 
-		mi = '07' if ((int(y0)<2015)|((int(y0)==2015)&(int(m0)<7))) else ('00'+str(m0))[-2:]
-		yi = '2015' if int(y0)< 2015 else str(y0)
-		sd = yi+mi+'01'
-		if int(mf) == 12:
-			fd = str(int(yf)+1)+'0101'
-		else:
-			fd = str(yf)+('00'+str(int(mf)+1))[-2:]+'01'
-
-		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
-		r = requests.get(url).json()
-		
-		monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
-		monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
-		if daily:
-			out = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]]
-		else:
-			out = monthly
-
-		if agg:
-			return sum([views for d,views in out])
-		else:
-			return dict(out)
-
-	def _pageviews_grok(self,m0,y0,mf,yf,agg=True,daily=False,lang='en'):
-		if not lang in self._views.keys():
-			self._views[lang] = {}
-		
-		title = self.langlinks(lang)
 		timestamp = self.creation_date(lang)
 		yy,mm = timestamp.split('-')[:2]
 		yy,mm = int(yy),int(mm)
-
 		if (y0 is not None):
-			mi = mm if (((yy==y0)&(mm<m0))|(yy>y0)) else m0
+			mi = mm if (((yy==y0)&(mm>m0))|(yy>y0)) else m0
 			yi = yy if (yy>y0) else y0
 		else:
 			yi,mi = yy,mm
@@ -612,34 +591,46 @@ class article(object):
 				dates += [(str(yy),('00'+str(mm))[-2:]) for mm in xrange(1,13)]
 			dates += [(str(yf),('00'+str(mm))[-2:]) for mm in xrange(1,mf+1)]
 
-		out = []
-		for yy,mm in dates:
-			if ((yy+'-'+mm) in self._views[lang].keys())&(not daily):
-				if agg:
-					out.append(self._views[lang][yy+'-'+mm])
+		rest_start = None
+		rest_end   = None
+		for y,m in dates:
+			if y+'-'+m not in self._views[lang].keys():
+				if (y=='2016')&(int(m)>1):
+					rest_start = (y,m) if (rest_start is None) else rest_start
+					rest_end   = (y,m)
 				else:
-					out.append(((yy+'-'+mm),self._views[lang][yy+'-'+mm]))
-			else:
-				url = ('http://stats.grok.se/json/'+lang+'/'+yy+mm+'/'+title).replace(' ','_')
-				r = requests.get(url).json()
-				self._views[lang][yy+'-'+mm] = sum(r['daily_views'].values())
-				if agg:
-					out.append( sum(r['daily_views'].values()))
-				else:
-					if daily:
-						out +=r['daily_views'].items()
-					else:
-						out.append((yy+'-'+mm,sum(r['daily_views'].values())))
+					self._pageviews_grok(y,m,lang=lang)
+		if (rest_start is not None):
+			self._pageviews_rest(rest_start,rest_end,lang=lang)
 
-		if agg:
-			return sum(out)
+		out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
+		return out
+		
+
+	def _pageviews_rest(self,rest_start,rest_end,lang='en'):
+		if not lang in self._views.keys():
+			self._views[lang] = {}
+		sd = rest_start[0]+rest_start[1]+'01'
+		if rest_end[1] == '12':
+			fd = str(int(rest_end[0])+1)+'0101'
 		else:
-			return dict(out)
+			fd = str(rest_end[0])+('00'+str(int(rest_end[1])+1))[-2:]+'01'
 
+		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
+		r = requests.get(url).json()
+		monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
+		monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
+		out = dict(monthly)
+		for date in out.keys():
+			self._views[lang][date] = out[date]
 
-
-
-
+	def _pageviews_grok(self,y,m,lang='en'):
+		if not lang in self._views.keys():
+			self._views[lang] = {}
+		title = self.langlinks(lang)
+		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
+		r = requests.get(url).json()
+		self._views[lang][y+'-'+m] = sum(r['daily_views'].values())
 
 
 
