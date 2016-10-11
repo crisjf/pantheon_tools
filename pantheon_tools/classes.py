@@ -348,18 +348,35 @@ class article(object):
 				box = ibox[btype]
 				for tag in ['image','image_name','img','smallimage']:
 					if tag in box.keys():
-						images.append(box[tag])
-			images = ['Image:'+image for image in images]
-			r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
-			norm = {}
-			if 'normalized' in r['query'].keys(): #This is to keep the order
-				norm = {val['from']:val['to'] for val in r['query']['normalized']}
-			pages = {val['title']:val['imageinfo'][0]['url'] for val in r['query']['pages'].values()}
-			results = []
+						images.append(box[tag].strip())
+			imgs = []
 			for image in images:
-				if image in norm.keys():
-					image = norm[image]
-				results.append(pages[image])
+				if image.strip() != '':
+					if '[[' in image:
+						image = image[image.find('[[')+2:].split(']]')[0].split('|')[0]
+					if ((image.lower()[:5]!='file:') & (image.lower()[:6]!='image:')):
+						imgs.append('Image:'+image)
+					else:
+						imgs.append(image)
+			images = imgs
+			if len(images)!=0:
+				r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
+				norm = {}
+				if 'normalized' in r['query'].keys(): #This is to keep the order
+					norm = {val['from']:val['to'] for val in r['query']['normalized']}
+				pages = {}
+				for val in r['query']['pages'].values():
+					try:
+						pages[val['title']] = val['imageinfo'][0]['url']
+					except:
+						pass
+				results = []
+				for image in images:
+					if image in norm.keys():
+						image = norm[image]
+					results.append(pages[image])
+			else:
+				results = []
 			self._image_url = results
 		return self._image_url
 	

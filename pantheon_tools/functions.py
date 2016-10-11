@@ -382,7 +382,7 @@ def extract(articles,ret=False):
 		return {a.curid():a._ex for a in articles}
 
 
-def infobox(article,ret=False):
+def infobox(articles,ret=False):
 	'''
 	Gets the infobox of the provided article or list of articles.
 	It only queries the infoboxes for the articles without infobox.
@@ -400,36 +400,30 @@ def infobox(article,ret=False):
 	iboxs : dict
 		If ret=True it returns a dictionary with curids as keys and infoboxes as json objects as values.
 	'''
-	it = hasattr(article,'__iter__')
-	if not it:
-		ibox = article.infobox()
-		if ret:
-			return {article.curid():ibox}
-	else:
-		pageids = [a.curid() for a in article if (a.raw_box is None)]
-		redirect_list = []
+	pageids = [a.curid() for a in articles if (a.raw_box is None)]
+	redirect_list = []
+	if len(pageids) != 0:
+		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':pageids})
+		for i,a in enumerate(articles):
+			if a.raw_box is None:
+				rp = r['query']['pages'][str(a.curid())]
+				rb = rp['revisions'][0]['*']
+				if '#redirect' in rb.lower(): 
+					title = rb.split('[[')[-1].split(']]')[0].strip()
+					articles[i].__init__(title,Itype='title')
+					redirect_list.append(i)
+				else:
+					articles[i].raw_box = rb
+	if len(redirect_list) != 0:
+		pageids = [a.curid() for a in articles if (a.raw_box is None)]
 		if len(pageids) != 0:
 			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':pageids})
-			for i,a in enumerate(article):
+			for i,a in enumerate(articles):
 				if a.raw_box is None:
-					rp = r['query']['pages'][str(a.curid())]
-					rb = rp['revisions'][0]['*']
-					if '#redirect' in rb.lower(): 
-						title = rb.split('[[')[-1].split(']]')[0].strip()
-						article[i].__init__(title,Itype='title')
-						redirect_list.append(i)
-					else:
-						article[i].raw_box = rb
-		if len(redirect_list) != 0:
-			pageids = [a.curid() for a in article if (a.raw_box is None)]
-			if len(pageids) != 0:
-				r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':pageids})
-				for i,a in enumerate(article):
-					if a.raw_box is None:
-						rb = r['query']['pages'][str(a.curid())]['revisions'][0]['*']
-						article[i].raw_box = rb
-		if ret:
-			return {a.curid():a.infobox() for a in article}
+					rb = r['query']['pages'][str(a.curid())]['revisions'][0]['*']
+					articles[i].raw_box = rb
+	if ret:
+		return {a.curid():a.infobox() for a in articles}
 
 
 def image_url(article,ret=False):
