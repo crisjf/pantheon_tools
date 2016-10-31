@@ -3,7 +3,7 @@ import json,os,operator,copy
 import nltk.data
 import nltk
 from query import wd_q,wp_q,_string,_isnum
-from parse_functions import drop_comments
+from parse_functions import drop_comments,find_nth
 from collections import defaultdict
 from nltk.stem import WordNetLemmatizer
 try:
@@ -12,7 +12,11 @@ except:
     import pickle
 import requests
 import datetime 
-from pandas import DataFrame
+from pandas import DataFrame,read_csv
+from geopy.distance import vincenty
+import multiprocessing
+import codecs
+from joblib import Parallel, delayed
 
 class article(object):
 	def __init__(self,I,Itype=None):
@@ -53,6 +57,7 @@ class article(object):
 
 		self._revisions = None
 		self._views = {}
+		self._daily_views = {}
 
 	def __repr__(self):
 		out = ''
@@ -516,7 +521,7 @@ class article(object):
 		else:
 			return [val[0] for val in self._revisions]
 
-	def pageviews(self,start_date,end_date=None,agg=False,lang='en',daily=False):
+	def pageviews(self,start_date,end_date=None,agg=False,lang='en',cdate_override=False,daily=False):
 		'''
 		Gets the pageviews between the provided dates for the given language editions.
 
@@ -539,18 +544,19 @@ class article(object):
 			out = {}
 			for lang in self.langlinks().keys():
 				if agg:
-					out[lang] = sum(self._pageviews_lang(start_date,end_date=end_date,lang=lang).values())
+					out[lang] = sum(self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily).values())
 				else:
-					out[lang] = self._pageviews_lang(start_date,end_date=end_date,lang=lang)
+					out[lang] = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
 			return out
 		else:
-			out = self._pageviews_lang(start_date,end_date=end_date,lang=lang)
 			if agg:
+				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override)
 				return sum(out.values())
 			else:
+				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
 				return out
 
-	def _pageviews_lang(self,start_date,end_date=None,lang='en'):
+	def _pageviews_lang(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False):
 		if start_date is not None:
 			y0,m0 = start_date.split('-')
 			m0,y0 = int(m0),int(y0)
@@ -570,15 +576,24 @@ class article(object):
 
 		if lang not in self._views.keys():
 			self._views[lang] = {}
+		if not cdate_override:
+			timestamp = self.creation_date(lang)
+			yy,mm = timestamp.split('-')[:2]
+			yy,mm = int(yy),int(mm)
 
-		timestamp = self.creation_date(lang)
-		yy,mm = timestamp.split('-')[:2]
-		yy,mm = int(yy),int(mm)
-		if (y0 is not None):
-			mi = mm if (((yy==y0)&(mm>m0))|(yy>y0)) else m0
-			yi = yy if (yy>y0) else y0
+			if (y0 is not None):
+				if (((yy==y0)&(mm>m0))|(yy>y0)):
+					mi = 1 if (mm == 12) else mm 
+				else:
+					mi = m0
+				if (yy>y0):
+					yi = yy+1 if (mm == 12) else yy
+				else:
+					yi = y0
+			else:
+				yi,mi = yy,mm
 		else:
-			yi,mi = yy,mm
+			yi,mi = y0,m0
 		mi = 12 if yi <= 2007 else mi
 		yi = 2007 if yi < 2007 else yi
 
@@ -599,17 +614,25 @@ class article(object):
 					rest_start = (y,m) if (rest_start is None) else rest_start
 					rest_end   = (y,m)
 				else:
-					self._pageviews_grok(y,m,lang=lang)
+					self._pageviews_grok(y,m,lang=lang,daily=daily)
 		if (rest_start is not None):
-			self._pageviews_rest(rest_start,rest_end,lang=lang)
+			self._pageviews_rest(rest_start,rest_end,lang=lang,daily=daily)
 
-		out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
+		if daily:
+			dates = set([y+'-'+m for y,m in dates])
+			days = [day for day in self._daily_views[lang].keys() if day[:find_nth(day,'-',2)] in dates]
+			out = {day:self._daily_views[lang][day] for day in days}
+		else:	
+			out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
 		return out
 		
 
-	def _pageviews_rest(self,rest_start,rest_end,lang='en'):
+	def _pageviews_rest(self,rest_start,rest_end,lang='en',daily=False):
 		if not lang in self._views.keys():
 			self._views[lang] = {}
+		if (not lang in self._daily_views.keys())&daily:
+			self._daily_views[lang] = {}
+
 		sd = rest_start[0]+rest_start[1]+'01'
 		if rest_end[1] == '12':
 			fd = str(int(rest_end[0])+1)+'0101'
@@ -623,18 +646,76 @@ class article(object):
 		out = dict(monthly)
 		for date in out.keys():
 			self._views[lang][date] = out[date]
+		if daily:
+			out = dict([(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]])
+			for day in out:
+				self._daily_views[lang][day] = out[day]
 
-	def _pageviews_grok(self,y,m,lang='en'):
+	def _pageviews_grok(self,y,m,lang='en',daily=False):
 		if not lang in self._views.keys():
 			self._views[lang] = {}
+		if (not lang in self._daily_views.keys())&daily:
+			self._daily_views[lang] = {}
 		title = self.langlinks(lang)
 		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
 		r = requests.get(url).json()
 		self._views[lang][y+'-'+m] = sum(r['daily_views'].values())
+		if daily:
+			for day in r['daily_views']:
+				self._daily_views[lang][day] = r['daily_views'][day]
+			
 
+class CTY(object):
+	def __init__(self,city_data='geonames'):
+		self.city_data=city_data
+		path = os.path.split(__file__)[0]+'/data/'
+		print 'Loading data from:\n'+path
+		if city_data == 'geonames':
+			header = ['geonameid','name','asciiname','alternatenames','latitude','longitude','feature class','feature code',
+				'country code','cc2','admin1 code','admin2 code','admin3 code','admin4 code','population','elevation',
+				'dem','timezone','modification date']
+			f = codecs.open(path+'cities5000.txt',encoding='utf-8')
+			self.cities = DataFrame([c.split('\t') for c in f.read().split('\n') if c !=''],columns=header)
+			self.c_coords = [tuple(c) for c in self.cities[['geonameid','latitude','longitude']].drop_duplicates().values]
+		elif city_data == 'chandler':
+			self.cities = read_csv(path+'chandler_cities.csv',encoding='utf-8')
+			self.c_coords = [tuple(c) for c in self.cities[['ch_id','Latitude','Longitude']].drop_duplicates().values]
 
+		self._out = {}
 
+	def city(self,coords):
+		if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
+			if coords not in self._out.keys():
+				self._out[coords] = _city(self,coords)
+			return self._out[coords]
+		else:
+			coords_ = [coord for coord in coords if coord not in self._out.keys()]
+			n_jobs = multiprocessing.cpu_count()
+			distances = Parallel(n_jobs=n_jobs)(delayed(_city)(self,coord) for coord in coords_)
+			dmap = dict(zip(coords_,distances))
+			out = []
+			for coord in coords:
+				if coord not in self._out.keys():
+					self._out[coord] = dmap[coord]
+				out.append(self._out[coord])
+			return out
 
+def _city(C,coords):
+	out = []
+	for city in C.c_coords:
+		try:
+			out.append((city[0],vincenty(coords,(city[1],city[2])).kilometers))
+		except:
+			pass
+	if len(out)==0:
+		out.append(('NA','NA','NA'))
+	if C.city_data == 'geonames':
+		out = DataFrame(out,columns=['geonameid','dis']).sort_values(by='dis').iloc[0]
+		return int(out['geonameid']),out['dis']
+	elif C.city_data == 'chandler':
+		out = DataFrame(out,columns=['geonameid','dis']).sort_values(by='dis').iloc[0]
+		return int(out['geonameid']),out['dis']
+		
 
 
 class Occ(object):

@@ -1,0 +1,1600 @@
+ch_id,City,OtherName,Country,Latitude,Longitude,Certainty,n_obs
+0,A Coruna,"Coruna, A Coruña",Spain,43.362344,-8.41154,1,1
+1,Aachen,Aix-la-Chapelle,Germany,50.77664,6.08342,1,11
+2,Aalborg,,Denmark,57.048,9.9187,1,1
+3,Aarhus,,Denmark,56.162939,10.203921,1,1
+4,Abeokuta,,Nigeria,7.15,3.35,2,4
+5,Aberdeen,,United Kingdom,57.14369,-2.09814,1,11
+6,Abidjan,,Cote D'Ivoire,5.30966,-4.01266,1,1
+7,Abo, Åbo (Turku),Finland,60.449325,22.259231,3,1
+8,Abomey-Calavi ,,Benin,7.18286,1.99119,1,4
+9,Accra,,Ghana,5.55602,-0.1969,1,1
+10,Achin,Aceh,Indonesia,5.55,95.316667,3,10
+11,Acre,,Israel,32.927778,35.081667,2,4
+12,Adana,,Turkey,37.00167,35.32889,1,2
+13,Addis Ababa,,Ethiopia,9.02497,38.74689,1,3
+14,Adelaide,,Australia,-34.92866,138.59863,1,4
+15,Aden,,Yemen,12.77944,45.03667,1,1
+16,Agades,,Niger,16.966667,7.983333,1,5
+17,Agra,,India,27.18333,78.01667,1,17
+18,Agrigento,Agrigentum,Italy,37.29082765,13.58427204,1,1
+19,Aguascalientes,,Mexico,21.88234,-102.28259,1,1
+20,Ahmedabad,Asawal,India,23.039568,72.566004,1,25
+21,Ahmednagar,,India,19.095208,74.749592,1,8
+22,Aix,,France,43.526304, 5.445429,3,8
+23,Ajmer,,India,26.44976,74.64116,1,4
+24,Akita,,Japan,39.71667,140.11667,1,1
+25,Akron,Ohio,United States of America,41.0731,-81.5178,1,4
+26,Aksu,Aqsu,China,41.12306,80.26444,1,3
+27,Akyab,Sittwe,Myanmar,20.144444,92.896944,1,1
+28,Albany,New York,United States of America,42.652578,-73.756233,1,5
+29,Aldershot,,United Kingdom,51.24827,-0.76389,1,1
+30,Aleppo,,Syria,36.216667,37.166667,1,35
+31,Alessandria,,Italy,44.91245,8.61894,1,9
+32,Alexandria,,Egypt,31.200092,29.918739,1,30
+33,Algiers,,Algiers,36.7525,3.04197,1,19
+34,Al-Hasa,"Lahsa, Ahsa, El Hasa, Al Ahsa, Hadjar",Saudi Arabia,25.429444,49.621944,2,2
+35,Alicante,,Spain,38.34517,-0.48149,1,1
+36,Aligarh,,India,27.88334,78.07475,1,1
+37,Alkalawa,Gobir,Nigeria,9.2833,8.4,3,3
+38,Allada,Ardra,Benin,6.66547,2.15138,1,2
+39,Allahabad,Prayag,India,25.44894,81.83328,1,10
+40,Allentown,Pennsylvania,United States of America,40.17789,-74.58349,1,3
+41,Almaty,Alma-Ata,Kazakhstan,43.2775,76.895833,1,2
+42,Almeria,Almería ,Spain,36.83814,-2.45974,1,9
+43,Alost,Aalst,Belgium,50.93781,4.040952,3,1
+44,Altenburg,,Germany,50.985,12.433333,1,1
+45,Altoona,Pennsylvania,United States of America,40.518681,-78.394736,3,1
+46,Alwar,,India,27.56246,76.625,1,1
+47,Amalfi,,Italy,40.634003,14.602683,1,3
+48,Amarapura,,Myanmar,21.892983,96.05,1,8
+49,Amarna,,Egypt,27.64528963,30.89624244,1,1
+50,Amber,Amer,India,26.985847,75.888251,3,9
+51,Amiens,,France,49.892,2.299,1,14
+52,Amman,,Jordan,31.95522,35.94503,1,1
+53,Amravati,Amraoti,India,20.9258,77.7647,2,1
+54,Amritsar,,India,31.63661,74.87476,1,7
+55,Amroha,,India,28.90314,78.46984,1,3
+56,Amsterdam,,Netherlands,52.37403,4.88969,1,27
+57,Anantpur,"Penugonda, Penukonda ",India,14.08339,77.59588,3,7
+58,Anbar,Al Anbar Governorate,Iraq,32.559761,41.919647,3,1
+59,Ancona,,Italy,43.59816,13.51008,3,1
+60,Andizhan ,Andijan,Uzbekistan,40.783333,72.333333,1,1
+61,Andria,,Italy,41.23063,16.29087,2,1
+62,Angers,,France,47.46667,-0.55,1,19
+63,Angkor,,Cambodia,13.412417,103.86705,1,12
+64,Angouleme,Angoulême ,France,45.65,0.15,1,1
+65,Ani,,Turkey,40.501381,43.567128,2,1
+66,Ankara,Angora,Turkey,39.91987,32.85427,1,9
+67,Anqing,Anking,China,30.50917,117.05056,1,3
+68,Anshan,,China,41.1167,122.9833,1,1
+69,Antananarivo,Tananarive,Madagascar,-18.914812,47.531623,1,1
+70,Antioch,,Syria/Turkey,36.20655,36.15722,2,12
+71,Antwerp,Antwerpen ,Belgium,51.219217,4.402883,1,21
+72,Anuradhapura,Anuradha-Pura,Sri Lanka,8.31223,80.41306,1,2
+73,Anyang,,China,36.09944,114.32889,3,1
+74,Ao,Zhengzhou,China,34.766667,113.65,2,2
+75,Apamea,,Turkey,35.41853326,36.40475674,3,1
+76,Arad,,Romania,46.18333,21.31667,1,1
+77,Arakan,Rakhine,Myanmar,19.810092,93.987842,1,10
+78,Arcot,Vellore,India,12.90569,79.31897,1,2
+79,Arequipa,,Peru,-16.39889,-71.535,1,9
+80,Argos,Argolis,Greece,37.63333,22.73333,1,2
+81,Arkhangelsk ,Archangel,Russian Federation,64.533333,40.533333,3,1
+82,Arles,,France,43.6767,4.6278,1,12
+83,Arnhem,,Netherlands,51.98,5.91111,1,1
+84,Aror,,Pakistan,27.65,68.9833,3,1
+85,Arrah,Ara,India,25.34,84.4,2,1
+86,Arras,,France,50.291,2.777533,1,10
+87,Astrakhan,"Atil, Itil",Russian Federation,46.366681,48.083239,1,13
+88,Asuncion,Asunción ,Paraguay,-25.30066,-57.63591,1,7
+89,Asyut,,Egypt,27.18096,31.18368,1,10
+90,Athens,,Greece,37.97945,23.71622,1,19
+91,Atlanta,,United States of America,33.749,-84.38798,1,4
+92,Auburn,Alabama,United States of America,32.587778,-85.480833,3,1
+93,Auckland,,New Zealand,-36.86667,174.76667,1,3
+94,Augsberg,Ausburg,Germany,48.371444,10.898239,1,24
+95,Augusta,Georgia,United States of America,33.473498,-82.010515,3,1
+96,Aurangabad,,India,19.876165,75.343314,1,8
+97,Avaris,near Pi-Rameses,Egypt,30.78629566,31.82221773,2,1
+98,Avignon,,France,43.94834,4.80892,1,16
+99,Axum,,Ethiopia,14.131781,38.714081,1,5
+100,Ayacucho,"Guamanga, Huamanga",Peru,-13.1615,-74.22154,1,10
+101,Aydin,,Turkey,37.84501,27.83963,1,1
+102,Ayutthaya,Ayutia,Thailand,14.35,100.55,2,13
+103,Ayvalik,Aivali,Turkey,39.33589,26.71281,1,1
+104,Azemmour ,Azammour,Morocco,33.287778,-8.342222,1,4
+105,Babylon,,Iraq,32.536389,44.420833,1,3
+106,Badajoz,,Spain,38.87789,-6.97061,1,6
+107,Badami,Vatapi,India,15.91495,75.67683,2,2
+108,Baeza,,Spain,37.99384,-3.47103,1,6
+109,Bagan,Pagan,Myanmar,21.172111,94.8602,1,4
+110,Baghdad,Bagdad,Iraq,33.34058,44.40088,1,30
+111,Bahawalpur,,Pakistan,29.3956,71.68333,1,1
+112,Bakhchiserai,,Ukraine,44.755286,33.867233,1,8
+113,Baku,,Azerbaijan,40.37767,49.89201,1,4
+114,Balasaghun,"Balasaqun, Gobalik",Kyrgyzstan,42.379739,75.250456,2,6
+115,Balkh,,Afghanistan,36.75635,66.8972,1,5
+116,Ballarat,,Australia,-37.56622,143.84957,1,1
+117,Baltimore,Maryland,United States of America,39.29038,-76.61219,1,9
+118,Bamberg,,Germany,49.89873,10.90067,1,1
+119,Banda,Uttar Pradesh,India,25.4833,80.3333,3,1
+120,Bandar Seri Begawan,,Brunei,4.890283,114.942217,3,5
+121,Bandung,,Indonesia,-6.914744,107.609814,3,2
+122,Bangalore,,India,12.97194,77.59369,1,8
+123,Bangkok,,Thailand,13.75398,100.50144,1,12
+124,Bantam,Batu Besar,Indonesia,-6.405369,106.064081,1,2
+125,Baoding,Paoting,China,38.873891,115.464806,2,1
+126,Baotou,Paotow,China,40.65744,109.84054,1,1
+127,Barcelona,,Spain,41.38879,2.15899,1,42
+128,Bareilly,,India,28.34702,79.42193,1,7
+129,Bari,,Italy,41.117142,16.871872,1,8
+130,Barletta,,Italy,41.31183,16.29077,1,1
+131,Barnaul,,Russian Federation,53.36056,83.76361,1,2
+132,Barnsley,,United Kingdom,53.55,-1.48333,1,1
+133,Barquisimeto,,Venezuela,10.07389,-69.32278,1,1
+134,Barranquilla,,Colombia,10.96854,-74.78132,1,3
+135,Barrow,Alaska,United States of America,71.29058,-156.78872,2,1
+136,Basel,,Switzerland,47.5584,7.57327,1,2
+137,Basra,Basrah,Iraq,30.5,47.816667,2,19
+138,Bassein,Pathein,Myanmar,16.774168,94.731666,2,1
+139,Bath,,United Kingdom,51.37795,-2.35907,1,6
+140,Bauchi,Yakoba,Nigeria,10.315833,9.844167,3,2
+141,Bay City,Michigan,United States of America,43.59505,-83.888639,2,1
+142,Beijing,Peking,China,39.9075,116.39723,1,38
+143,Beirut,,Lebanon,33.88894,35.49442,1,2
+144,Bejaia,"Bougie, Béjaïa",Algeria,36.75,5.066667,2,11
+145,Belem,"Belém, Para",Brazil,-1.455833,-48.503889,3,4
+146,Belfast,,Ireland,54.597283,-5.930117,1,11
+147,Belgaum,,India,15.85212,74.50447,1,1
+148,Belgorod-Dnestrovskiy ,"Bilhorod-Dnistrovskyi, Akkerman",Ukraine,46.183333,30.333333,1,1
+149,Belgrade,Beograd,Serbia,44.80401,20.46513,1,16
+150,Bellary,,India,15.14575,76.91751,1,5
+151,Belo Horizonte,,Brazil,-19.92083,-43.93778,1,2
+152,Belur,,India,13.16558,75.86519,3,1
+153,Bendery,Bender,Republic of Moldova,46.83056,29.47111,1,1
+154,Bendigo,,Australia,-36.75818,144.28024,1,1
+155,Benin,Oedo,Nigeria,6.339081,5.626483,2,11
+156,Benxi,,China,41.28861,123.765,1,1
+157,Berdychiv ,Berdichev,Ukraine,49.907903,28.587936,1,4
+158,Bergamo,,Italy,45.69798,9.66895,1,12
+159,Bergen,,Norway,60.391264,5.322053,1,8
+160,Bergisch Gladbach,Gladbach,Germany,51.2,7.116667,3,2
+161,Berlin,,Germany,52.52437,13.41053,1,13
+162,Bern,,Switzerland,46.94809,7.44744,1,1
+163,Bernburg ,Bernberg,Germany,51.797014,11.73421,2,1
+164,Beruit,,Lebanon,33.888629,35.495479,1,1
+165,Berwick-upon-Tweed,Berwick,United Kingdom,55.771,-2.007,3,1
+166,Besancon,Besançon ,France,47.24878,6.01815,1,13
+167,Beziers, Béziers,France,43.34762,3.21899,1,9
+168,Bhagalpur,Boglipore,India,25.24446,86.97183,1,5
+169,Bhaktapur,"Bhatgaon, Bhadgaon",Nepal,27.672222,85.427778,1,2
+170,Bharatpur,Bhurtpore,India,27.21731,77.49009,3,6
+171,Bhavnagar,,India,21.77446,72.1525,1,1
+172,Bhimavaram ,Bhimavarman,India,16.54541,81.531578,1,3
+173,Bhiwani,,India,28.79194,76.14108,1,1
+174,Bhuj,,India,23.25397,69.66928,1,1
+175,Bialystok,,Poland,53.13333,23.16433,1,1
+176,Bida,,Nigeria,9.08333,6.01667,1,1
+177,Bidar,,India,17.91331,77.5301,3,1
+178,Bielefeld,,Germany,52.03333,8.53333,1,1
+179,Bihar,"Udantapura, Odantapuri",India,25.096074,85.313119,3,6
+180,Bijapur,,India,16.82442,75.71537,1,9
+181,Bikaner,,India,28.02094,73.30749,1,2
+182,Bilbao,,Spain,43.26271,-2.92528,1,3
+183,Binghamton,New York,United States of America,42.09869,-75.91797,2,1
+184,Binh Dinh,Vijaya,Vietnam,14.166256,108.902683,2,6
+185,Birmingham,,United Kingdom,52.48142,-1.89983,1,15
+186,Birmingham,Alabama,United States of America,33.520661,-86.80249,1,5
+187,Bitlis,,Turkey,38.40115,42.10784,1,2
+188,Blackburn,,United Kingdom,53.748578,-2.487536,2,5
+189,Blackpool,,United Kingdom,53.81667,-3.05,2,1
+190,Blagoveshchensk ,Blagovyeshchensk,Russian Federation,50.272776,127.540406,1,1
+191,Bobastro,Malaga Province,Spain,36.716667,-4.416667,2,1
+192,Bobruysk ,Bobruisk,Belarus,53.15,29.233333,1,1
+193,Bogota,"Bacata, Funza, Bogotá",Columbia,4.598056,-74.075833,1,13
+194,Bologna,,Italy,44.49381,11.33875,1,28
+195,Bolton,,United Kingdom,53.58333,-2.43333,1,5
+196,Bonga,,Ethiopia,7.28333,36.23333,2,1
+197,Bonn,,Germany,50.73438,7.09548,1,3
+198,Bordeaux,,France,44.84044,-0.5805,1,23
+199,Borinage,,Belgium,50.617619,3.345133,2,4
+200,Bost,"Bust, Lashkar Gah",Afghanistan,31.583056,64.369167,2,2
+201,Boston,,United States of America,42.358431,-71.059772,1,11
+202,Boulogne,Boulogne-sur-Mer,France,50.7264,1.6147,2,1
+203,Bourges,,France,47.08333,2.4,1,11
+204,Bournemouth,,United Kingdom,50.72048,-1.8795,1,2
+205,Bradford,,United Kingdom,53.79391,-1.75206,2,7
+206,Braila,,Romania,45.26667,27.98333,1,1
+207,Brandenburg,Bradenburg an der Havel,Germany,52.416667,12.533333,3,1
+208,Brasilia,Brasília,Brazil,-15.77972,-47.92972,1,1
+209,Brasov ,"Brassov, Brasso",Romania,45.666667,25.616667,2,1
+210,Brasov ,Kronstadt,Romania,45.655651,25.6108,1,1
+211,Bratislava,"Pozsony, Pressburg",Slovakia,48.145892,17.107136,2,14
+212,Braunschweig,Brunswick,Germany,52.268875,10.526769,1,11
+213,Bremen,,Germany,53.07516,8.80777,1,18
+214,Bremerhaven,,Germany,53.55021,8.57674,1,1
+215,Brescia,,Italy,45.52478,10.22727,1,23
+216,Brest,Brest-Litovsk,Belarus,52.133333,23.666667,2,1
+217,Brest,,France,48.3908,-4.486075,1,7
+218,Bridgeport,Connecticut,United States of America,41.1864,-73.1956,3,2
+219,Brighton,,United Kingdom,50.822531,-0.137164,2,6
+220,Brisbane,,Australia,-27.46794,153.02809,1,4
+221,Bristol,,United Kingdom,51.45523,-2.59665,1,16
+222,Broach,,India,21.724644,73.002294,3,9
+223,Brockton,Massachusetts,United States of America,42.08343,-71.01838,1,1
+224,Brugge,Bruges,Belgium,51.210819,3.224936,1,22
+225,Brunn,Brno,Austria,49.2,16.6167,2,11
+226,Brussel,Brussels,Belgium,50.85045,4.34878,1,25
+227,Bucharest,,Romania,44.43225,26.10626,1,17
+228,Budapest,,Hungary,47.49801,19.03991,1,21
+229,Budaun,,India,28.0362,79.12631,1,1
+230,Buenos Aires,,Argentina,-34.61315,-58.37723,1,19
+231,Buffalo,,United States of America,42.9047,-78.8494,1,6
+232,Bukhara,Bokhara,Uzbekistan,39.765869,64.422347,1,26
+233,Burgos,,Spain,42.35,-3.7,1,12
+234,Burhanpur,,India,21.30898,76.22996,2,7
+235,Burnley,,United Kingdom,53.8,-2.23333,1,1
+236,Bursa,Brusa,Turkey,40.19266,29.08403,1,22
+237,Bury,,United Kingdom,53.593,-2.298,1,1
+238,Busan,Pusan,Republic of Korea,35.179554,129.075642,3,4
+239,Bussa,Boussa,Nigeria,10.194264,4.564217,2,2
+240,Bydgoszcz,Bromberg,Poland,53.116667,18,3,1
+241,Cadiz,,Spain,36.52978,-6.29465,1,13
+242,Caen,,France,49.18585,-0.35912,1,21
+243,Cagliari,,Italy,39.20738,9.13462,1,1
+244,Cahokia,Missouri,United States of America,38.57088,-90.19011,1,2
+245,Cairo,"Fostat, Fustat",Egypt,30.06263,31.24967,1,35
+246,Cajamarquilla,,Peru,-11.985278,-76.910556,3,1
+247,Calais,,France,50.9581,1.85205,1,1
+248,Calcutta,Kolkata,India,22.56263,88.36304,1,14
+249,Cali,Santiago de Cali,Colombia,3.43722,-76.5225,1,2
+250,Calicut,,India,11.258753,75.78041,3,12
+251,Caltanissetta,,Italy,37.490112,14.062893,1,1
+252,Cambay,,India,22.313114,72.619408,3,17
+253,Cambridge,,United Kingdom,52.205,0.119,1,1
+254,Campulung Muscel ,,Romania,47.5308,25.5514,1,3
+255,Canton,Ohio,United States of America,40.805, -81.375833,2,1
+256,Cape Town,,South Africa,-33.92584,18.42322,1,4
+257,Cap-Haitien,"Cap Francois, Cap-Haïtien  ",Haiti,19.756219,-72.199669,1,2
+258,Capua,,Italy,41.09971,14.22013,1,1
+259,Caracas,,Venezuela,10.48801,-66.87919,1,12
+260,Cardiff,,Wales,51.481581,-3.17909,1,4
+261,Carlisle,,United Kingdom,54.8951,-2.9382,1,1
+262,Cartagena,,Spain,37.625683,-0.996583,1,10
+263,Carthage,,Tunisia,36.8581,10.3308,3,6
+264,Casablanca,,Morocco,33.58831,-7.61138,1,2
+265,Cassel,,France,50.80109,2.48527,1,1
+266,Catania,,Italy,37.50213,15.08719,1,17
+267,Cerignola,,Italy,41.26403,15.90046,1,1
+268,Ceske Budejovice,"Budweis, Ceské Budejovice",Czech Republic,48.974722,14.474722,2,1
+269,Ceuta,,Spain,35.88933,-5.31979,1,6
+270,Chakanputun,Chanpoton,Mexico,19.35,-90.716667,2,1
+271,Chanchan, Chancán ,Peru,-8.106,-79.074536,1,1
+272,Chanda,,India,26.064269,82.315343,3,4
+273,Chandannagar,Chandernagore,India,22.87,88.38,2,6
+274,Chanderi,,India,24.71514,78.1376,2,2
+275,Chandragiri,,India,13.5833,79.3167,2,2
+276,Changchun,"Hsinking, Kwangchingtsu",China,43.9,125.2,1,5
+277,Changsha,,China,28.196111,112.972222,1,16
+278,Changteh,,China,28.228209,112.938814,3,1
+279,Changzhou,"Changchow, Jiangsu province",China,31.77358,119.95401,1,6
+280,Chaozhou,"Chaochow, Chaohsien",China,23.67,116.63,3,4
+281,Charleston,South Carolina,United States of America,32.7833,-79.9333,1,3
+282,Chatham,,United Kingdom,51.37891,0.52786,2,5
+283,Chattanooga,Tennessee,United States of America,35.04563,-85.30968,1,1
+284,Chefoo,Yantai,China,37.535,121.389167,2,1
+285,Cheltenham,,United Kingdom,51.883333,-2.066667,2,1
+286,Chelyabinsk,,Russian Federation,55.15402,61.42915,1,2
+287,Chemnitz,,Germany,50.83333,12.91667,1,2
+288,Chengde,Jehol,China,40.966667,117.933333,3,4
+289,Chengdu,,China,30.66667,104.06667,1,35
+290,Cherbourg,Cherbourg-Octeville,France,49.639093,-1.625298,1,1
+291,Chernivtsi,Czernowitz,Ukraine,48.291683,25.935217,3,1
+292,Chester,,United Kingdom,53.1903,-2.8916,3,1
+293,Chhapra,,India,25.7848,84.7274,3,5
+294,Chiang Mai,Chiengmai,Thailand,18.790978,98.960775,1,4
+295,Chibiri,Naya,Ghana,6.82,-2.42,3,2
+296,Chicago,Illinois,United States of America,41.85003,-87.65005,1,7
+297,Chihuahua,,Mexico,28.63333,-106.08333,1,1
+298,Chillan, Chillán ,Chile,-36.60664,-72.10344,1,1
+299,Chillicothe,Ohio,United States of America,39.3364,-82.9839,3,2
+300,Chincha,,Peru,-13.45,-76.133333,2,1
+301,Chinkiang,Zhenjiang,China,32.2,119.416667,2,15
+302,Chisinau,"Kishinev, Chisinãu ",Republic of Moldova,47.026858,28.84155,1,5
+303,Chittagong,,Bangladesh,22.3384,91.83168,1,2
+304,Chittoor,,India,13.217176,79.100329,2,8
+305,Cholula,,Mexico,19.06333,-98.306389,1,12
+306,Chongqing,"Chonquing, Chungking",China,29.56301,106.551557,2,11
+307,Chorzow ,Konigshutte,Poland,50.3,18.95,3,1
+308,Christchurch,,New Zealand,-43.532054,172.636225,1,1
+309,Chunar,"Chandalgar, Uttar Pradesh",India,25.12909,82.8836,1,2
+310,Cincinnati,,United States of America,39.162,-84.45689,1,9
+311,Clermont,,France,45.7831,3.0824,2,9
+312,Cleveland,Ohio,United States of America,41.499495,-81.695409,1,6
+313,Cluj-Napoca,Koloszvar,Romania,46.777248,23.59989,1,1
+314,Coatbridge,,United Kingdom,55.86216,-4.02469,1,1
+315,Cochabamba,Oropesa,Bolivia,-17.3895,-66.1568,1,5
+316,Cochin,,India,9.93988,76.26022,1,8
+317,Coimbatore,,India,11.00555,76.96612,1,2
+318,Coimbra,,Portugal,40.20564,-8.41955,1,5
+319,Colchester,,United Kingdom,51.88921,0.90421,1,1
+320,Colmar,,France,48.08333,7.36667,1,1
+321,Cologne,"Koln, Coln",Germany,50.937531,6.960278,1,28
+322,Colombo,,Sri Lanka,6.9344,79.8428,1,5
+323,Columbus,Ohio,United States of America,39.961176,-82.998794,1,4
+324,Conakry,,Guinea,9.53795,-13.67729,1,1
+325,Concepcion, Concepción ,Chile,-36.818938,-73.050319,1,1
+326,Constantine,,Algeria,36.365,6.61472,1,13
+327,Copenhagen,,Denmark,55.67594,12.56553,1,20
+328,Cordoba,,Argentina,-31.4135,-64.18105,1,3
+329,Cordoba,"Cordova, Córdoba",Spain,38.046133,-4.893564,2,25
+330,Corinth,,Greece,37.938636,22.932228,1,3
+331,Cork,,Ireland,51.89797,-8.47061,1,12
+332,Cossimbazar,Kasimbazar,India,24.1167,88.2833,3,4
+333,Cottbus,,Germany,51.75769,14.32888,1,1
+334,Coventry,,United Kingdom,52.40656,-1.51217,3,3
+335,Craiova,,Romania,44.333333,23.816667,2,1
+336,Cremona,,Italy,45.13617,10.02797,1,16
+337,Crewe,,United Kingdom,53.09787,-2.44161,1,1
+338,Crotone,Croton,Italy,39.08144536,17.12880422,2,1
+339,Ctesiphon,Taq-I  Kisra,Iraq,33.09378746,44.58006701,1,3
+340,Cuddalore,,India,11.74629,79.76436,2,1
+341,Cuenca,,Ecuador,-2.8992,-79.0153,1,1
+342,Cuiaba ,"Cuiabá, Cuyaba",Brazil,-15.598917,-56.094894,1,1
+343,Curitiba,,Brazil,-25.42778,-49.27306,1,2
+344,Cuttack,,India,20.46497,85.87927,1,23
+345,Cuzco,,Peru,-13.525,-71.972222,1,13
+346,Cyrene,near present-day Shahhat,Libya,32.81901498,21.85583296,3,2
+347,Czestochowa,,Poland,50.79646,19.12409,1,1
+348,Da Nang,,Vietnam,16.051571,108.214897,1,1
+349,Daegu,Taegu,Republic of Korea,35.871435,128.601445,1,2
+350,Daejeon,Taejon,Republic of Korea,36.350412,127.384548,1,1
+351,Dakar,,Senegal,14.6937,-17.44406,1,1
+352,Dali,Tali,China,25.606486,100.267638,1,13
+353,Dallas,Texas,United States of America,32.78014,-96.800451,1,3
+354,Damascus,,Syria,33.5102,36.29128,1,30
+355,Dandong,Antung,China,40.1167,124.3833,2,1
+356,Darbhanga,,India,26.15216,85.89707,1,1
+357,Dar-es-Salaam,Dar es Salaam,Tanzania,-6.822921,39.269661,1,1
+358,Darlington,,United Kingdom,54.527,-1.5526,3,1
+359,Darmstadt,,Germany,49.87056,8.64944,1,1
+360,Datong,"Taitong, Tatung",China,40.083333,113.3,2,5
+361,Daugavpils,Dvinsk,Latvia,55.875,26.535556,3,1
+362,Daulatabad,Deogiri,India,19.942724,75.213164,3,3
+363,Davenport,Iowa,United States of America,41.5431,-90.5908,3,1
+364,Dayton,Ohio,United States of America,39.11284,-84.47272,1,3
+365,Debrecen,,Hungary,47.53333,21.63333,1,9
+366,Delft,,Netherlands,52.00667,4.35556,1,9
+367,Delhi,,India,28.65381,77.22897,1,33
+368,Demak,,Indonesia,-6.8909,110.6396,1,1
+369,Denver,Colorado,United States of America,39.737567,-104.984718,1,4
+370,Dera Ismail Khan,,Pakistan,31.83269,70.9024,1,1
+371,Derby,,United Kingdom,52.922531,-1.474619,1,5
+372,Deri Ghazi Khan,,Pakistan,30.053049,70.637093,1,1
+373,Des Moines,Iowa,United States of America,41.60054,-93.60911,1,1
+374,Dessau-Rosslau ,,Germany,51.83864,12.24555,1,1
+375,Detroit,Michigan,United States of America,42.33143,-83.04575,1,6
+376,Dewsbury,,United Kingdom,53.69076,-1.62907,1,1
+377,Dhaka,Dacca,India,23.709921,90.407143,1,15
+378,Dhanbad,,India,23.80199,86.44324,1,1
+379,Dhar,,India,22.59373,75.29774,1,5
+380,Dharwad ,Dharwar,India,15.364708,75.123955,3,1
+381,Dienne,"Guinea, Jenne",Senegal,15.033366,-16.350122,3,6
+382,Dieppe,,France,49.922992,1.077483,1,11
+383,Dijon,,France,47.31667,5.01667,1,19
+384,Dikwa,Emirate,Nigeria,12.02396,13.91646,1,1
+385,Dinajpur,,Bangladesh,25.62745,88.63779,2,1
+386,Diu,Dui,India,21.081554,76.091401,3,6
+387,Diyarbakir,Diarbekr,Turkey,37.914411,40.230628,1,15
+388,Dnipropetrovsk,"Dnepropetrovsk, Ekaterinoslav",Ukraine,48.464717,35.046183,1,3
+389,Donetsk,"Donestsk, Stalino",Ukraine,48.015883,37.80285,1,2
+390,Dongo,Pungu n'Dongo,Angola,-9.6625,15.583889,3,1
+391,Dongola,"Pachoras, Mukarra",Sudan,19.16667,30.48333,1,7
+392,Dordrecht,,Netherlands,51.81,4.67361,1,9
+393,Dortmund,,Germany,51.51494,7.466,1,3
+394,Dover,,United Kingdom,51.13333,1.3,1,1
+395,Dresden,,Germany,51.05089,13.73832,1,18
+396,Dublin,,Ireland,53.33306,-6.24889,1,26
+397,Dubuque,Iowa,United States of America,42.50056,-90.66457,1,1
+398,Duhuang,Tunhuang,China,40.15,94.666667,2,1
+399,Duluth,Minnesota,United States of America,46.786672,-92.100485,1,1
+400,Dumyat,Damietta,Egypt,31.41648,31.81332,1,12
+401,Dundee,,United Kingdom,56.5,-2.96667,1,10
+402,Dunedin,,New Zealand,-45.87416,170.50361,1,1
+403,Dunkerque,Dunkirk,France,51.0383,2.3775,1,10
+404,Durango,,Mexico,24.016667,-104.666667,3,1
+405,Durban,,South Africa,-29.8579,31.0292,1,3
+406,Dur-Kurigalzu,,Iraq,33.35355825,44.20235367,1,2
+407,Dusseldorf,Düsseldorf ,Germany,51.22172,6.77616,1,4
+408,Dvin,,Armenia,40.01984,44.58376,2,1
+409,Dzibalchaltun,"Dzibilchaltún, Dzibilchaltun",Mexico,21.091075,-89.590453,2,1
+410,East Berlin,,Germany,52.5186,13.4044,1,1
+411,Eastbourne,,United Kingdom,50.76871,0.28453,1,1
+412,Ebla,,Syria,35.79839754,36.79872812,1,1
+413,Ecbatana,,Iran,34.8053317919 ,48.51738769,1,1
+414,Ecija,Écija ,Spain,37.5422,-5.0826,1,6
+415,Edessa,Urfa,Turkey,37.15,38.8,1,13
+416,Edinburgh,,United Kingdom,55.95206,-3.19648,1,23
+417,Edirne,Adrianople,Turkey,41.681808,26.562269,1,19
+418,Edmonton,,Canada,53.55014,-113.46871,1,1
+419,Eisenach,,Germany,50.9807,10.31522,1,1
+420,El Paso,Texas,United States of America,31.7903,-106.4233,1,1
+421,El Tajin,"Tajin, El Tajín",Mexico,20.4481,97.3782,2,4
+422,Elblag,Elbing,Poland,54.166667,19.4,2,1
+423,Elis,Eleia,Greece,37.89189226,21.37348005,1,1
+424,Ellora,,India,20.026319,75.177641,3,2
+425,Elmira,New York,United States of America,42.0898,-76.80773,3,1
+426,Elvira,,Spain,36.5025,-4.783611,3,1
+427,Ephesus,,Turkey,37.94049284,27.34104109,3,2
+428,Erfurt,,Germany,50.9787,11.03283,1,11
+429,Erzurum,"Theodosiopolis, Erzerum",Turkey,39.90861,41.27694,1,5
+430,Esfahan,Isfahan,Iran,32.651389,51.679192,1,30
+431,Esztergom,,Hungary,47.7928,18.74148,1,3
+432,Etawah,,India,26.7778,79.02159,1,1
+433,Evansville,Indiana,United States of America,37.97476,-87.55585,1,1
+434,Evora, Évora ,Portugal,38.56667,-7.9,1,4
+435,Exeter,,United Kingdom,50.7236,-3.52751,1,6
+436,Faisalabad,,Pakistan,31.41667,73.08333,1,1
+437,Faiyum  ,Medinet-el-Fayum,Egypt,29.308374,30.844105,2,1
+438,Faizabad,"Ayodhya, Ajodhya, Fyzabad",India,26.779386,82.142169,2,9
+439,Fall River,Massachusetts,United States of America,41.70149,-71.15505,1,1
+440,Farrukhabad,,India,27.39048,79.58006,3,8
+441,Fatehpur Sikri,,India,27.0937,77.66003,1,2
+442,Feodosia,"Kaffa, Theodosia, Feodosiya, Caffa",Russian Federation,45.048889,35.379167,2,13
+443,Ferrara,,Italy,44.82678,11.62071,1,20
+444,Fez,Fes,Morocco,34.033333,-5.01,1,27
+445,Firozpur,Ferozepore,India,30.918094,74.616113,1,1
+446,Firuzkoh,Ghor,Afghanistan,34.099578,64.905956,2,2
+447,Fitchburg,Massachusetts,United States of America,42.58342,-71.8023,1,1
+448,Flensburg,,Germany,54.78431,9.43961,1,1
+449,Florence,Firenze,Italy,43.771033,11.248,1,32
+450,Florianopolis,Florianópolis ,Brazil,-27.59667,-48.54917,1,1
+451,Foggia,,Italy,41.46093,15.54925,1,1
+452,Folkestone,,United Kingdom,51.08333,1.18333,1,1
+453,Forst,,Germany,51.73544,14.63971,1,1
+454,Fort Wayne,Indiana,United States of America,41.1306,-85.12886,2,1
+455,Fort Worth,Texas,United States of America,32.72541,-97.32085,1,1
+456,Fortaleza,,Brazil,-3.71722,-38.54306,1,3
+457,Frankfurt am Main,,Germany,50.110922,8.682128,1,21
+458,Frankfurt/Oder,Oder,Germany,52.34249,14.538127,2,1
+459,Freetown,,Sierra Leone,8.43194,-13.28972,1,1
+460,Freiberg,,Germany,50.91089,13.33881,1,1
+461,Freiburg im Breisgau,,Germany,47.9959,7.85222,1,1
+462,Fua,"Puwa, near Alexandria",Egypt,31.207161,29.960322,3,2
+463,Fukui,,Japan,36.065178,136.221527,1,2
+464,Furth,Fürth ,Germany,49.477117,10.988667,1,1
+465,Fushun,Liaoning province,China,41.85583,123.92333,3,2
+466,Fuzhou,"Fuchow, Hokchiu, Fujian province",China,26.076111,119.306389,1,35
+467,Galati,Galatz,Romania,45.42572,28.031044,1,1
+468,Galle,,Sri Lanka,6.0367,80.217,1,1
+469,Galveston,Texas,United States of America,29.281111,-94.825833,1,1
+470,Gangaikonda Cholapuram,"Jayakondacholapuram, Ganaikonda, Chalapuram",India,11.20718,79.367622,2,1
+471,Ganja,Elizavetpol,Azerbaijan,40.682778,46.360556,2,1
+472,Gao,"Kagho, Kukia, Gogo",Mali,16.27167,-0.04472,2,9
+473,Gauda,"Lakhnauti, Gaur",India,24.866667,88.133333,2,13
+474,Gaya,,India,24.79686,85.00385,1,6
+475,Gdansk,Danzig,Poland,54.352025,18.64663,2,19
+476,Gela,,Italy,37.08034,14.23068,1,1
+477,Gelibolu,Gallipoli,Turkey,40.333333,26.499992,1,10
+478,Geneva,Genève ,Switzerland,46.198392,6.142297,1,13
+479,Genova,Genoa,Italy,44.40565,8.946256,1,30
+480,Gent,Ghent,Belgium,51.053469,3.730378,1,26
+481,Georgetown,,Guyana,6.8,-58.166667,2,1
+482,Gera,,Germany,50.88029,12.08187,1,1
+483,Ghazipur,"Ghazeepore, Gauspur, Ghazipour",India,25.58052,83.58058,1,1
+484,Ghazni,,Afghanistan,33.55391,68.42096,1,6
+485,Gibraltar,,Britain  ,36.14474,-5.35257,2,1
+486,Gifu,,Japan,35.423298,136.760654,1,2
+487,Glasgow,,United Kingdom,55.86515,-4.25763,1,21
+488,Gliwice,Gleiwitz,Poland,50.294491,18.671384,1,1
+489,Gloucester,,United Kingdom,51.87,-2.24,1,1
+490,Goa,,India,15.299333,74.124,1,14
+491,Goiania,Goiânia ,Brazil,-16.67861,-49.25389,1,1
+492,Golkonda,Golconda,India,17.382986,78.402003,3,2
+493,Gomel,,Belarus,52.445278,30.984167,1,1
+494,Gondar,,Ethiopia,12.600003,37.466669,1,6
+495,Gorakhpur,,India,26.760555,83.373168,2,7
+496,Gorlitz,"Corlitz, Görlitz ",Germany,51.150627,14.968707,3,1
+497,Gortyn,"Gortys, Gortyna",Greece,35.06262738,24.94680958,1,1
+498,Goteborg,Göteborg ,Sweden,57.70887,11.97456,1,4
+499,Gotha,,Germany,50.94823,10.70193,1,1
+500,Gottingen,Göttingen ,Germany,51.53933,9.93406,1,1
+501,Granada,,Spain,37.177336,-3.598558,1,31
+502,Grand Rapids,Michigan,United States of America,42.96336,-85.66809,1,2
+503,Graz,,Austria,47.06667,15.45,1,8
+504,Great Yarmouth,,United Kingdom,52.60831,1.73052,1,1
+505,Greenock,,United Kingdom,55.94838,-4.76121,1,1
+506,Grenoble,,France,45.16667,5.71667,1,12
+507,Gresik,"Grisee, Java",Indonesia,-7.15389,112.65611,3,4
+508,Grimsby,,United Kingdom,53.56539,-0.07553,1,1
+509,Grodno,Hrodna,Belarus,53.666667,23.833333,2,1
+510,Groningen,,Netherlands,53.21917,6.56667,1,7
+511,Groznyj ,Grozny,Russian Federation,43.30191,45.67228,1,1
+512,Grudziadz ,Graudenz,Poland,53.483749,18.753565,1,1
+513,Guadalajara,,Mexico,20.673819,-103.343489,1,9
+514,Guadalajara,,Mexico,20.67359,-103.343803,1,1
+515,Guanajuato,,Mexico,21.01858,-101.2591,1,11
+516,Guangzhou,Canton,China,23.11667,113.25,1,36
+517,Guatemala City,Iximche,Guatemala,14.64072,-90.51327,1,18
+518,Guayaquil,,Ecuador,-2.18194,-79.89167,1,12
+519,Guben,,Germany,51.94987,14.71447,1,1
+520,Guilin,"Gwilin, Kweilin",China,25.273566,110.290195,3,4
+521,Guiyang,"Gwiyang, Kweiyang",China,26.647661,106.630154,1,11
+522,Guizhou,Kweichow,China,26.598194,106.70741,1,1
+523,Gulbarga,,India,17.33764,76.83787,1,4
+524,Gumarcaj,"Gumarcaah, Utatlan, Gumarkaaj, Gumarcaj, Cumarcaj, Kumarcaaj, Q'umarkaj",Guatemala,14.7667,-91.2667,2,3
+525,Guntur,,India,16.29974,80.45729,1,1
+526,Gurgaon,Gargaon,India,28.459497,77.026638,3,2
+527,Gwalior,,India,26.22982,78.17337,1,8
+528,Gwalior,Lashkar,India,26.22337,78.173622,3,1
+529,Gwangju,Kwangchu,Republic of Korea,35.166667,126.916667,1,1
+530,Gyeongju,Kyongju,Republic of Korea,35.856172,129.224747,1,1
+531,Haarlem,,Netherlands,52.38084,4.63683,1,13
+532,Haikou,Kiungshan,China,20.003143,110.354149,3,1
+533,Haining ,"Hweining, Zhejiang Province",China,30.533333,120.683333,2,2
+534,Haiphong,,Vietnam,20.85611,106.68222,1,1
+535,Fukuoka,Hakata,Japan,33.591389,130.414722,2,11
+536,Hakodate,,Japan,41.77583,140.73667,1,2
+537,Halberstadt,,Germany,51.89562,11.05622,1,1
+538,Halebidu,"Dwarasamudra, Dorasamudra ",India,12.2591,76.640549,3,1
+539,Halifax,,Canada,44.64533,-63.57239,1,1
+540,Halifax,,United Kingdom,53.727019,-1.857539,1,1
+541,Halle,,Germany,51.4833,11.9667,3,2
+542,Hama,,Syria,35.133333,36.75,2,4
+543,Hamadan,,Iran,34.79922,48.51456,1,7
+544,Hamburg,,Germany,53.57532,10.01534,1,26
+545,Hamilton,,Canada,43.250022,79.866092,1,1
+546,Hamm,,Germany,51.68033,7.82089,1,1
+547,Handan,Ye,China,36.6,114.483333,3,2
+548,Hangzhou,Hangchow,China,30.25,120.166667,2,37
+549,Hannover,,Germany,52.37052,9.73322,1,13
+550,Hanoi,Hà Noi,Vietnam,21.033333,105.85,1,12
+551,Hanzhong,Hanchung,China,33.066667,107.016667,1,4
+552,Harar,Harrar,Ethiopia,9.304648,42.132642,1,1
+553,Harare,Salisbury,Zimbabwe,-17.863889,31.029722,1,1
+554,Harbin,Haerbin,China,45.75,126.65,1,4
+555,Harrisburg,Pennsylvania,United States of America,40.2737,-76.884418,1,1
+556,Hartford,,United States of America,41.7627,-72.6743,3,3
+557,Hartlepool,,United Kingdom,54.68611,-1.2125,1,1
+558,Hastings,,United Kingdom,50.8563,0.5729,1,1
+559,Hathras,,India,27.59621,78.05237,1,1
+560,Hattusa,"Hattusah, Khattushash, Bogazkale",Turkey,40.021111,34.609722,2,2
+561,Havana,La Habana,Cuba,23.13302,-82.38304,1,19
+562,Haverhill,,United Kingdom,52.08226,0.43891,1,1
+563,Hazor,Tel Hazor,Israel,33.01745538,35.5685014,1,2
+564,Hefei,"Hofei, Luchow",China,31.866667,117.283333,1,2
+565,Heidelberg,,Germany,49.40768,8.69079,1,1
+566,Heilbronn,,Germany,49.13995,9.22054,1,1
+567,Heliopolis,,Egypt,30.129528,31.288889,3,1
+568,Helsinki,Helsinfors,Finland,60.173324,24.941025,1,4
+569,Herat,,Afghanistan,34.34817,62.19967,1,13
+570,Hildesheim,,Germany,52.15077,9.95112,1,1
+571,Himeji,,Japan,34.81667,134.7,1,3
+572,Hippos,Hippo,Israel,32.77907253,35.65948301,3,1
+573,Hiraizumi,Iwate,Japan,38.986661,141.113822,2,2
+574,Hirosaki,,Japan,40.59306,140.4725,1,1
+575,Hiroshima,,Japan,34.396775,132.460017,1,17
+576,Ho Chi Minh,Saigon,Vietnam,10.823099,106.628767,1,9
+577,Hobart,,Australia,-42.87936,147.32941,1,1
+578,Hodeidah,"Al Hudaydah, Hodeida",Yemen,14.802222,42.951111,1,1
+579,Hodmezovasarhely ,"Hodmezo-Vasarhely, Hódmezovásárhely ",Hungary,46.418126,20.330032,1,1
+580,Hof,,Germany,50.313539,11.912781,3,1
+581,Hofuf,,Saudi Arabia,25.383333,49.583333,2,1
+582,Hohhot,,China,40.81056,111.65222,1,1
+583,Holyoke,Massachusetts,United States of America,42.20426,-72.6162,2,1
+584,Homs,,Syria,34.72682,36.72339,1,3
+585,Hong Kong,,China,22.28552,114.15769,1,5
+586,Honolulu,,United States of America,21.30694,-157.85833,1,3
+587,Horlivka,Gorlovka,Ukraine,48.3071,38.029633,2,1
+588,Hormuz,Ormuz,Iran,27.1,56.45,1,8
+589,Houston,Texas,United States of America,29.760193,-95.36939,1,3
+590,Hsinhui,,China,22.4583,113.034187,3,1
+591,Huai'an ,"Huaian, Hwaian",China,33.5,119.133333,1,8
+592,Huainan,,China,32.62639,116.99694,1,1
+593,Huancavelica,,Peru,-12.78542,-74.97501,1,5
+594,Hubli,,India,15.34776,75.13378,1,1
+595,Huddersfield,,United Kingdom,53.64904,-1.78416,1,1
+596,Hue,,Vietnam,16.46667,107.6,1,9
+597,Hugli-Chuchura ,"Chinsurah, Hooghly, Hooghly-Chinsura",India,22.9,88.39,2,5
+598,Huizhou,Huichow,China,23.0667,114.4,2,1
+599,Hull,,United Kingdom,53.7446,-0.33525,1,8
+600,Hyderabad,,India,17.38405,78.45636,1,19
+601,Hydra,,Algeria,36.7567,3.0247,3,1
+602,Iasi,Jassy,Romania,47.16667,27.6,1,6
+603,Ibadan,,Nigeria,7.38778,3.89639,1,7
+604,Ife,,Nigeria,7.470706,4.55665,1,1
+605,Ijaye,short-lived kingdom,Nigeria,6.684967,3.288544,3,2
+606,Ikkeri,,India,14.135,75.0226,3,1
+607,Ikoso,Shaki,Guinea,8.666667,3.383333,3,3
+608,Ilade,,Nigeria,6.5667,3.5333,3,1
+609,Ilorin,,Nigeria,8.5,4.55,1,3
+610,Imphal,,India,24.80805,93.9442,1,1
+611,Incheon,Inchon,Republic of Korea,37.456256,126.705206,1,2
+612,Indianapolis,Indiana,United States of America,39.76838,-86.15804,1,4
+613,Indore,,India,22.71792,75.8333,1,8
+614,Inwa,Ava,Myanmar,21.857353,95.981936,1,13
+615,Ioannina ,"Iannina,  Ioánnina, Yannina",Greece,39.665028,20.853747,1,6
+616,Ipswich,,United Kingdom,52.05917,1.15545,3,1
+617,Iquique,,Chile,-20.22036,-70.13913,1,1
+618,Iraklion ,"Irakleion, Candia. Heraklion",Greece,35.338736,25.144214,1,5
+619,Irkutsk,,Russian Federation,52.29778,104.29639,1,3
+620,Isanapura,Chenla,Cambodia,11.55,104.916667,2,1
+621,Iseyin,,Nigeria,7.966667,3.6,1,2
+622,Istakhr,"Estakhr, Stakhr",Iran,29.9797278,52.90898604,3,1
+623,Istanbul,"Constantinople, Byzantium",Turkey,41.005275,28.976944,1,46
+624,Ivano-Frankivs'k ,"Ivano-Frankivsk, Stanislau",Ukraine,48.916667,24.716667,3,1
+625,Ivanovo,,Russian Federation,56.9967,40.9819,1,2
+626,Iwo,Osun,Nigeria,7.63333,4.18333,1,1
+627,Izapa,,Mexico,14.92339814,-92.17999,1,1
+628,Izhevsk,,Russian Federation,56.84976,53.20448,1,2
+629,Izmail,Ismail,Romania,45.351667,28.836389,2,7
+630,Iznik,Nicaea,Turkey,40.42861,29.72111,1,2
+631,Jabalpur,,India,23.16697,79.95006,1,1
+632,Jacksonville,Florida,United States of America,30.3369,-81.6614,1,2
+633,Jaen,Jaén ,Spain,37.76922,-3.79028,1,10
+634,Jaffna,,Sri Lanka,9.66845,80.00742,1,1
+635,Jaipur,Jeypore,India,26.91962,75.78781,1,10
+636,Jakarta,Batavia,Indonesia,-6.21462,106.84513,1,18
+637,Jalandhar,Jullundur,India,31.326015,75.576183,3,3
+638,Jammu,,India,32.73569,74.86911,1,3
+639,Jamnagar,,India,22.47292,70.06673,1,1
+640,Jamshedpur,,India,22.80278,86.18545,1,1
+641,Japalpur,Jubbulpore,India,23.1667,79.95,1,1
+642,Jatinegara,Meester Cornelis,Indonesia,-6.230702,106.882743,1,1
+643,Jaunpur,,India,25.75506,82.68361,1,5
+644,Jeddah,Jiddah,Saudi Arabia,21.543333,39.172778,2,2
+645,Jelgava,Mitau,Latvia,56.648333,23.713889,2,1
+646,Jerez de la Frontera,Xerez,Spain,36.6936,-6.132431,1,13
+647,Jerusalem,,Israel,31.76904,35.21633,1,17
+648,Jhansi,,India,25.45446,78.58221,1,3
+649,Jilin,Kirin,China,43.896536,125.32599,3,7
+650,Jinan,Tsinan,China,36.650997,117.120497,1,11
+651,Jingdezhen,Kingtehchen,China,29.268836,117.17842,2,20
+652,Jingmen,Shasi/Jingzhou,China,31.0436,112.2008,3,1
+653,Jinzhou,"Chinchou, Chinchow",China,41.1077778,121.1416667,3,1
+654,Jiujiang,"Kiukiang, Kew Keang",China,29.705078,115.987222,1,3
+655,Jodhpur,,India,26.26841,73.00594,1,14
+656,Johannesburg,,South Africa,-26.20227,28.04363,1,5
+657,Juarez,,Mexico,31.739444,-106.486944,2,1
+658,Kabul,,Afghanistan,34.52813,69.17233,1,14
+659,Kaesong,Songdo,Dem. People's Republic of Korea,37.97083,126.55444,1,10
+660,Kagoshima,,Japan,31.5966,130.557183,1,14
+661,Kahramanmaras,Marash,Turkey,37.5833,36.9333,3,1
+662,Kaifeng,"Bienliang, Pienliang",China,34.7986,114.30742,1,30
+663,Kairouan,"Qairwan, Qairawan, Zirids, Kairwan",Tunisia, 35.674444,10.101667,2,10
+664,Kaiserslautern,,Germany,49.443,7.77161,1,1
+665,Kakinada,Kokanada,India,16.93,82.33,3,1
+666,Kalaa,,Algeria,35.580556,0.328333,3,1
+667,Kalinjar,,India,25.011586,80.472977,3,2
+668,Kaluga,,Russian Federation,54.5293,36.27542,1,8
+669,Kalyan,,India,19.2437,73.13554,1,4
+670,Kamakura,,Japan,35.30889,139.55028,1,3
+671,Kamarupa,"Kamata, Pragjyotisha",India,26.183333,91.733333,3,1
+672,Kamianets-Podilskyi,Kamenets,Ukraine,48.683333,26.583333,2,1
+673,Kamtapur,Kamatapur,India,26.158333,89.370833,2,1
+674,Kanauji,"Kannauj, Kanauj",India,27.05519,79.91808,3,11
+675,Kanazawa,,Japan,36.561325,136.656206,1,12
+676,Kanchipuram,"Conjeeveram, Kanchi, K?ñci-pura, Conjevaram",India,12.834173,79.70364,1,9
+677,Kandahar,Qandahar,Afghanistan,31.61332,65.71013,1,9
+678,Kangding,Tatsienlu,China,30.055278,101.964722,1,1
+679,Kano,,Nigeria,12.00012,8.51672,1,17
+680,Kanpur,Cawnpore,India,26.4478,80.34627,1,6
+681,Kansas City,Missouri,United States of America,39.11417,-94.62746,1,4
+682,Kaohsiung,,Taiwan,22.61626,120.31333,1,2
+683,Karachi,,Pakistan,24.9056,67.0822,1,5
+684,Karaganda,,Kazakhstan,49.833333,73.166667,1,2
+685,Karaman,Laranda,Turkey,37.18111,33.215,1,5
+686,Karbala,Kerbela,Iraq,32.6143,44.02483,1,1
+687,Karlsruhe,,Germany,49.00472,8.38583,1,1
+688,Kashan,,Iran,33.98308,51.43644,1,1
+689,Kashi,Kashgar,China,39.4704,75.989756,1,17
+690,Kathmandu,Katmandu,Nepal,27.7,85.333333,1,4
+691,Katowice,,Poland,50.25842,19.02754,1,4
+692,Katsina,,Nigeria,12.98943,7.60063,1,8
+693,Kaunas,Kovno,Lithuania,54.898535,23.903563,1,1
+694,Kayalpatam,"Cail, Kayal ",India,8.566389,78.116389,3,1
+695,Kayseri,"Caesarea, Mazaca",Turkey,38.73222,35.48528,2,12
+696,Kazan,,Russian Federation,55.790278,49.134722,2,17
+697,Kebbi,,Nigeria,11.678125,4.069544,2,1
+698,Kecskemet,,Hungary,46.90618,19.69128,1,1
+699,Kemerovo,,Russian Federation,55.33333,86.08333,1,1
+700,Kerkira,"Corfu, Corcyra,  Kérkira",Greece,39.583333,19.866667,2,1
+701,Kerman,,Iran,30.28321,57.07879,1,13
+702,Kermanshah,,Iran,34.31417,47.065,1,5
+703,Khabarovsk,,Russian Federation,48.48272,135.08379,3,2
+704,Khajuraho,,India,24.8478,79.93344,3,1
+705,Kharkov,Kharkiv,Ukraine,49.9935,36.230384,1,4
+706,Khartoum,,Sudan,15.55177,32.53241,1,2
+707,Kherson,Cherson,Ukraine,46.635417,32.616867,1,5
+708,Khiva,"Khorasam, Khoresm, Khwarezm, Khwarizm, Khwarazm, Chorezm",Uzbekistan,41.3784494711 ,60.35964994,1,1
+709,Khovd,Kobdo,Mongolia,48.004167,91.640556,2,1
+710,Khujand,Khojent,Tajikistan,40.283333,69.633333,2,1
+711,Khvoy,"Khoy, Khoi",Iran,38.5525,44.952222,2,2
+712,Kiel,,Germany,54.32133,10.13489,1,3
+713,Kiev,,Russian Federation,50.45466,30.5238,1,23
+714,Kilmarnock,,United Kingdom,55.61171,-4.49581,1,1
+715,Kilwa,,Tanzania,-9.149644,38.987675,2,7
+716,Kingston,,Jamaica,17.992731,-76.8,1,9
+717,Kinshasa,Leopoldville,Democratic Republic of the Congo,-4.325,15.3222,1,2
+718,Kirkcaldy,,United Kingdom,56.10982,-3.16149,1,1
+719,Kirovohrad, Elizavetgrad,Ukraine,48.507933,32.262317,2,1
+720,Kish,Qish,Iran,32.55217989,44.5856425,2,1
+721,Kiskunfelegyhaza,Kiskunfélegyháza ,Hungary,46.71213,19.84458,1,1
+722,Kitakyushu,,Japan,33.83333,130.83333,1,1
+723,Knossos,,Greece,35.2979516,25.16329744,1,1
+724,Knoxville,Tennesse,United States of America,35.972778,-83.99769,1,1
+725,Kobe,Hyogo,Japan,34.691269,135.183072,1,8
+726,Koblenz am Rhein ,Coblenz,Germany,50.360025,7.589907,1,1
+727,Kochi,,Japan,33.558803,133.531167,2,2
+728,Kofu,,Japan,35.655625,138.567574,1,1
+729,Kohat,,Pakistan,33.58196,71.44929,1,1
+730,Kokand,Khokand,Uzbekistan,40.533261,70.932342,1,6
+731,Kolar,,India,13.13671,78.12917,1,4
+732,Kolhapur,,India,16.69563,74.23167,1,1
+733,Kolomyia,Kolomea,Ukraine,48.530556,25.040278,1,1
+734,Konigsberg,"Kaliningrad, Königsberg ",Germany,54.716667,20.516667,2,15
+735,Konya,Konia,Turkey,37.87135,32.48464,1,9
+736,Konye-Urgench,Gurganj,Turkmenistan,42.333333,59.15,2,1
+737,Kortrijk,Courtrai,Belgium,50.83053,3.264464,1,1
+738,Kosambi,Kausambi,India,25.338984,81.392899,2,1
+739,Kosice ,"Košice, Kassa",Slovakia,48.721005,21.2578,1,1
+740,Kostroma,,Russian Federation,57.76647,40.92686,1,1
+741,Kota,Kotah,India,25.18,75.83,3,2
+742,Krakow,Cracow,Poland,50.06143,19.93658,1,13
+743,Krasnodar,Ekaterinodar,Russian Federation,45.006247,38.960626,1,3
+744,Krasnoyarsk,,Russian Federation,56.01839,92.86717,1,3
+745,Krefeld,,Germany,51.33921,6.58615,1,1
+746,Kremenchuk,Kremenchug,Ukraine,49.065783,33.410033,1,1
+747,Krivoi Rog,Kryvyi Rih,Ukraine,47.910483,33.391783,1,2
+748,Kuala Lumpur,,Malaysia,3.1412,101.68653,1,2
+749,Kudus,Kudus Regency,Indonesia,-6.8048,110.8405,2,1
+750,Kufa,,Iraq,32.033333,44.4,2,6
+751,Kukawa,Kuka,Nigeria,12.916667,13.566667,3,3
+752,Kukukhoto,"Kweihwa, Kweisui, Huhehot",China,40.842585,111.749181,2,3
+753,Kumamoto,,Japan,32.78983,130.741574,1,3
+754,Kumasi,,Guinea,6.68848,-1.62443,1,4
+755,Kumbakonam,,India,10.96209,79.39124,1,2
+756,Kunduz,Qunduz,Afghanistan,36.72896,68.857,1,1
+757,Kunming,Yunnanfu,China,25.03889,102.71833,1,19
+758,Kure,,Japan,34.23333,132.56667,1,2
+759,Kursk,,Russian Federation,51.73733,36.18735,1,6
+760,Kush,Kus,Egypt,18.53,31.84,3,12
+761,Kutahya ,"Kütahya, Kutahia",Turkey,39.416667,29.983333,3,1
+762,Kutaisi,Kutais,Georgia,42.25,42.7,1,1
+763,Kuwait,,Kuwait,29.369721,47.978324,1,1
+764,Kyoto,,Japan,35.02107,135.75385,1,25
+765,La Chaux de Fonds,,Switzerland,47.097872,6.821634,1,1
+766,La Paz,,Bolivia,-16.5,-68.15,1,11
+767,La Plata,,Argentina,-34.92145,-57.95453,1,3
+768,La Rochelle,,France,46.16667,-1.15,1,5
+769,La Spezia,Spezia,Italy,44.10245,9.824083,3,1
+770,Lagos,,Nigeria,6.524379,3.379206,1,3
+771,Lahore,,Pakistan,31.54972,74.34361,1,15
+772,Lakkundi,Lokkigundi,India,15.389314,75.716929,1,1
+773,Lamphun ,"Haripunjai, Lampun ",Thailand,18.574461,99.008722,1,1
+774,Lancaster,,United Kingdom,54.06667,-2.83333,1,1
+775,Lancaster,Pennsylvania,United States of America,40.039722,-76.304444,3,1
+776,Landsberg am Lech,Landsberg,Germany,48.047778,10.898889,1,1
+777,Lanzhou,Lanchow,China,36.061089,103.834304,1,10
+778,Laon,,France,49.56667,3.61667,1,5
+779,Las Palmas,,Spain,28.15,-15.416667,3,1
+780,Lausanne,,Switzerland,46.516,6.63282,1,1
+781,Lawrence,Kansas,United States of America,38.9717,-95.2353,3,1
+782,Le Havre,,France,49.494369,0.107931,1,8
+783,Le Mans,,France,48.00611,0.199556,1,1
+784,Lecce,,Italy,40.35703,18.17202,1,7
+785,Leeds,,United Kingdom,53.79648,-1.54785,1,14
+786,Leghorn,Livorno,Italy,43.55,10.310579,2,11
+787,Legnica,Leignitz,Poland,51.208333,16.160278,2,1
+788,Leicester,,United Kingdom,52.6386,-1.13169,1,7
+789,Leiden,Leyden,Netherlands,52.15833,4.49306,1,17
+790,Leipzig,,Germany,51.33962,12.37129,1,19
+791,Leon,Léon ,Mexico,21.1292,-101.672675,1,1
+792,Leon,,Spain,42.605556,-5.57,1,4
+793,Leptis,Leptis Magna,Libya,32.63777029,14.29232884,3,1
+794,Leshan,Kiating,China,29.552106,103.765568,3,1
+795,Lewiston,Maine,United States of America,44.0975, -70.1925,3,1
+796,Lexington,Kentucky,United States of America,38.040584,-84.503716,1,1
+797,Lhasa,,China,29.645563,91.140749,1,10
+798,Liaotung,penninsula,China,40.5,121.5,3,2
+799,Liaoyang,,China,41.266667,123.183333,1,10
+800,Liberec,Reichenberg,Czech Republic,50.716667,15.066667,3,1
+801,Liege, Liège ,Belgium,50.63373,5.56749,1,19
+802,Liepaja,Libau,Latvia,56.505634,21.011906,1,1
+803,Lille,,France,50.628442,3.054975,1,25
+804,Lima,Rimac,Peru,-12.04318,-77.02824,1,14
+805,Limerick,,Ireland,52.6653,-8.630497,1,12
+806,Limoges,,France,45.83153,1.2578,1,10
+807,Lincoln,,United Kingdom,53.230689,-0.540583,1,1
+808,Lincoln,Nebraska,United States of America,40.825763,-96.685198,3,1
+809,Linqing,Linching,China,36.849444,115.706111,3,2
+810,Linz,,Austria,48.30639,14.28611,1,1
+811,Lisbon,,Portugal,38.71667,-9.13333,1,35
+812,Little Rock,,United States of America,34.74648,-92.28959,1,1
+813,Liverpool,,United Kingdom,53.408372,-2.991572,1,16
+814,Ljubljana,Laibach,Slovenia,46.056456,14.508064,1,1
+815,Loango,,Congo,-4.630225,11.835006,3,1
+816,Lodz,,Poland,51.75,19.46667,1,5
+817,London,,United Kingdom,51.511214,-0.119825,1,32
+818,London,,Canada,42.98339,-81.23304,1,1
+819,Londonderry,New Hampshire,United States of America,42.86509,-71.37395,3,1
+820,Lorca,,Spain,37.67119,-1.7017,1,2
+821,Lorient,,France,47.75,-3.36667,1,1
+822,Los Angeles,California,United States of America,34.052234,-118.243685,1,6
+823,Louisville,Kentucky,United States of America,38.252563,-85.758367,1,6
+824,Louveigne,"Louvain, Louveigné ",Belgium,50.877572,4.704328,2,13
+825,Lowell,Massachusetts,United States of America,42.633425,-71.316172,1,1
+826,Luanda,Loanda,Angola,-8.838333,13.23444,3,4
+827,Luang Prabang,,Lao People's Democratic Republic,19.884111,102.141633,1,4
+828,Lubeck,Lübeck ,Germany,53.865886,10.687097,1,17
+829,Lublin,,Poland,51.25,22.56667,1,1
+830,Lucca,,Italy,43.84357,10.50585,1,15
+831,Lucheng,,China,36.316667,113.216667,3,1
+832,Lucknow,,India,26.83928,80.92313,1,12
+833,Ludhiana,,India,30.90015,75.85229,1,3
+834,Ludwigshafen,,Germany,49.47741,8.44518,1,1
+835,Lugansk,"Luhansk, Voroshilovgrad",Ukraine,48.57404,39.307827,1,1
+836,Luoyang,Honan,China,34.669722,112.442222,2,18
+837,Lusaka,,Zambia,-15.40669,28.28713,1,1
+838,Luton,,United Kingdom,51.87967,-0.41748,1,1
+839,Lvov,"Lwow, Lemberg",Poland,49.839683,24.029717,1,15
+840,Lyon,,France,45.74846,4.84671,1,33
+841,Maastricht,,Netherlands,50.84833,5.68889,1,1
+842,Macao,,China,22.1667,113.55,1,8
+843,Macclesfield,,United Kingdom,53.258663,-2.119287,1,1
+844,Maceio,Maceió ,Brazil,-9.66583,-35.73528,1,1
+845,Madgdeburg,,Germany,52.130808,11.628878,1,15
+846,Madras,,India,13.08784,80.27847,1,17
+847,Madrid,,Spain,40.416775,-3.703789,1,26
+848,Madurai,,India,9.91735,78.11962,1,17
+849,Maebashi,,Japan,36.389482,139.063428,1,1
+850,Magdeburg,,Germany,52.12773,11.62916,1,3
+851,Magnitogorsk,,Russian Federation,53.41861,59.04722,1,1
+852,Mahdia,Mahdiya,Tunisia,35.50472,11.06222,1,1
+853,Maheshwar,,India,22.17592,75.58715,1,3
+854,Mahoba,,India,25.29222,79.87231,2,1
+855,Maidstone,,United Kingdom,51.26667,0.51667,1,1
+856,Mainz,,Germany,49.98419,8.2791,1,16
+857,Majapahit,,Indonesia,-8.18947,113.667019,3,3
+858,Makassar,,Indonesia,-5.14,119.4221,1,2
+859,Mako,,Hungary,46.21667,20.48333,1,1
+860,Malaga,,Spain,36.721261,-4.421267,1,18
+861,Malang,,Indonesia,-7.9797,112.6304,1,1
+862,Malatya,,Turkey,38.35018,38.31667,1,1
+863,Mali,"Melle, Niani",Mali,11,-8,3,6
+864,Malmo,Malmö ,Sweden,55.604981,13.003822,1,1
+865,Managua,,Nicaragua,12.13282,-86.2504,1,1
+866,Manaus,,Brazil,-3.10194,-60.025,1,1
+867,Manchester,,United Kingdom,53.48095,-2.23743,1,17
+868,Mandalay,,Myanmar,21.97473,96.08359,1,2
+869,Mandu,Mandavgad,India,22.36667,75.38333,2,5
+870,Mandvi,Måndvi ,India,22.83282,69.35238,1,1
+871,Mangalore,,India,12.91723,74.85603,1,1
+872,Mani,,Mexico,20.393381,-89.407156,1,2
+873,Manila,,Philippines,14.58,121,1,17
+874,Manisa,,Turkey,38.61202,27.42646,1,1
+875,Mannheim,,Germany,49.49671,8.47955,1,11
+876,Mansoura,Mansura,Egypt,31.040948,31.37847,3,1
+877,Mansura,Brahmanabad  ,Pakistan,25.590258,68.776944,3,10
+878,Mantova,Mantua,Italy,45.156417,10.791375,1,21
+879,Manyakheta,Malkhed,India,17.19313,77.157379,3,2
+880,Maracaibo,,Venezuela,10.63167,-71.64056,1,3
+881,Maragheh,,Iran,37.383531,46.237961,1,3
+882,Mareb,Marib,Yemen,15.40427477,45.355823,1,1
+883,Marghilon,"Margilan, Marghelan",Uzbekistan,40.471119,71.718361,2,1
+884,Mariana,,Brazil,-20.37778,-43.41611,1,3
+885,Mariupol,Zhdanov,Ukraine,47.09514,37.54131,1,2
+886,Marrakech ,Marrakesh,Morocco,31.63416,-7.99994,1,29
+887,Marseille,,France,43.29695,5.38107,1,30
+888,Martaban,Mottama,Myanmar,16.52834,97.6157,1,2
+889,Masenya,,Chad,11.402536,16.171328,3,7
+890,Mashhad,Meshhed,Iran,36.3,59.6,1,14
+891,Masulipatam,,India,16.18438,81.134933,1,4
+892,Matanzas,,Cuba,23.04111,-81.5775,1,1
+893,Mathura,Muttra,India,27.4925,77.673611,3,5
+894,Matsue,,Japan,35.468059,133.048375,1,1
+895,Matsumae,"Fukuyama, Matsmaye (Hokkaido)",Japan,41.433333,140.116667,3,6
+896,Matsuyama,,Japan,33.839157,132.765575,1,2
+897,Mawlamyine,Moulmein,Myanmar,16.484591,97.625931,1,1
+898,Mayapan,"Màayapáan, Mayapán",Mexico,20.978497,-89.593372,2,2
+899,Maykop,Maikop,Russian Federation,44.6,40.08333,1,1
+900,M'banza-Congo,"M'banza-Kongo, Sao Salvador",Angola,-6.267778,14.248056,2,2
+901,Mecca,,Saudi Arabia,21.42667,39.82611,1,18
+902,Mechelen,,Belgium,51.02574,4.47762,1,1
+903,Meckenbeuren ,Schwerin,Germany,53.62937,11.41316,1,1
+904,Medan,,Indonesia,3.5833,98.6667,1,2
+905,Medellin,Medellín,Colombia,6.25184,-75.56359,1,3
+906,Medina,Madinah ,Saudi Arabia,24.4609,39.620189,1,7
+907,Medina del Campo,,Spain,41.31239,-4.91413,1,6
+908,Meerut,,India,28.97155,77.71934,1,5
+909,Meihsien,,China,24.297687,116.107241,3,1
+910,Meknes,"Takrart, Mequinez, Miknas, Meknès ",Morocco,33.89352,-5.54727,1,14
+911,Melbourne,,Australia,-37.814,144.96332,1,11
+912,Memphis,,Egypt,29.844722,31.250833,2,5
+913,Memphis,,United States of America,35.149703,-90.048529,1,2
+914,Mendoza,,Argentina,-32.89084,-68.82717,1,1
+915,Mengo,hill/area in Kampala,Uganda,0.346667,32.605556,3,3
+916,Merida,Tiho,Mexico,20.979719,-89.615789,1,12
+917,Merida,Emerita,Spain,38.91611,-6.34366,1,3
+918,Merthyr Tydfil,,United Kingdom,51.748731,-3.381647,1,3
+919,Merv,Merw,Turkmenistan,37.6628,62.1925,1,3
+920,Messina,,Italy,38.19327,15.54969,1,36
+921,Metz,,France,49.11911,6.17269,1,23
+922,Mexico City,Tenochtitlan,Mexico,19.42847,-99.12766,1,27
+923,Mhow,Dr Ambedkar Nagar,India,22.552437,75.756527,3,1
+924,Miami,,United States of America,25.77427,-80.19366,1,2
+925,Michurinsk,Kozlov,Russian Federation,52.883333,40.483333,2,1
+926,Middelburg,,Netherlands,51.5,3.61389,1,8
+927,Middlesbrough,,United Kingdom,54.57623,-1.23483,1,3
+928,Midnapore,Midnapur,India,22.42087,87.326088,2,1
+929,Milan,,Italy,45.465453,9.198786,1,44
+930,Miletus,,Turkey,37.530278,27.278333,2,1
+931,Milwaukee,Wisconsin,United States of America,43.0389,-87.90647,1,4
+932,Minneapolis,Minnesota,United States of America,39.12194,-93.265011,1,5
+933,Minsk,,Belarus,53.9,27.56667,1,3
+934,Mirzapur,,India,24.10287,82.564433,3,6
+935,Miskolc,Miskole,Hungary,48.104167,20.791667,1,1
+936,Mobile,Alabama,United States of America,30.69436,-88.04305,1,1
+937,Modakeke,,Nigeria,7.38333,4.26667,3,1
+938,Mogilev,,Belarus,53.899999,30.333328,1,1
+939,Mohenjodaro,Mohenjo-daro,Pakistan,27.32533494,68.13293014,1,1
+940,Monastir,,Turkey,41.038155,21.343003,3,1
+941,Mondovi,,Italy,44.39603,7.81764,1,9
+942,Montauban,,France,44.01667,1.35,1,6
+943,Monte Alban,Monte Albán,Mexico,17.043989,-96.767467,2,1
+944,Monterrey,Monterey,Mexico,25.6667,-100.3,1,3
+945,Montevideo,,Uraguay,-34.817311,-56.158866,1,4
+946,Montlucon,Montluçon ,France,46.33333,2.6,2,1
+947,Montpellier,,France,43.61092,3.87723,1,20
+948,Montreal,Montréal,Canada,45.50884,-73.58781,1,8
+949,Monza,,Italy,45.58248,9.27485,1,1
+950,Moradabad,,India,28.83893,78.77684,1,4
+951,Morelia,,Mexico,19.768333,-101.189444,2,1
+952,Morioka,,Japan,39.702053,141.154484,1,1
+953,Moscow,,Russian Federation,55.75222,37.61556,1,30
+954,Mosul,Ak Mawsil,Iraq,36.335,43.11889,1,11
+955,Motherwell,,United Kingdom,55.78924,-3.99187,1,1
+956,Muhlhausen,,Germany,51.20896,10.45275,1,1
+957,Mulhausen,,France,47.750839,7.335888,1,1
+958,Multan,,Pakistan,30.19556,71.47528,1,10
+959,Mumbai,Bombay,India,19.07283,72.88261,1,23
+960,Munger,"Mudgagiri, Monghyr",India,25.37262,86.490321,1,6
+961,Munich,,Germany,48.136739,11.576756,1,20
+962,Munster,Münster ,Germany,51.9667,7.6333,3,1
+963,Murcia,,Spain,37.98704,-1.13004,1,15
+964,Murshidabad,,India,24.1839,88.27171,3,11
+965,Muscat,,Oman,23.61387,58.5922,1,5
+966,Musumba,,Democratic Republic of the Congo,-8.559167,22.6825,2,1
+967,Muzaffarpur,Mizaffarpur,India,26.120888,85.36472,1,1
+968,Mycenae,,Greece,37.73038721,22.75788116,1,1
+969,Mykolayiv ,"Nikolayev, Nikolayev",Ukraine,46.975033,31.994583,3,1
+970,Mysore,,India,12.29791,76.63925,1,5
+971,Nadiya,,India,23.501389,73.960963,3,2
+972,Nagano,,Japan,36.651299,138.180956,1,1
+973,Nagapattinam,"Negapatam, Choromandel",India,10.768802,79.839427,3,4
+974,Nagara,"Bednur, Bidanur",India,13.824,75.034,3,6
+975,Nagasaki,,Japan,32.752558,129.878192,1,13
+976,Nagoya,,Japan,35.181447,136.906397,1,18
+977,Nagpur,,India,21.15,79.1,2,11
+978,Nairobi,,Kenya,-1.28333,36.81667,1,1
+979,Nam Dinh,,Vietnam,20.42,106.168333,1,1
+980,Namangan,,Uzbekistan,40.9983,71.67257,1,1
+981,Namur,,Belgium,50.4669,4.86746,1,1
+982,Nanchang,,China,28.68333,115.88333,1,16
+983,Nancy,,France,48.68439,6.18496,1,12
+984,Nanhai,"Foshan, Fatshan",China,23.016667,113.116667,1,10
+985,Nanjing,Nanking,China,32.05,118.766667,1,38
+986,Nanning,,China,22.81667,108.31667,1,7
+987,Nantes,,France,47.21725,-1.55336,1,15
+988,Nantong,Nantung,China,31.980175,120.894339,1,1
+989,Naples,,Italy,40.851775,14.268122,1,38
+990,Nara City,,Japan,34.685333,135.832742,1,5
+991,Narbonne,,France,43.18333,3,1,6
+992,Nashville,Tennessee,United States of America,36.166667,-86.783333,1,3
+993,Nellore,,India,14.45363,79.98674,1,1
+994,New Bedford,Massachusetts,United States of America,41.63622,-70.9342,1,1
+995,New Haven,Connecticut,United States of America,41.308274,-72.927884,1,2
+996,New Orleans,Louisiana,United States of America,29.95465,-90.07507,1,8
+997,New York,New York,United States of America,40.714353,-74.005972,1,12
+998,Newburgh,New York,United States of America,41.519722, -74.021389,2,1
+999,Newcastle,,Australia,-32.92715,151.77647,1,1
+1000,Newcastle upon Tyne,,United Kingdom,54.978253,-1.617781,2,16
+1001,Newport,,Wales,51.582336,-2.969647,1,1
+1002,Nezhyn,Nezhin,Ukraine,51.038056,31.886111,1,1
+1003,Ngornu,Angornu,Nigeria,12.714444,13.702778,3,2
+1004,Nice,,France,43.70313,7.26608,1,2
+1005,Nicosia,,Cyprus,35.16667,33.36667,1,8
+1006,Niigata,,Japan,37.902552,139.023095,1,2
+1007,Nijmegen,Nimeguen,Netherlands,51.812563,5.837233,1,1
+1008,Nimes,Nîmes ,France,43.83333,4.35,1,16
+1009,Nimrud,Calah,Iraq,36.09813154,43.32875612,1,2
+1010,Nineveh,,Iraq,36.359444,43.152778,2,1
+1011,Ningbo,"Yinhsien, Ningpo",China,29.866667,121.55,2,18
+1012,Nippur,,Iraq,32.12693858,45.23078534,1,1
+1013,Nis,Nish,Serbia,43.319381,21.896328,1,3
+1014,Nishapur,,Iran,36.213333,58.795833,1,11
+1015,Nizhniy Novgorod,"Nishny Novgorod, Gorkiy",Russian Federation,56.3269,44.0075,1,14
+1016,Nizhniy Tagil,Nizhny-Tagil,Russian Federation,57.916667,59.966667,1,2
+1017,Nkazargamu,"Gasreggomo, Birni, Kazargamu",Nigeria,13.047222,12.227778,3,7
+1018,Norfolk,Virginia,United States of America,36.84681,-76.28522,1,3
+1019,Norrkoping,Norrköping ,Sweden,58.59419,16.1826,1,1
+1020,Northampton,,United Kingdom,52.150592,-0.896028,2,1
+1021,Norwich,,United Kingdom,52.62783,1.29834,1,16
+1022,Nottingham,,United Kingdom,52.9536,-1.15047,1,11
+1023,Novgorod,,Russian Federation,58.525569,31.274192,1,13
+1024,Novocherkassk ,Novocherkask,Russian Federation,47.416667,40.083333,1,1
+1025,Novokuznetsk,Stalinsk,Russian Federation,53.7557,87.1099,1,2
+1026,Novosibirsk,,Russian Federation,55.0415,82.9346,1,2
+1027,Nurnberg,"Nürnberg, Nuremberg",Germany,49.452031,11.07675,1,23
+1028,Nyiregyhaza,Nyíregyháza ,Hungary,47.95539,21.71671,1,1
+1029,Oaklahoma City,Oaklahoma,United States of America,35.46756,-97.516428,1,2
+1030,Oaxaca,,Mexico,17.07108,-96.71914,1,9
+1031,Odense,,Denmark,55.39594,10.38831,1,1
+1032,Odessa,Odesa,Russian Federation,46.47747,30.73262,1,8
+1033,Ogbomosho,,Nigeria,8.133333,4.25,1,4
+1034,Ohrid,Ochrida,Bulgaria,43.454967,23.380704,3,4
+1035,Okayama,,Japan,34.661753,133.916667,1,12
+1036,Olbia,,Italy,40.9167,9.5,2,1
+1037,Oldham,,United Kingdom,53.54051,-2.1183,1,4
+1038,Omaha,Nebraska,United States of America,41.252363,-95.997988,1,4
+1039,Omdurman,,Sudan,15.64453,32.47773,1,1
+1040,Omsk,,Russian Federation,54.99244,73.36859,3,3
+1041,Opole,Oppeln,Poland,50.675107,17.921298,2,1
+1042,Oporto,Porto,Portugal,41.167972,-8.627064,1,14
+1043,Oradea,Nagyvarad,Romania,47.072222,21.921111,1,1
+1044,Oran,,Algeria,35.69111,-0.64167,1,7
+1045,Orel,,Russian Federation,52.96508,36.0785,1,5
+1046,Orenburg,Chkalov,Russian Federation,51.7727,55.0988,1,2
+1047,Orlando,Florida,United States of America,28.53834,-81.37924,1,1
+1048,Orleans,Orléans,France,47.902964,1.90925,1,22
+1049,Oruro,,Bolivia,-17.98333,-67.15,1,7
+1050,Osaka ,,Japan,34.693216,135.502082,1,16
+1051,Osh,,Kyrgyzstan,40.51506,72.80826,1,1
+1052,Oshogbo,,Nigeria,7.765845,4.561471,1,1
+1053,Oslo,Christiania,Norway,59.913869,10.752245,1,4
+1054,Osnabruck,Osnabrück ,Germany,52.27264,8.0498,1,1
+1055,Ostend,Oostende,Belgium,51.216667,2.9,1,1
+1056,Ostia,,Italy,41.75551909,12.28966708,1,1
+1057,Ostrava,Ostrau,Czech Republic,49.835556,18.2925,1,3
+1058,Otaru,,Japan,43.18944,141.00222,1,1
+1059,Otsu,,Japan,35.017893,135.854607,1,1
+1060,Ottawa,,Canada,45.41117,-75.69812,1,3
+1061,Oualata,"Walata, Biru",Mauritania,17.3,-7.025,2,3
+1062,Oudong,"Udong, Odong",Cambodia,11.819431,104.742897,1,2
+1063,Ougadougou,Wagadugu,Burkina Faso,12.364636,-1.533864,1,1
+1064,Ouro Preto,Vila Rica,Brazil,-20.39484,-43.50517,1,5
+1065,Oxford,,United Kingdom,51.752021,-1.257726,1,1
+1066,Oxyrhyncus,,Egypt,28.53558797,30.65990829,2,1
+1067,Oyo,Katunga,Nigeria,7.85,3.93333,1,15
+1068,Pachacamac,,Peru,-12.188786,-76.849033,2,1
+1069,Pachuca,,Mexico,20.097613,-98.709579,1,1
+1070,Padang,Pandang,Indonesia,-0.94924,100.35427,2,1
+1071,Padua,,Italy,45.406436,11.876761,1,25
+1072,Paisley,,United Kingdom,55.83173,-4.43254,1,7
+1073,Paithan,Prati??h?na,India,19.47506,75.38558,3,1
+1074,Palembang,,Indonesia,-2.91673,104.7458,1,8
+1075,Palermo,,Italy,38.115689,13.361267,1,35
+1076,Palghat,Palakkad,India,10.78673,76.654793,1,1
+1077,Palma,,Spain,39.56939,2.65024,1,16
+1078,Panama City,,Panama,8.994297,-79.518852,1,1
+1079,Pandua,,India,23.07492,88.28637,3,1
+1080,Paramaribo,,Suriname,5.86638,-55.16682,1,1
+1081,Parana,Paraná ,Argentina,-31.73197,-60.5238,1,1
+1082,Paris,,France,48.856614,2.352222,1,43
+1083,Parma,,Italy,44.80266,10.32898,1,14
+1084,Patan,Anhilvada,India,23.8507,72.12963,1,14
+1085,Patan,,Nepal,27.666667,85.316667,1,2
+1086,Paterson,New Jersey,United States of America,40.91677,-74.17181,1,1
+1087,Patiala,,India,30.32715,76.40266,1,1
+1088,Patna,,India,25.610533,85.14145,1,19
+1089,Patras,,Greece,38.24664,21.734574,1,2
+1090,Patzcuaro,,Mexico,19.51931,-101.6097,1,2
+1091,Pau,,France,43.3,0.37,2,1
+1092,Pavia,,Italy,45.18446,9.16145,1,17
+1093,Pecs,Pécs ,Hungary,46.08333,18.23333,1,1
+1094,Pegu,Bago,Myanmar,17.333333,96.483333,1,8
+1095,Pekalongan,,Indonesia,-6.8886,109.6753,1,1
+1096,Penang Serai,,Malaysia,5.263234,100.484623,3,2
+1097,Penglai,Tengchow,China,37.8086111,120.7508333,2,2
+1098,Penza,,Russian Federation,53.20066,45.00464,3,2
+1099,Pergamum,,Turkey,39.13225127,27.1836318,1,2
+1100,Perm,,Russian Federation,58.013889,56.248889,1,3
+1101,Perspolis,,Iran,29.93448748,52.89096558,1,1
+1102,Perth,,Australia,-31.95224,115.8614,1,2
+1103,Perth,,United Kingdom,56.394994,-3.430839,1,1
+1104,Peshawar,"Purusapura, Pushkalavati",Pakistan,34.008,71.57849,1,5
+1105,Peterborough,,United Kingdom,52.583333,-0.25,2,1
+1106,Petra,,Jordan,30.325172,35.442581,1,1
+1107,Petrovaradin,Peterwardein,Serbia,45.25,19.866667,1,1
+1108,Pforzheim,,Germany,48.88436,8.69892,1,1
+1109,Philadelphia,Pennsylvania,United States of America,39.95,-75.1667,1,12
+1110,Phnom Penh,,Cambodia,11.56245,104.91601,1,4
+1111,Phoenix,Arizona,United States of America,33.44838,-112.074143,1,2
+1112,Piacenza,Fiacenza,Italy,45.04676,9.69937,1,16
+1113,Pilibhit,,India,28.63098,79.80338,1,2
+1114,Piotrkow,,Poland,51.405172,19.703024,3,1
+1115,Pirmasens,,Germany,49.20145,7.60529,1,1
+1116,Pisa,,Italy,43.71553,10.39659,1,14
+1117,Pittsburgh,Pennsylvania,United States of America,40.44062,-79.99589,1,9
+1118,Pliska,Aboba,Bulgaria,43.362531,27.125539,1,1
+1119,Ploiesti ,Ploesti,Romania,44.94,26.03,1,1
+1120,Plovdiv,Philippopolis,Bulgaria,42.15,24.75,1,14
+1121,Plymouth,,United Kingdom,50.375456,-4.14305,1,13
+1122,Plzen ,Pilsen,Czech Republic,49.738425,13.37362,3,1
+1123,Pochow,,China,33.8772222,115.7702778,3,6
+1124,Poitiers,,France,46.58333,0.33333,1,12
+1125,Polonnaruwa,,Sri Lanka,7.93965,81.00274,1,3
+1126,Poltava,,Ukraine,49.59373,34.54073,1,1
+1127,Pondicherry,,India,11.91386,79.814472,1,9
+1128,Porbandar,,India,21.64219,69.60929,1,1
+1129,Port Louis,,Mauritius,-20.16194,57.504104,1,5
+1130,Port Said,,Egypt,31.25654,32.28412,1,2
+1131,Port-au-Prince,,Haiti,18.53917,-72.335,1,2
+1132,Portland,Maine,United States of America,43.661471,-70.25532,1,1
+1133,Portland,Oregon,United States of America,45.523062,-122.676482,1,4
+1134,Porto Alegre,Pôrto Alegre,Brazil,-30.03306,-51.23,1,4
+1135,Port-of-Spain,,Trinidad and Tobago,10.661702,-61.519442,1,1
+1136,Portsmouth,,United Kingdom,50.816661,-1.083383,1,8
+1137,Potosi,Potosí ,Bolivia,-19.58361,-65.75306,1,14
+1138,Potsdam,,Germany,52.39886,13.06566,1,7
+1139,Poznan,Posen,Poland,52.40692,16.92993,1,14
+1140,Prague,,Austria,50.08804,14.42076,1,29
+1141,Prambanan,temple in Indonesia,Indonesia,-7.752022,110.491369,2,1
+1142,Preslav,,Bulgaria,43.164542,26.817967,1,3
+1143,Preston,,United Kingdom,53.76667,-2.71667,1,5
+1144,Pretoria,,South Africa,-25.74486,28.18783,1,2
+1145,Prizren,Frizren,Serbia,42.21389,20.73972,1,9
+1146,Prokopyevsk,Prokopievsk,Russian Federation,53.883137,86.715772,2,1
+1147,Providence,Rhode Island,United States of America,41.823989,-71.412833,1,6
+1148,Provins,,France,48.55,3.3,1,4
+1149,Przemysl,,Poland,49.78498,22.76728,1,1
+1150,Pskov,,Russian Federation,57.8136,28.3496,1,8
+1151,Puebla, Puebla de Zaragoza,Mexico,19.0514,-98.2178,1,16
+1152,Pula,Pola,Croatia,44.866667,13.85,2,1
+1153,Pundravardhana,,India,25.5,81.5,2,1
+1154,Pune,Poona,India,18.52043,73.856744,1,13
+1155,Puri,Jagganath,India,19.810556,85.831389,2,6
+1156,Purnia,Purneah,India,25.78,87.47,2,1
+1157,Pyay,"Sri Ksetra, Prome",Myanmar,18.82151,95.221029,3,2
+1158,Pyongyang,"P'yongyang, Tonggoo",Dem. People's Republic of Korea,39.03385,125.75432,1,14
+1159,Qazvin,Kazvin,Iran,36.26877,50.0041,1,15
+1160,Qingdao,Tsingtao,China,36.067082,120.38264,3,2
+1161,Qiqihar,Tsitsihar,China,47.354348,123.918186,1,2
+1162,Qom,,Iran,34.6401,50.8764,1,2
+1163,Quebec ,,Canada,46.81228,-71.21454,1,9
+1164,Quilon,,India,8.88,76.6,3,13
+1165,Quito,,Ecuador,-0.22985,-78.52495,1,18
+1166,Qum,"Kum, Qom, Com",Iran,34.64,50.876389,2,4
+1167,Rabat,,Morocco,34.01325,-6.83255,1,16
+1168,Rabba,,Nigeria,9.2,5.033333,3,3
+1169,Radom,,Poland,51.40253,21.14714,1,1
+1170,Raichur,,India,16.2047,77.354,1,1
+1171,Raipur,,India,21.14,81.38,2,1
+1172,Rajahmundry,,India,17.00517,81.77784,1,4
+1173,Rajkot,,India,22.29161,70.79322,1,1
+1174,Rajmahal,,India,25.05303,87.83048,3,4
+1175,Rampur,,India,28.789304,79.024952,1,6
+1176,Rangpur,,India,25.74664,89.25166,1,3
+1177,Ratlam,,India,23.33033,75.04032,1,1
+1178,Ravenna,,Italy,44.4175,12.20111,1,1
+1179,Rawalpindi,,Pakistan,33.6007,73.0679,1,3
+1180,Rawtenstall,,United Kingdom,53.70076,-2.28442,1,1
+1181,Rayy,"Rey, Ray",Iran,35.5833,51.4333,2,6
+1182,Reading,,United Kingdom,51.45625,-0.97113,1,1
+1183,Reading,Pennsylvania,United States of America,40.335647,-75.926875,1,1
+1184,Real de Catorce,,Mexico,23.689397,-100.885547,2,1
+1185,Recife,Pernambuco,Brazil,-8.05389,-34.88111,1,13
+1186,Regensburg,Ratisbon,Germany,49.015,12.09556,1,10
+1187,Reggio di Calabria,,Italy,38.1113,15.647292,2,4
+1188,Reims,Rheims,France,49.25,4.03333,1,20
+1189,Remscheid,,Germany,51.17983,7.1925,1,1
+1190,Rennes,,France,48.11198,-1.67429,1,12
+1191,Rhodes,,Greece,36.4333,28.2167,2,1
+1192,Rhondda,,Wales,51.65896,-3.44885,1,4
+1193,Richmond,Virgina,United States of America,37.5333,77.4667,3,3
+1194,Riga,,Russian Federation,56.946,24.10589,1,12
+1195,Rio de Janeiro,,Brazil,-22.90278,-43.2075,1,15
+1196,Riobamba,,Ecuador,-1.67083,-78.64861,1,7
+1197,Roanne,,France,46.03333,4.06667,1,1
+1198,Rochdale,,United Kingdom,53.61766,-2.1552,1,1
+1199,Rochefort,,Belgium,50.1631,5.2216,1,1
+1200,Rochester,,United Kingdom,51.386067,0.487261,1,1
+1201,Rochester,New York,United States of America,43.161031,-77.610922,1,4
+1202,Rockford,Illinois,United States of America,42.259444,-89.064444,3,1
+1203,Rome,,Italy,41.89474,12.4839,1,36
+1204,Rosario,,Argentina,-32.94682,-60.63932,1,4
+1205,Roskilde,,Denmark,55.64152,12.08035,1,6
+1206,Rostock,,Germany,54.0887,12.14049,1,1
+1207,Rostov-on-Don,Rostov,Russian Federation,47.2333,39.41394,1,4
+1208,Rotherham,,United Kingdom,53.43012,-1.35678,1,1
+1209,Rotterdam,,Netherlands,51.9225,4.47917,1,16
+1210,Roubaix,Roubaix-Tourcoing,France,50.692706,3.177847,2,5
+1211,Rouen,,France,49.44313,1.09932,1,30
+1212,Ruhr,,Germany,51.407415,6.862626,1,6
+1213,Ruse,Rustchuk,Bulgaria,43.835572,25.965656,2,7
+1214,Ryazan,,Russian Federation,54.609542,39.712586,1,1
+1215,Saarbrucken,Saarbrücken ,Germany,49.2354,6.98165,1,2
+1216,Sacramento,,United States of America,38.581487,-121.494237,1,2
+1217,Sagar,Saugor,India,23.83,78.71,2,1
+1218,Saginaw,Michigan,United States of America,43.41947,-83.950807,3,1
+1219,Saharanpur,,India,29.9679,77.54522,1,1
+1220,Saint Petersburg,Leningrad,Russian Federation,59.89444,30.26417,1,12
+1221,Saint-Malo,,France,48.649336,-2.025675,1,8
+1222,Saint-Omer,,France,50.750114,2.252208,1,8
+1223,Saint-Quentin,,France,49.847066,3.2874,1,1
+1224,Sais,Sa el-Hagar ,Egypt,30.96485438,30.76872699,1,1
+1225,Sakai,Fukui,Japan,34.573333,135.483056,1,5
+1226,Salamanca,,Spain,40.970103,-5.663539,1,7
+1227,Salem,,India,11.664325,78.146014,1,1
+1228,Salem,Massachusetts,United States of America,42.519539,-70.896717,1,1
+1229,Salerno,,Italy,40.67797,14.76599,1,9
+1230,Salt Lake City,Utah,United States of America,40.76078,-111.89105,1,3
+1231,Salvador,"Sao Salvador, Bahia",Brazil,-12.97111,-38.51083,1,16
+1232,Salzburg,,Austria,47.79941,13.04399,1,1
+1233,Samara,Kuibyshev,Russian Federation,53.2028,50.1408,3,2
+1234,Samaria,"Shomron, Šomron ",Palestine,32.2761695611 ,35.19040505,1,1
+1235,Samarkand,Sumarqand,Uzbekistan,39.6576,66.947561,1,23
+1236,Samarra, Samarra' ,Iraq,34.198333,43.874167,2,4
+1237,Sambhal,,India,28.58323,78.56689,3,1
+1238,San Antonio,Texas,United States of America,29.424122,-98.493628,1,3
+1239,San Bernardino,California,United States of America,34.1,-117.3,3,1
+1240,San Diego,California,United States of America,32.715328,-117.157256,1,2
+1241,San Francisco,California,United States of America,37.77493,-122.419416,1,7
+1242,San Juan,,Puerto Rico,18.45,-66.0667,1,3
+1243,San Luis Potosi,San Luis Potosí  ,Mexico,22.14993,-100.9828,1,4
+1244,San Salvador,,El Salvador,13.706899,-89.202258,1,2
+1245,San Sebastian,,Spain,43.31283,-1.97499,1,1
+1246,Sana'a ,Sanaa,Yemen,15.35472,44.20667,1,9
+1247,Sankt Gallen,,Switzerland,47.424482,9.376717,1,1
+1248,Santa Cruz,,Spain,28.466667,-16.25,3,1
+1249,Santa Fe,,Argentina,-31.610658,-60.697294,1,1
+1250,Santander,,Spain,43.46472,-3.80444,1,1
+1251,Santiago,,Chile,-33.45,-70.666667,1,13
+1252,Santiago de Cuba,,Cuba,20.019833,-75.813917,1,1
+1253,Santiago de Queretaro,"Santiago de Querétaro, Queretaro",Mexico,20.588792,-100.389889,2,5
+1254,Santiago Tilantongo,Tilantongo,Mexico,17.25,-97.283333,2,2
+1255,Santo Domingo,,Dominican Republic,18.466667,-69.95,1,1
+1256,Santos,,Brazil,-23.96083,-46.33361,1,1
+1257,Sao Luis,"Maranhao, São Luís ",Brazil,-2.5283,-44.3044,3,1
+1258,Sao Paolo,São Paulo,Brazil,-23.5475,-46.63611,1,5
+1259,Sapporo,,Japan,43.06417,141.34694,1,3
+1260,Saptagram,Satgaon,India,22.9667,88.3833,3,2
+1261,Sarai,Serai,Russian Federation,53.74577,41.02126,1,5
+1262,Sarajevo,"Bosna-Serai, Serajevo",Bosnia and Herzegovina,43.84864,18.35644,1,7
+1263,Saratov,,Russian Federation,51.54056,46.00861,1,9
+1264,Sardis,Sardes,Turkey,38.48226723,28.04759086,1,1
+1265,Sasebo,,Japan,33.15917,129.72278,1,1
+1266,Sassari,,Italy,40.72722,8.56028,1,1
+1267,Satara,,India,17.68589,73.99333,1,1
+1268,Savannah,Georgia,United States of America,32.08354,-81.09983,1,1
+1269,Schenectady,New York,United States of America,42.81424,-73.93957,1,1
+1270,Scranton,Pennsylvania,United States of America,41.40897,-75.66241,1,3
+1271,Seattle,Washington,United States of America,47.60621,-122.33207,1,4
+1272,Segou ,"Segu, Ségou ",Mali,13.440597,-6.265319,1,5
+1273,Segovia,,Spain,40.943564,-4.113003,1,6
+1274,Seleucia,,Iraq,33.094444,44.522222,2,2
+1275,Semarang,,Indonesia,-6.9932,110.4203,1,8
+1276,Sendai,,Japan,38.266667,140.866667,1,10
+1277,Sennar,,Sudan,13.567469,33.567203,1,4
+1278,Seoul,Hanyang,Republic of Korea,37.56826,126.97783,1,20
+1279,Serres,"Serrai, Seres",Greece,41.090922,23.541319,1,8
+1280,Sevastopol,,Russian Federation,44.58883,33.5224,1,4
+1281,Seville,,Spain,37.388097,-5.982331,1,31
+1282,Shahjahanpur,,India,27.88142,79.9109,3,4
+1283,Shanghai,,China,31.22222,121.45806,1,18
+1284,Shangrao,"Hsinchow, Shangjao",China,28.441944,117.963333,2,1
+1285,Shaoxing ,Shaohing,China,30,120.583333,1,6
+1286,Sheffield,,United Kingdom,53.381128,-1.470086,1,14
+1287,Shenyang,"Fengtien, Mukden",China,41.79222,123.43278,1,11
+1288,s'Hertogenbosch,Bois-le-Duc,Netherlands,51.697819,5.303667,1,7
+1289,Shijiazhuang,,China,38.042308,114.514861,1,1
+1290,Shikarpur,,Pakistan,27.95,68.65,2,1
+1291,Shimonoseki,,Japan,33.95,130.95,1,2
+1292,Shiraz,,Iran,29.61031,52.53114,1,17
+1293,Shizuoka,Sumpu,Japan,34.97712,138.383084,2,5
+1294,Shkoder,"Shkodra, Scutari",Albania,42.0743,19.527661,1,7
+1295,Shuangcheng,Shuangchengpu,China,45.395992,126.293015,3,1
+1296,Shumen,Shumla,Bulgaria,43.276667,26.929167,3,4
+1297,Sialkot,,Pakistan,32.5101,74.54313,1,1
+1298,Sidjilmasa,Sijilmessa,Morocco,31.28,-4.28,2,2
+1299,Sidon,,Lebanon,33.55993,35.37564,1,1
+1300,Siena,,Italy,43.32004,11.33283,1,14
+1301,Silistra ,Silistria,Bulgaria,44.114728,27.267189,1,7
+1302,Simferopol,,Crimea,44.952117,34.102417,1,1
+1303,Singapore,,Singapore,1.28967,103.85007,1,5
+1304,Sioux City,Iowa,United States of America,42.49999,-96.40031,1,1
+1305,Sira,,India,13.74155,76.9043,1,4
+1306,Siraf,,Iran,27.666667,52.3425,1,2
+1307,Sivas,,Turkey,39.74833,37.01611,1,10
+1308,Skopje,"Uskub, Skoplje",Serbia,41.99646,21.43141,1,9
+1309,Smolensk,,Russian Federation,54.7818,32.0401,1,14
+1310,Smyrna,Izmir,Turkey,38.41273,27.13838,1,13
+1311,Soba,,Sudan,15.523889,32.680833,3,3
+1312,Soest,,Germany,51.57558,8.10619,1,7
+1313,Sofia,,Bulgaria,42.69751,23.32415,1,15
+1314,Soissons,,France,49.38167,3.32361,1,1
+1315,Sokoto,,Nigeria,13.06092,5.23902,1,2
+1316,Solapur ,Sholapur,India,17.659919,75.906391,1,2
+1317,Solingen,,Germany,51.17343,7.0845,1,1
+1318,Soltaniyeh,"Sultaniya, Sol??n?yeh, Sol??neyyeh, Sultaniye, Sult?n?yeh, Sa‘?d?yeh, Soltania",Iran,36.434722,48.7975,1,3
+1319,Somnath,,India,20.906002,70.384372,1,2
+1320,Songadh,Songarh,India,22.702178,74.938414,3,1
+1321,Sopron,,Hungary,47.68501,16.59049,1,1
+1322,South Bend,Indiana,United States of America,41.68338,-86.25001,1,1
+1323,Southampton,,United Kingdom,50.90395,-1.40428,3,2
+1324,Sovetsk,Tilsit,Russian Federation,55.083333,21.883333,2,1
+1325,Sparti,"Spárti, Sparta",Greece,37.08182158,22.4234456,1,2
+1326,Speyer,Spires,Germany,49.320478,8.436217,2,7
+1327,Spokane,Washington,United States of America,47.65966,-117.42908,1,1
+1328,Springfield,Illinois,United States of America,39.783,-89.65,1,1
+1329,Springfield,Massachusetts,United States of America,42.112411,-72.547455,1,3
+1330,Springfield,Ohio,United States of America,39.926944,-83.804167,1,1
+1331,Srimantapur ,"Serampore, Serampur, Srirampur, Srirampore, Shreerampur, Shreerampore, Shrirampur, Shrirampore, Srerampore, Serampur",India,22.75,88.34,2,1
+1332,Srinagar,,India,34.08842,74.80298,1,19
+1333,Srirangapatna,"Shrirangapattana, Seringapatam",India,12.417956,76.694687,3,8
+1334,St. Helens,Oregon,United States of America,45.859444,-122.816944,2,1
+1335,St. John,,Canada,45.273315,-66.063308,3,1
+1336,St. John's,,Canada,47.56494,-52.70931,3,1
+1337,St. Louis,Missouri,United States of America,38.626978,-90.199403,1,10
+1338,Stavanger,,Norway,58.97005,5.73332,1,1
+1339,Stavropol,,Russian Federation,45.049999,41.96667,1,1
+1340,Stockholm,,Sweden,59.33258,18.0649,1,12
+1341,Stockport,,United Kingdom,53.40979,-2.15761,1,4
+1342,Stoke,,United Kingdom,53.25,-2.86667,1,8
+1343,Stralsund,,Germany,54.30911,13.0818,1,1
+1344,Strasbourg,Strassburg,France,48.58342,7.74296,1,24
+1345,Stuttgart,,Germany,48.78232,9.17702,1,10
+1346,Subotica,"Szabadka, Maria Theresiopel",Serbia,46.100278,19.665556,2,6
+1347,Suceava,Suczawa,Romania,47.63333,26.25,1,3
+1348,Sudak,Soldaia,Russian Federation,44.84924,34.97471,1,3
+1349,Sukhothai,Sukotai,Thailand,17.005558,99.826372,1,2
+1350,Sunderland,,United Kingdom,54.90465,-1.38222,2,6
+1351,Surabaya,Soerabaja,Indonesia,-7.24917,112.75083,1,11
+1352,Surakarta,Soerakarta,Indonesia,-7.55611,110.83167,1,9
+1353,Surame,,Nigeria,13.0875,4.898611,2,1
+1354,Surat,,India,21.19594,72.83023,1,19
+1355,Susa,,Iran,32.19085,48.246028,1,8
+1356,Suzhou,Soochow,China,31.3,120.6,1,42
+1357,Sverdlovs'k ,Sverdlovsk,Ukraine,48.08455,39.651631,1,2
+1358,Svishtov,Sistova,Bulgaria,43.616667,25.35,2,1
+1359,Swansea,,Wales,51.62079,-3.94323,1,1
+1360,Swatow,Shantou,China,23.353299,116.681838,2,2
+1361,Swindon,,United Kingdom,51.55797,-1.78116,1,1
+1362,Sydney,,Australia,-33.86785,151.20732,1,10
+1363,Syracuse,,Greece,37.06082237,15.29420264,2,9
+1364,Syracuse,New York,United States of America,43.048122,-76.147424,1,2
+1365,Syzran,,Russian Federation,53.166667,48.466667,1,1
+1366,Szczecin,Stettin,Poland,53.416667,14.583333,2,12
+1367,Szeged,Szegedin,Hungary,46.255,20.145,2,7
+1368,Szekesfehervar,Székesfehérvár ,Hungary,47.18995,18.41034,1,4
+1369,Szentes,,Hungary,46.65627,20.27201,1,1
+1370,Tabriz,,Iran,38.08,46.2919,1,23
+1371,Tacoma,Washington,United States of America,47.25288,-122.44429,1,1
+1372,Taganrog,,Russian Federation,47.23617,38.89688,1,1
+1373,Taian,Shandong province,China,36.2,117.083333,2,2
+1374,Taichung,,Taiwan,24.1469,120.6839,1,1
+1375,Tainan City,Taiwan,China,22.983333,120.18333,3,8
+1376,Taipei,,Taiwan,25.04776,121.53185,1,5
+1377,Taiyuan,,China,37.87059,112.548879,1,26
+1378,Takamatsu,,Japan,34.342788,134.046574,1,1
+1379,Takaoka,,Japan,36.75,137.01667,1,1
+1380,Takasaki,,Japan,36.33333,139.01667,1,1
+1381,Taku,Dagu forts,China,38.974444,117.673611,2,2
+1382,Talca,,Chile,-35.4264,-71.65542,1,1
+1383,Tallinn,Reval,Estonia,59.436961,24.753575,1,2
+1384,Taluqan ,"Taloqan, Takhar",Afghanistan,36.716667,69.516667,2,1
+1385,Tambov,,Russian Federation,52.73169,41.44326,1,1
+1386,Tammerfors,Tampere,Finland,61.498151,23.761025,1,1
+1387,Tampa,Florida,United States of America,27.94752,-82.45843,1,1
+1388,Tamralipti,Tamralipta,India,22.3,87.92,2,1
+1389,Tangier,,Morocco,35.76727,-5.79975,1,1
+1390,Tangshan,Hebei province,China,39.63333,118.18333,1,1
+1391,Tanta,,Egypt,30.783333,31,2,1
+1392,Taranto,"Tartentum, Tarentum",Italy,40.47054509,17.24555378,3,1
+1393,Targoviste,"Tirgovishtea, Târgoviste ",Romania,44.924167,25.456667,1,9
+1394,Tarnow,,Poland,50.0125,20.988611,2,1
+1395,Tarsus,,Turkey,36.91876,34.8784,1,7
+1396,Tartu,Dorpat,Estonia,58.380685,26.725015,1,1
+1397,Tashkent,,Uzbekistan,41.26465,69.21627,1,8
+1398,Taunton,Massachusetts,United States of America,41.9,-71.090278,1,1
+1399,Taxilla,Taxila,Pakistan,33.75743141,72.82952293,1,1
+1400,Taza,,Morocco,34.2167,-4.0167,1,2
+1401,Tbilisi,Tiflis,Georgia,41.709975,44.792989,1,12
+1402,Tehran,Teheran,Iran,35.69439,51.42151,1,13
+1403,Tel Aviv,,Israel,32.08088,34.78057,1,2
+1404,Tenayuca,,Mexico,19.532167,-99.168472,2,4
+1405,Teotihuacan,,Mexico,19.69291001,-98.84606,1,4
+1406,Teresina ,Therezina,Brazil,-5.089212,-42.801627,1,1
+1407,Ternopol ,Tarnopol,Ukraine,49.48479,25.621045,1,1
+1408,Terre Haute,Indiana,United States of America,39.4667,-87.41391,1,1
+1409,Texcoco,Tezcoco,Mexico,19.504422,-98.891425,2,9
+1410,Thana,,India,19.218331,72.97809,3,3
+1411,Thanesar ,"Sthanishvara, Thaneswar",India,21.24099,86.689434,3,1
+1412,Thanjavur ,Tanjore,India,10.786999,79.137827,1,8
+1413,Thatta,Tatta,India,24.746117,67.924336,2,5
+1414,The Hague,s-Gravenhage,Netherlands,52.070492,4.300694,1,17
+1415,Thebes,Waset,Egypt,25.720556,32.610278,1,1
+1416,Thessaloniki,"Salonica, Thessalonica",Greece,40.63935,22.944606,1,29
+1417,Thiruvananthapuram,Trivandrum,India,8.487495,76.948623,3,2
+1418,Tiahuanaco,Tiwanaku,Bolivia,-16.55228,-68.67953,1,1
+1419,Tianjin,Tientsin,China,39.14222,117.17667,1,17
+1420,Tianshui,"Tsinchow, Tienshui",China,34.57952,105.74238,1,4
+1421,Tikal,Tical,Guatemala,17.222094,-89.623614,2,2
+1422,Tilburg,,Netherlands,51.55551,5.0913,1,1
+1423,Timisoara ,Temesvar,Romania,45.755533,21.23,2,1
+1424,Tinnis,Tennis,Egypt,31.2,32.233333,3,4
+1425,Tiruchirappalli,Trichinopoly,India,10.805,78.685556,3,8
+1426,Tlaxcala,,Mexico,19.32076,-98.20959,1,7
+1427,Tlemcen,Tlemsen,Algeria,34.87833,-1.315,1,9
+1428,Tokat,,Turkey,40.31389,36.55444,1,1
+1429,Tokushima,,Japan,34.070269,134.554844,1,6
+1430,Tokyo,"Yedo, Edo",Japan,35.6895,139.69171,1,22
+1431,Toledo,,Spain,39.862831,-4.027322,1,20
+1432,Toledo,Ohio,United States of America,41.571019,-83.966889,1,4
+1433,Tollan,Tula,Mexico,20.06369902,-99.3409691,1,1
+1434,Tombouctou ,Timbuktu,Mali,16.77348,-3.00742,1,6
+1435,Tomsk,,Russian Federation,56.49771,84.97437,1,1
+1436,Tonk,,India,26.16638,75.78824,2,1
+1437,Topeka,Kansas,United States of America,39.04833,-95.67804,1,1
+1438,Toronto,,Canada,43.70011,-79.4163,1,5
+1439,Torquay,,United Kingdom,50.4792,-3.5305,3,1
+1440,Toulon,,France,43.11667,5.93333,1,13
+1441,Toulouse,,France,43.60426,1.44367,1,26
+1442,Toungoo,Taungoo,Myanmar,18.933333,96.433333,1,3
+1443,Tournai,Doornik,Belgium,50.60715,3.38932,1,7
+1444,Tours,,France,47.38333,0.68333,1,22
+1445,Toyama,,Japan,36.695952,137.213677,3,2
+1446,Trabzon,Trebizond,Turkey,41.00145,39.717806,3,15
+1447,Trakai,Troki,Lithuania,54.633333,24.933333,2,5
+1448,Trapani,,Italy,38.01584,12.51077,1,1
+1449,Trenton,,United States of America,40.2237,-74.764,1,1
+1450,Tres Zapotes,,Mexico,18.466667,-95.433333,2,1
+1451,Trier,Treves,Germany,49.75565,6.63935,1,14
+1452,Trieste,Triest,Italy,45.633333,13.8,2,6
+1453,Tripoli,,Libya,32.876175,13.187508,1,15
+1454,Tripolis,"Tripoli, Tripolitza",Greece,37.516667,22.383333,3,2
+1455,Trondheim,,Norway,63.43049,10.39506,1,1
+1456,Troy ,New York,United States of America,42.728411,-73.691786,1,3
+1457,Troyes,,France,48.3,4.08333,1,20
+1458,Tsinkiang,"Zayton, Chinchiang, Chuanchow",China,24.913889,118.58583,3,27
+1459,Tsu,,Japan,34.716667,136.5,2,1
+1460,Tucuman,Tucumán ,Argentina,-26.808285,-65.21759,1,2
+1461,Tula,,Russian Federation,54.107722,37.573261,1,11
+1462,Tulsa,Oaklahoma,United States of America,36.15398,-95.99278,1,1
+1463,Tunis,,Tunisia,36.818811,10.165961,1,24
+1464,Turin,,Italy,45.07049,7.68682,1,19
+1465,Turpan,"Turfan, Tulufan",China,42.93333,89.16667,1,3
+1466,Tver,Kalinin  ,Russian Federation,56.858722,35.917597,1,8
+1467,Tynemouth,,United Kingdom,55.01788,-1.42559,2,5
+1468,Tyre,,Lebanon,33.27333,35.19389,3,1
+1469,Tzintzuntzan,,Mexico,19.62903,-101.57857,1,4
+1470,Udaipur,,India,24.57127,73.691544,3,9
+1471,Ufa,,Russian Federation,54.78517,56.04562,1,3
+1472,Ugarit,,Syria,35.60228865,35.78656277,1,1
+1473,Ujjain,,India,23.18239,75.77643,3,12
+1474,Ulaanbaatar,"Ulan Bator, Urga",Mongolia,47.92,106.92,3,1
+1475,Ulm,,Germany,48.39841,9.99155,1,15
+1476,Ulyanovsk,Simbirsk,Russian Federation,54.316684,48.383413,1,1
+1477,Ur,,Iraq,30.962659,46.10321,1,1
+1478,Uralsk,Oral,Kazakhstan,51.233333,51.366667,1,1
+1479,Urmieh ,Urmia,Iran,37.555278,45.072499,3,2
+1480,Uruk,Erech,Iraq,31.322222,45.636111,2,1
+1481,Urumqi,"Ürümqi, Tihwa, Bishbaliq, Urumchi",China,43.825644,87.616822,1,6
+1482,Usti nad Labem,Aussig,Czech Republic,50.661116,14.053146,1,1
+1483,Utica,New York,United States of America,43.096569,-75.231887,1,1
+1484,Utrecht,,Netherlands,52.09083,5.12222,1,17
+1485,Utsunomiya  ,Utsonomiya,Japan,36.555112,139.882807,1,1
+1486,Uwajima,Uajima,Japan,33.22334,132.560558,3,1
+1487,Vadodara,Baroda,India,22.30731,73.181098,3,9
+1488,Vaishali,Vaisali,India,25.6833,85.081782,3,1
+1489,Valencia,,Spain,39.469908,-0.376289,1,24
+1490,Valencia,,Venezuela,10.174124,-67.999519,1,1
+1491,Valenciennes,,France,50.35,3.53333,1,12
+1492,Vallabhi,Vallabhipur,India,21.8878,71.8795,2,1
+1493,Valladolid,,Spain,41.65518,-4.72372,1,16
+1494,Valletta,Valetta,Malta,35.89972,14.51472,1,10
+1495,Valparaiso,,Chile,-33.05,-71.6167,1,7
+1496,Van,,Turkey,38.49239,43.38311,1,1
+1497,Vancouver,,Canada,49.24966,-123.11934,1,2
+1498,Varanasi ,Benares,India,25.317645,82.973914,2,18
+1499,Varna,,Bulgaria,43.21667,27.91667,1,6
+1500,Veliko Tarnovo ,"Veliko, Tarnovo, Trnovo",Bulgaria,43.083333,25.65,2,6
+1501,Vellore,,India,12.9184,79.13255,1,6
+1502,Venice,,Italy,45.440847,12.315514,1,34
+1503,Verona,,Italy,45.43419,10.99779,1,26
+1504,Versailles,,France,48.8,2.13333,1,8
+1505,Verviers,,Belgium,50.58907,5.86241,1,1
+1506,Viborg,,Denmark,56.45319,9.40201,1,1
+1507,Vicenza,,Italy,45.545478,11.535422,1,11
+1508,Vidin,,Bulgaria,43.99,22.8725,1,4
+1509,Vienna,Wien,Austria,48.20849,16.37208,1,24
+1510,Vienne,,France,45.51667,4.86667,3,1
+1511,Vijayanagar,,India,15.335,76.462,3,9
+1512,Vijayawada,Bezwada,India,16.506174,80.648015,3,3
+1513,Vilnius,Vilna,Lithuania,54.683333,25.283333,1,14
+1514,Visakhapatnam,Vizagapatam,India,17.686816,83.218482,2,1
+1515,Visby,,Sweden,57.64089,18.29602,1,4
+1516,Vitebsk,,Belarus,55.1904,30.2049,1,1
+1517,Vizianagaram,,India,18.107187,83.395302,3,1
+1518,Vladikavkatz,,Russian Federation,43.083295,44.649944,1,1
+1519,Vladimir,,Russian Federation,56.13655,40.39658,1,5
+1520,Vladivostok,,Russian Federation,43.10562,131.87353,1,3
+1521,Volgograd,"Stalingrad, Tsaritsyn",Russian Federation,48.71939,44.50184,2,3
+1522,Voronezh,,Russian Federation,51.67204,39.1843,1,10
+1523,Wakayama,,Japan,34.225986,135.167508,1,5
+1524,Wakefield,,United Kingdom,53.6801,-1.492,2,1
+1525,Wanxian,Wanhsien,China,30.9,108.467,3,6
+1526,Warangal,,India,17.968901,79.58333,1,3
+1527,Warrington,,United Kingdom,53.39254,-2.58024,1,1
+1528,Warsaw,,Poland,52.22977,21.01178,1,21
+1529,Washington D.C.,Washington,United States of America,38.914144,-77.0234,1,7
+1530,Waterbury,Connecticut,United States of America,41.55815,-73.0515,2,1
+1531,Waterford,,Ireland,52.25833,-7.11194,1,1
+1532,Weihai,Weihaiwei,China,37.516667,122.116667,3,1
+1533,Weisbaden,Lainz-Weisbaden,Germany,50.06308,8.243344,1,4
+1534,Wellington,,New Zealand,-41.286452,174.776253,1,2
+1535,Wenzhou,"Wenchow, Luchow",China,27.99942,120.66682,1,6
+1536,Wheeling,West Virginia,United States of America,40.063962,-80.720915,3,1
+1537,Wiener Neustadt,,Austria,47.8,16.25,1,4
+1538,Wigan,,United Kingdom,53.53333,-2.61667,1,1
+1539,Wilkes-Barre,Pennsylvania,United States of America,41.245915,-75.88131,1,1
+1540,Winnipeg,,Canada,49.8844,-97.14704,1,4
+1541,Wolverhampton,,United Kingdom,52.58547,-2.12296,1,4
+1542,Worcester,,United Kingdom,52.18935,-2.22001,2,1
+1543,Worcester,,United States of America,42.266667,-71.8,1,2
+1544,Worms,,Germany,49.63278,8.35916,1,8
+1545,Wroclaw,Breslau,Germany,51.116667,17.033333,3,30
+1546,Wuhan,Wuchang,China,30.58333,114.26667,1,26
+1547,Wuhu,,China,31.33728,118.37351,1,7
+1548,Wuppertal,Barmen-Elberfeld,Germany,51.268752,7.18026,2,6
+1549,Wurzburg,Würzburg ,Germany,49.791558,9.953694,1,7
+1550,Wuxi,"Jiangsu province, Wuchang, Wuhsi",China,31.49117,120.31191,1,4
+1551,Wuzhou,Wuchow,China,23.476963,111.279115,2,6
+1552,Xiamen,"Amoy, Hsiamen",China,24.47979,118.08187,1,12
+1553,Xian,"Sian, Changan, Xi'an",China,34.341485,108.940404,1,35
+1554,Xiangtan,Siangtan,China,27.85,112.9,3,7
+1555,Xiangyang,"Siangfan, Siangyang",China,32.017,112.133,3,8
+1556,Xingtai,Shunteh,China,37.0631,114.494,3,1
+1557,Xining,,China,36.61667,101.76667,1,2
+1558,Xuzhou,"Suchow, Suifu, Hsuchow",China,34.26,117.21,1,17
+1559,Yadz,Yezd,Iran,31.896611,54.360681,1,11
+1560,Yamagata,,Japan,38.243127,140.341385,1,1
+1561,Yamaguchi,,Japan,34.185956,131.47065,1,7
+1562,Yangon ,,Myanmar,16.80528,96.15611,1,6
+1563,Yangzhou,Yangchow,China,32.4, 119.416667,2,30
+1564,Yarkand,Yarcant,China,38.414289,77.246006,2,5
+1565,Yaroslavl,,Russian Federation,57.626072,39.884464,2,9
+1566,Yekaterinburg,Ekaterinburg,Russian Federation,56.833333,60.6,1,1
+1567,Yelets,Elets,Russian Federation,52.616667,38.466667,2,1
+1568,Yerevan,Erivan,Armenia,40.183333,44.516667,1,2
+1569,Yichang,Ichang,China,30.716667,111.283333,2,1
+1570,Yinchuan,"Chunghsing, Yuwei, Erikhaya, Khotun, Ninghsia",China,38.4667,106.2667,3,12
+1571,Yining,"Ili, Gulja, Kulja",China,43.916667,81.316667,2,4
+1572,Yogyakarta,Jogjakarta,Indonesia,-7.797139,110.368833,1,7
+1573,Yokohama,,Japan,35.443708,139.638026,1,2
+1574,Yonezawa,,Japan,37.91667,140.11667,1,1
+1575,York,,United Kingdom,53.962301,-1.081884,1,1
+1576,Youngstown,Ohio  ,United States of America,41.1,-80.65,1,3
+1577,Ypres,Leper,Belgium,50.849997,2.883339,1,14
+1578,Zacatecas,,Mexico,22.76843,-102.58141,1,13
+1579,Zafar,Dhafar,Yemen,14.21175142,44.40341925,2,1
+1580,Zagazig,,Egypt,30.58768,31.502,1,1
+1581,Zagreb,,Croatia,45.81444,15.97798,1,3
+1582,Zamfara,,Nigeria,12.184417,6.237594,3,2
+1583,Zanzibar,,Tanzania,-6.16394,39.19793,1,3
+1584,Zaporizhia,Zaporozhye,Ukraine,47.8388,35.139567,1,2
+1585,Zaragoza,,Spain,41.648792,-0.889581,1,22
+1586,Zaria,,Nigeria,11.11128,7.7227,1,9
+1587,Zempoala,Cempoala,Mexico,19.91608,-96.402969,1,2
+1588,Zhangjiakou,Kalgan,China,40.824418,114.887543,2,2
+1589,Zhangye,Kanchow,China,38.93333,100.45,3,5
+1590,Zhitomir,,Ukraine,50.25465,28.658667,1,1
+1591,Zhongshan,Chungshan,China,22.517646,113.392782,3,1
+1592,Zibo,,China,36.79056,118.06333,1,1
+1593,Zigong,,China,29.34162,104.77689,2,1
+1594,Zimbabwe,Great Zimbabwe,Zimbabwe,-20.266667,30.933333,2,3
+1595,Zittau,,Germany,50.89772,14.80764,1,1
+1596,Zunyi,Tsunyi,China,27.6866667,106.9072222,3,1
+1597,Zurich,,Switzerland,47.36667,8.55,1,4
+1598,Zwickau,,Germany,50.72724,12.48839,1,1
