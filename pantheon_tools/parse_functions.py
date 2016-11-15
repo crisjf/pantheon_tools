@@ -6,8 +6,19 @@ def drop_comments(value):
 	return value
 
 def find_nth(haystack, needle, n):
-    start = haystack.find(needle)
-    while start >= 0 and n > 1:
-        start = haystack.find(needle, start+len(needle))
-        n -= 1
-    return start
+	'''Returns the index of the nth occurrence of needle in haystack.
+	
+	Parameters
+	----------
+	haystack : str
+		String to search.
+	needle : str
+		Pattern to find.
+	n : int
+		Occurrence to return.
+	'''
+	start = haystack.find(needle)
+	while start >= 0 and n > 1:
+		start = haystack.find(needle, start+len(needle))
+		n -= 1
+	return start

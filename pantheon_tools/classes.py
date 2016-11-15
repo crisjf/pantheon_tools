@@ -562,6 +562,7 @@ class article(object):
 			m0,y0 = int(m0),int(y0)
 		else:
 			m0,y0 = None,None
+
 		if end_date is None:
 			yf = datetime.date.today().year
 			mf = datetime.date.today().month
@@ -576,6 +577,7 @@ class article(object):
 
 		if lang not in self._views.keys():
 			self._views[lang] = {}
+
 		if not cdate_override:
 			timestamp = self.creation_date(lang)
 			yy,mm = timestamp.split('-')[:2]
@@ -610,7 +612,7 @@ class article(object):
 		rest_end   = None
 		for y,m in dates:
 			if y+'-'+m not in self._views[lang].keys():
-				if (y=='2016')&(int(m)>1):
+				if ((y=='2015')&(int(m)>=7))|(y=='2016'):#Here is the cutoff to go to rest
 					rest_start = (y,m) if (rest_start is None) else rest_start
 					rest_end   = (y,m)
 				else:
@@ -623,9 +625,10 @@ class article(object):
 			days = [day for day in self._daily_views[lang].keys() if day[:find_nth(day,'-',2)] in dates]
 			out = {day:self._daily_views[lang][day] for day in days}
 		else:	
-			out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
+			_out = defaultdict(lambda:0,self._views[lang])
+			out = {y+'-'+m:_out[y+'-'+m] for y,m in dates}
+			#out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
 		return out
-		
 
 	def _pageviews_rest(self,rest_start,rest_end,lang='en',daily=False):
 		if not lang in self._views.keys():
@@ -641,15 +644,21 @@ class article(object):
 
 		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
 		r = requests.get(url).json()
-		monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
-		monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
-		out = dict(monthly)
+		if ('title' not in r.keys()):
+			monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
+			monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
+			out = dict(monthly)
+		else:
+			out = defaultdict(lambda: 0)
+
 		for date in out.keys():
 			self._views[lang][date] = out[date]
 		if daily:
 			out = dict([(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]])
 			for day in out:
 				self._daily_views[lang][day] = out[day]
+	
+
 
 	def _pageviews_grok(self,y,m,lang='en',daily=False):
 		if not lang in self._views.keys():
