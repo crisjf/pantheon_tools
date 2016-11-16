@@ -1,6 +1,6 @@
 from setuptools import setup
 setup(
-	name='pantheon_tools',
+	name='johnny5',
 	version = '0.1',
 	author = "C. Jara-Figueroa",
     author_email = "crisjf@mit.edu",
