@@ -3,7 +3,7 @@ import json,os,operator,copy
 import nltk.data
 import nltk
 from query import wd_q,wp_q,_string,_isnum
-from parse_functions import drop_comments,find_nth
+from parse_functions import drop_comments,find_nth,parse_date
 from collections import defaultdict
 from nltk.stem import WordNetLemmatizer
 try:
@@ -104,6 +104,7 @@ class article(object):
 		self._creation_date = defaultdict(lambda:'')
 		self._feats = ''
 		self._occ   = ''
+
 
 	def data_wp(self):
 		'''
@@ -488,22 +489,6 @@ class article(object):
 				else:
 					self.__init__(red,Itype='title')
 
-
-	def occupation(self,return_all=False):
-		'''
-		Uses the occupation classifier Occ to predict the occupation.
-		Warning: This function runs very slow because it loads a new classifier each time.
-		Instead use:
-		>>> C = wt.Occ()
-		>>> C.classify(article)
-		'''
-		if self._occ is None:
-			C = Occ()
-			article = copy.deepcopy(self)
-			self._feats = C.feats(article)
-			self._occ = C.classify(article,return_all=return_all)
-		return self._occ
-
 	def revisions(self,user=True):
 		'''
 		Gets the timestamps for the edit history of the Wikipedia article.
@@ -658,8 +643,6 @@ class article(object):
 			for day in out:
 				self._daily_views[lang][day] = out[day]
 	
-
-
 	def _pageviews_grok(self,y,m,lang='en',daily=False):
 		if not lang in self._views.keys():
 			self._views[lang] = {}
@@ -672,6 +655,90 @@ class article(object):
 		if daily:
 			for day in r['daily_views']:
 				self._daily_views[lang][day] = r['daily_views'][day]
+
+
+
+class biography(article):
+	def __init__(self,I,Itype=None):
+		super(biography, self).__init__(I,Itype=None)
+
+	def living(self):
+		'''
+		Retrieves the information whether the biography is about a living or dead person.
+		It uses the WikiProject Biography template from the Talk page to get this information.
+
+		Returns
+		-------
+		alive : str
+			Returns either 'yes' or 'no'.
+		'''
+		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
+		wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
+		templates = wikicode.filter_templates()
+		for t in templates:
+			if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
+				for p in t.params:
+					if p.name.strip().replace(' ','').lower() == 'living':
+						living = drop_comments(p.value.lower().strip())
+						if (living[0] == 'n'):
+							return 'no'
+						elif (living[0] == 'y'):
+							return 'yes'
+						else:
+							return p.value
+		return 'NA'
+
+	def death_date(self,raw=False):
+		'''
+		Gets the death date from the infobox. 
+		If it is not available in the infobox (or it cannot parse it) it uses Wikidata.
+
+		Parameters
+		----------
+		raw : boolean (False)
+			If True it also returns the raw text from the infobox.
+
+		Returns
+		-------
+		d : tuple
+			(yyyy,mm,dd)
+		t : string (if raw)
+			Raw text from the infobox.
+		'''
+		d = 'NA'
+		t = 'NA'
+		if len(self.infobox()) !=0:
+			for box in self.infobox().values():
+				if 'death_date' in box.keys():
+					t = box['death_date']
+					break
+			if t != 'NA':
+				d = parse_date(t)
+		else:
+			t = 'wd'
+			d = self.wd_prop('P570')[0]['time'].split('T')[0][1:].split('-')
+		if d[0] == 'NA':
+			t = 'wd' if t =='NA' else t
+			d = self.wd_prop('P570')[0]['time'].split('T')[0][1:].split('-')    
+		if raw:
+			return (d,t)
+		else:
+			return d
+
+	def occupation(self,return_all=False):
+		'''
+		Uses the occupation classifier Occ to predict the occupation.
+		Warning: This function runs very slow because it loads a new classifier each time.
+		Instead use:
+		>>> C = wt.Occ()
+		>>> C.classify(article)
+		'''
+		if self._occ is None:
+			C = Occ()
+			article = copy.deepcopy(self)
+			self._feats = C.feats(article)
+			self._occ = C.classify(article,return_all=return_all)
+		return self._occ
 			
 
 class CTY(object):
@@ -861,9 +928,6 @@ class Occ(object):
 		return article._feats
 
 	
-
-
-
 def id_type(I):
 	if _isnum(I):
 		return 'curid'
