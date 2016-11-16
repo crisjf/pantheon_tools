@@ -733,6 +733,7 @@ class biography(article):
 		>>> C = wt.Occ()
 		>>> C.classify(article)
 		'''
+		print 'Warning: This function runs very slow because it loads a new classifier each time.'
 		if self._occ is None:
 			C = Occ()
 			article = copy.deepcopy(self)
@@ -802,7 +803,7 @@ class Occ(object):
 		path = os.path.split(__file__)[0]+'/data/'
 		print 'Loading data from:\n'+path
 		f = open(path+'trained_classifier.pkl', 'rb')
-		self.classifier = pickle.load(f)
+		self._classifier = pickle.load(f)
 		f.close()
 
 		self.lmt = WordNetLemmatizer()
@@ -831,7 +832,7 @@ class Occ(object):
 		if str(article.curid()) in self.train_keys:
 			return self.train[str(article.curid())],'trained'
 		else:
-			probs = self.classifier.prob_classify(self.feats(article))
+			probs = self._classifier.prob_classify(self.feats(article))
 			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
 			prob_ratio = probs[0][1]/probs[1][1]
 			article._occ = (probs[0][0],prob_ratio)
@@ -855,7 +856,8 @@ class Occ(object):
 		Returns the occupations as reported in Wikidata using the vocabulary provided in occ_vocab.txt
 		'''
 		wd_occs = set([self.wdmap[o['id']] for o in article.wd_prop('P106')])
-		wd_occs.remove('NA')
+		if 'NA' in wd_occs:
+			wd_occs.remove('NA')
 		return wd_occs
 
 	def _isa(self,article):
