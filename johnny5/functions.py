@@ -1,12 +1,10 @@
-import requests
+import requests,os
 from parse_functions import drop_comments
 from crisjfpy import chunker
 from pandas import DataFrame
 from query import wd_q,wp_q,chunker
 from itertools import chain
 from classes import article
-import os
-import json
 
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
 wikidata_API = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json'

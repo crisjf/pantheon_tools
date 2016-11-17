@@ -1,9 +1,27 @@
+import mwparserfromhell,re
+
 def drop_comments(value):
 	'''Drops wikimarkup comments from the provided string.'''
 	while '<!--' in value:
 		comment = value[value.find('<!--'):].split('-->')[0]+'-->'
 		value = value.replace(comment,'')
 	return value
+
+def drop_nowrap(text):
+    text = re.sub(r'\{\{[^\|]*[Nn]owrap[^\|]*\|','{{nowrap|',text)
+    nowrap = ''
+    p_count = 0
+    if '{{nowrap|' in text:
+        for c in text[text.lower().find('{{nowrap|'):]:
+            nowrap += c
+            if c == '{':
+                p_count +=1
+            if c == '}':
+                p_count +=-1
+            if p_count ==0:
+                break
+        text = text.replace(nowrap,nowrap[9:-2])
+    return text
 
 def find_nth(haystack, needle, n):
 	'''Returns the index of the nth occurrence of needle in haystack.
@@ -23,12 +41,66 @@ def find_nth(haystack, needle, n):
 		n -= 1
 	return start
 
+def first_month(pt,as_num=False):
+    '''Returns the first month in the string. Returns 'NA' when there is no month. '''
+    pt_ = pt.lower()
+    months = ['january','february','march','april','may','june','july','august','september','october','november','december']
+    mm = 'NA'
+    i = 10000
+    for month in months:
+        if month in pt_:
+            if pt_.find(month) < i:
+                i = pt_.find(month)
+                mm = month
+    if mm =="NA":
+        months = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+        for month in months:
+            if month in pt_:
+                if pt_.find(month) < i:
+                    i = pt_.find(month)
+                    mm = month
+    if as_num:
+        mp = dict(zip(months,range(1,13)))
+        return mp[mm]
+    else:
+        return mm
+
+def parse_ints(s):
+    '''Parses a list of integers from s'''
+    items = []
+    item = ''
+    for c in s:
+        try:
+            c = unicode(int(c))
+            item += c
+        except:
+            if len(item) !=0:
+                items.append(int(item))
+                item = ''
+    if len(item) !=0:
+        items.append(int(item))
+        item = ''
+    #if len(items) == 0:
+        #items.append('NA')
+    return items
+
+def has_num(text):
+    '''Returns True if there is a number in the text.'''
+    for c in text:
+        try:
+            c = int(c)
+            return True
+        except:
+            pass
+    return False
 
 
-import mwparserfromhell
-import re
-from crisjfpy.pyparse import parse_ints,first_month,drop_nowrap
 def parse_date(t):
+    '''
+    Parses a date from the given string.
+    This function is constantly under development since new date formats are added to wikipedia every day.
+    The current version is optimized for parsing death dates.
+    '''
     t = drop_nowrap(t)
     t = re.sub(r'\{\{[^\|]*[Cc]irca[^\}]*\}\}','',t).strip()
     template = mwparserfromhell.parse(t).filter_templates()

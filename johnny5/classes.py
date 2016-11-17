@@ -1,22 +1,18 @@
-import mwparserfromhell
-import json,os,operator,copy
-import nltk.data
-import nltk
-from query import wd_q,wp_q,_string,_isnum
-from parse_functions import drop_comments,find_nth,parse_date
-from collections import defaultdict
+import requests,json,os,operator,copy,mwparserfromhell,datetime,codecs
+import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
+from pandas import DataFrame,read_csv
+from geopy.distance import vincenty
 try:
     import cPickle as pickle
 except:
     import pickle
-import requests
-import datetime 
-from pandas import DataFrame,read_csv
-from geopy.distance import vincenty
 import multiprocessing
-import codecs
 from joblib import Parallel, delayed
+
+from query import wd_q,wp_q,_string,_isnum
+from parse_functions import drop_comments,find_nth,parse_date
+from collections import defaultdict
 
 class article(object):
 	def __init__(self,I,Itype=None):
@@ -44,7 +40,7 @@ class article(object):
 		self._wd_claims      = {}
 		self._wd_claims_data = {}
 
-		self._coords = None
+		
 
 		self._content = None
 
@@ -388,35 +384,6 @@ class article(object):
 				results = []
 			self._image_url = results
 		return self._image_url
-	
-	def coords(self,wiki):
-		'''
-		Special method for articles corresponding to places to get the coordinates either from Wikipedia or Wikidata.
-		
-		Parameters
-		----------
-		wiki : string
-			Wiki to use, either 'wd' or 'wp'.
-		'''
-		if self._coords is None:
-			if wiki=='wd':
-				try:
-					coords = self.wd_prop('P625')[0]
-					self._coords = (coords['latitude'],coords['longitude'])
-				except:
-					self._coords = ('NA','NA')
-			else:
-				wiki ='en' if wiki == 'wp' else wiki
-				try:
-					if wiki !='en':
-						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
-					else:
-						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
-					coords = r['query']['pages'].values()[0]['coordinates'][0]
-					self._coords = (coords['lat'],coords['lon'])
-				except:
-					self._coords = ('NA','NA')
-		return self._coords
 
 	def wd_prop(self,prop):
 		'''
@@ -656,11 +623,69 @@ class article(object):
 			for day in r['daily_views']:
 				self._daily_views[lang][day] = r['daily_views'][day]
 
+class place(article):
+	def __init__(self,I,Itype=None):
+		super(place, self).__init__(I,Itype=None)
+		self._coords = None
+		self._is_city = None
+		self._wpcities = None
+
+
+	def coords(self,wiki='wp'):
+		'''
+		Get the coordinates either from Wikipedia or Wikidata.
+		
+		Parameters
+		----------
+		wiki : string
+			Wiki to use, either 'wd' or 'wp'.
+			Default is 'wp'
+		'''
+		if self._coords is None:
+			if wiki=='wd':
+				try:
+					coords = self.wd_prop('P625')[0]
+					self._coords = (coords['latitude'],coords['longitude'])
+				except:
+					self._coords = ('NA','NA')
+			else:
+				wiki ='en' if wiki == 'wp' else wiki
+				try:
+					if wiki !='en':
+						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
+					else:
+						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
+					coords = r['query']['pages'].values()[0]['coordinates'][0]
+					self._coords = (coords['lat'],coords['lon'])
+				except:
+					self._coords = ('NA','NA')
+		return self._coords
 
 
 class biography(article):
 	def __init__(self,I,Itype=None):
 		super(biography, self).__init__(I,Itype=None)
+		self._is_bio = None
+		self._wpbio = None
+
+	def _wpbio_template(self):
+		'''
+		Returns the template associated to the WP Biography when available.
+		'''
+		if self._wpbio is None:
+			self._is_bio = False
+			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
+			wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
+			templates = wikicode.filter_templates()
+			for t in templates:
+				if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
+					self._wpbio = t
+					self._is_bio = True
+					break
+		if self._is_bio:
+			return self._wpbio
+		else:
+			return 'NA'
 
 	def living(self):
 		'''
@@ -672,21 +697,39 @@ class biography(article):
 		alive : str
 			Returns either 'yes' or 'no'.
 		'''
-		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
-		wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
-		templates = wikicode.filter_templates()
-		for t in templates:
-			if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
-				for p in t.params:
-					if p.name.strip().replace(' ','').lower() == 'living':
-						living = drop_comments(p.value.lower().strip())
-						if (living[0] == 'n'):
-							return 'no'
-						elif (living[0] == 'y'):
-							return 'yes'
-						else:
-							return p.value
+		t = self._wpbio_template()
+		if t =='NA':
+			if not self._is_bio:
+				print 'Warning: Not within WPBio'
+			return 'NA'
+		for p in t.params:
+			if p.name.strip().replace(' ','').lower() == 'living':
+				living = drop_comments(p.value.lower().strip())
+				if (living[0] == 'n'):
+					return 'no'
+				elif (living[0] == 'y'):
+					return 'yes'
+				else:
+					return p.value
 		return 'NA'
+
+
+		#r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
+		#wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
+		#templates = wikicode.filter_templates()
+		#for t in templates:
+		#	if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
+		#		self._is_bio = True
+		#		for p in t.params:
+		#			if p.name.strip().replace(' ','').lower() == 'living':
+		#				living = drop_comments(p.value.lower().strip())
+		#				if (living[0] == 'n'):
+		#					return 'no'
+		#				elif (living[0] == 'y'):
+		#					return 'yes'
+		#				else:
+		#					return p.value
+		#return 'NA'
 
 	def death_date(self,raw=False):
 		'''
@@ -744,6 +787,9 @@ class biography(article):
 
 class CTY(object):
 	def __init__(self,city_data='geonames'):
+		'''
+		Assigns a city to a set of coordinates.
+		'''
 		self.city_data=city_data
 		path = os.path.split(__file__)[0]+'/data/'
 		print 'Loading data from:\n'+path
