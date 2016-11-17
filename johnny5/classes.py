@@ -14,6 +14,7 @@ from query import wd_q,wp_q,_string,_isnum,rget
 from parse_functions import drop_comments,find_nth,parse_date
 from collections import defaultdict
 
+
 class article(object):
 	def __init__(self,I,Itype=None):
 		"""
@@ -197,11 +198,14 @@ class article(object):
 				self.I['title'] = self.data_wp()['title']
 		return self.I['title']
 
-	def url(self,wiki='wp'):
+	def url(self,wiki='wp',lang='en'):
 		if wiki == 'wp':
 			if self.no_wp:
 				print "No Wikipedia page corresponding to this article"
-			print 'https://en.wikipedia.org/wiki/'+self.title().replace(' ','_')
+			if lang == 'en':
+				print 'https://en.wikipedia.org/wiki/'+self.title().replace(' ','_')
+			else:
+				print 'https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_')
 		elif wiki =='wd':
 			if self.no_wd:
 				print "No Wikidata page corresponding to this article"
@@ -209,14 +213,22 @@ class article(object):
 		else:
 			raise NameError('Wrong wiki')
 
-	def infobox(self):
+	def infobox(self,lang='en',force=False):
 		"""
 		Returns the infobox of the article.
 		By getting the infobox, the class handles the redirect.
 		If the raw_box is given, it will only parse the box.
 		If raw_box is not given, it will get it.
+
+		Parameters
+		----------
+		lang : str ('en')
+			Language edition to get the infobox from.
+		force : boolean (False)
+			If True it will 'force' the search for the infobox by getting the template that is the most similar to an Infobox.
+			Only used for non english editions.
 		"""
-		if self._infobox is None:
+		if (self._infobox is None)&(lang == 'en'):
 			if self.raw_box is None:
 				rbox = '#redirect'
 				while '#redirect' in rbox.lower():
@@ -248,7 +260,53 @@ class article(object):
 				self._infobox = {}
 			else:
 				self._infobox = box
-		return self._infobox
+		return self._infobox if lang == 'en' else self._infobox_nonen(lang,force=force)
+
+	def _infobox_nonen(self,lang,force=False):
+		'''Gets the infobox for non english wikipedias.'''
+		ibox_codebook = defaultdict(lambda:'infobox', {'es':'ficha de','ca':'infotaula de','sv':'infobox',
+														'nl':'infobox','fr':'infobox','pl':'infobox','pt':'info',
+														'ru':u'\u0433\u043e\u0441\u0443\u0434\u0430\u0440\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439'
+														})
+		self.redirect()
+		if lang not in self.langlinks().keys():
+			print 'Warning: No article found in '+lang+' language.'
+			return 'NA'
+		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':self.langlinks(lang)},lang=lang)
+		try:
+			rbox = r['query']['pages'].values()[0]['revisions'][0]['*']
+		except:
+			rbox = ''
+		ibox_name = ibox_codebook[lang]
+		wikicode = mwparserfromhell.parse(rbox)
+		templates = wikicode.filter_templates()
+		box = {}
+		lengths = []
+		for template in templates:
+			name = template.name.strip().lower()
+			lengths.append(len(template.params))
+			if ibox_name in name:
+				box_ = {}
+				box_type = drop_comments(_string(name).replace(ibox_name,'')).strip()
+				for param in template.params:
+					key = drop_comments(_string(param.name.strip_code())).strip().lower()
+					value = _string(param.value).strip()
+					box_[key] = value
+				box[box_type] = box_
+		if (box == {}) & force:
+			lengths.append(7) #Infobox should have at least 7 fields
+			length = max(lengths)
+			for template in templates:
+				name = template.name.strip().lower()
+				if len(template.params) >= length:
+					box_ = {}
+					box_type = drop_comments(_string(name)).strip()
+					for param in template.params:
+						key = drop_comments(_string(param.name.strip_code())).strip().lower()
+						value = _string(param.value).strip()
+						box_[key] = value
+					box[box_type] = box_
+		return box
 
 	def extract(self):
 		'''
