@@ -63,6 +63,7 @@ class article(object):
 		return out
 
 	def __str__(self):
+		self.redirect()
 		out = ''
 		out+= 'curid : '+str(self.curid())+'\n' if self.title() != '' else 'curid : NA\n'
 		out+= 'title : '+self.title()+'\n' if self.title() != '' else 'title : NA\n'
@@ -713,6 +714,10 @@ class biography(article):
 		else:
 			return self._isa_values[0]
 
+	def desc(self):
+		phrase,sentence,verb = self._is_a(full=True)
+		return sentence
+
 	def _is_group(self):
 		phrase,sentence,verb = self._is_a(full=True)
 		if (verb=='are')|(verb=='were'):
@@ -792,6 +797,8 @@ class biography(article):
 		t : string (if raw)
 			Raw text from the infobox.
 		'''
+		if self.living() =='yes':
+			return 'alive'
 		d = 'NA'
 		t = 'NA'
 		if len(self.infobox()) !=0:
@@ -825,9 +832,16 @@ class biography(article):
 			C = Occ()
 			article = copy.deepcopy(self)
 			self._feats = C.feats(article)
-			self._occ = C.classify(article,return_all=return_all)
-		return self._occ
-			
+			self._occ = C.classify(article,return_all=True)
+		if return_all:
+			return self._occ
+		else:
+			if self._occ[1] == 'trained':
+				return self._occ
+			else:
+				prob_ratio = self._occ[0][1]/self._occ[1][1]
+				return self._occ[0][0],prob_ratio
+
 
 class CTY(object):
 	def __init__(self,city_data='geonames'):
