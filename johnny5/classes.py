@@ -61,7 +61,7 @@ class article(object):
 		out+= 'curid : '+str(self.I['curid'])+'\n' if self.I['curid'] is not None else 'curid : \n'
 		out+= 'title : '+self.I['title']+'\n' if self.I['title'] is not None else 'title : \n'
 		out+= 'wdid  : '+self.I['wdid'] if self.I['wdid'] is not None else 'wdid  : '
-		return out
+		return out.encode('utf-8')
 
 	def __str__(self):
 		self.redirect()
@@ -70,7 +70,7 @@ class article(object):
 		out+= 'title : '+self.title()+'\n' if self.title() != '' else 'title : NA\n'
 		out+= 'wdid  : '+self.wdid()+'\n' if self.wdid() !='' else 'wdid  : NA\n'
 		out+= 'L     : '+str(self.L()) 
-		return out
+		return out.encode('utf-8')
 
 	def _missing_wd(self):
 		'''
@@ -205,7 +205,10 @@ class article(object):
 			if lang == 'en':
 				print 'https://en.wikipedia.org/wiki/'+self.title().replace(' ','_')
 			else:
-				print 'https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_')
+				if lang in self.langlinks().keys():
+					print 'https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_')
+				else:
+					print 'No article in this edition'
 		elif wiki =='wd':
 			if self.no_wd:
 				print "No Wikidata page corresponding to this article"
@@ -270,8 +273,7 @@ class article(object):
 														})
 		self.redirect()
 		if lang not in self.langlinks().keys():
-			print 'Warning: No article found in '+lang+' language.'
-			return 'NA'
+			return {}
 		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':self.langlinks(lang)},lang=lang)
 		try:
 			rbox = r['query']['pages'].values()[0]['revisions'][0]['*']
@@ -405,25 +407,49 @@ class article(object):
 		return len(self.langlinks())
 
 	def image_url(self):
+		'''
+		Gets the url for the image that appears in the infobox.
+		It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.
+		'''
 		if self._image_url is None:
-			images = []
-			ibox = self.infobox()
-			for btype in ibox:
-				box = ibox[btype]
-				for tag in ['image','image_name','img','smallimage']:
-					if tag in box.keys():
-						images.append(box[tag].strip())
-			imgs = []
-			for image in images:
-				if image.strip() != '':
-					if '[[' in image:
-						image = image[image.find('[[')+2:].split(']]')[0].split('|')[0]
-					if ((image.lower()[:5]!='file:') & (image.lower()[:6]!='image:')):
-						imgs.append('Image:'+image)
-					else:
-						imgs.append(image)
-			images = imgs
-			if len(images)!=0:
+			for lang in ['en','sv','ceb','de','nl','fr','ru','it','es','war','pl','vi','ja','pt','zh','uk','ca','fa','no','ar','sh','fi']:
+				results = self._image_url_lang(lang)
+				if len(results) != 0:
+					self._image_url = results[0]
+					break
+			if self._image_url is None:
+				self._image_url = 'NA'
+		return self._image_url
+
+	def _image_url_lang(self,lang):
+		tags_codebook = defaultdict(
+						lambda:['image','img','image_name'],
+							{'en':['image','image_name','img','smallimage'],'es':['imagen','img'],
+							'pt':['imagem','img'],'nl':['afbeelding'],'fr':['image'],'ja':[u'\u753b\u50cf'],
+							'ru':[u'\u0438\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u0438\u0435'],
+							'uk':[u'\u0437\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u043d\u044f'],
+							'pl':[u'zdj\u0119cie'],'sv':['bild','img']
+							})
+		images = []
+		tags = tags_codebook[lang]
+		ibox = self.infobox(lang=lang,force=True)
+		for btype in ibox:
+			box = ibox[btype]
+			for tag in tags:
+				if tag in box.keys():
+					images.append(box[tag].strip())
+		imgs = []
+		for image in images:
+			if image.strip() != '':
+				if '[[' in image:
+					image = image[image.find('[[')+2:].split(']]')[0].split('|')[0]
+				if ((image.lower()[:5]!='file:') & (image.lower()[:6]!='image:')):
+					imgs.append('Image:'+image)
+				else:
+					imgs.append(image)
+		images = imgs
+		if len(images)!=0:
+			try:
 				r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
 				norm = {}
 				if 'normalized' in r['query'].keys(): #This is to keep the order
@@ -439,10 +465,11 @@ class article(object):
 					if image in norm.keys():
 						image = norm[image]
 					results.append(pages[image])
-			else:
+			except:
 				results = []
-			self._image_url = results
-		return self._image_url
+		else:
+			results = []
+		return results
 
 	def wd_prop(self,prop):
 		'''
