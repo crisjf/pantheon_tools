@@ -1,4 +1,4 @@
-import requests,json,os,operator,copy,mwparserfromhell,datetime,codecs
+import json,os,operator,copy,mwparserfromhell,datetime,codecs
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
@@ -10,7 +10,7 @@ except:
 import multiprocessing
 from joblib import Parallel, delayed
 
-from query import wd_q,wp_q,_string,_isnum
+from query import wd_q,wp_q,_string,_isnum,rget
 from parse_functions import drop_comments,find_nth,parse_date
 from collections import defaultdict
 
@@ -595,7 +595,7 @@ class article(object):
 			fd = str(rest_end[0])+('00'+str(int(rest_end[1])+1))[-2:]+'01'
 
 		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
-		r = requests.get(url).json()
+		r = rget(url).json()
 		if ('title' not in r.keys()):
 			monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
 			monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
@@ -617,7 +617,7 @@ class article(object):
 			self._daily_views[lang] = {}
 		title = self.langlinks(lang)
 		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
-		r = requests.get(url).json()
+		r = rget(url).json()
 		self._views[lang][y+'-'+m] = sum(r['daily_views'].values())
 		if daily:
 			for day in r['daily_views']:
@@ -667,6 +667,62 @@ class biography(article):
 		super(biography, self).__init__(I,Itype=None)
 		self._is_bio = None
 		self._wpbio = None
+		self._isa_values = None
+
+	def _is_a(self,full=False):
+		'''
+		Gets the phrase after the verb 'to be' in the first paragraph of the extract.
+
+		Parameters
+		----------
+		full : boolean (False)
+			If True it will return a tuple with (phrase,sentence,verb), otherwise it returns only phrase.
+
+		Returns
+		-------
+		phrase : str
+			Phrase after the verb 'to be'.
+		sentence : str
+			Full sentence that contains the verb 'to be'.
+		verb : str
+			Verb to be as it appears in the sentence.
+		'''
+		if self._isa_values is None:
+			sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+			lmt = WordNetLemmatizer()
+			ex = self.extract()
+			sentences = sent_detector.tokenize(ex)
+			found_tobe = False
+			phrase = ''
+			for sentence in sentences:
+				words = nltk.pos_tag(nltk.word_tokenize(sentence))
+				for word,tag in words:
+					if tag[:2] == 'VB':
+						if lmt.lemmatize(word, pos='v') == 'be':
+							found_tobe = True
+							phrase = sentence[sentence.find(word)+len(word):].strip()
+							break
+				if found_tobe:
+					break
+			if found_tobe:
+				self._isa_values = (phrase,sentence,word.lower())
+			else:
+				self._isa_values = ('NA','NA','NA')
+		if full:
+			return self._isa_values
+		else:
+			return self._isa_values[0]
+
+	def _is_group(self):
+		phrase,sentence,verb = self._is_a(full=True)
+		if (verb=='are')|(verb=='were'):
+			return True
+		words = set(nltk.word_tokenize(phrase.lower()))
+		buzz_words = ['band','duo','group','team']
+		for w in buzz_words:
+			if (w in words):
+				return True
+		return False
 
 	def _wpbio_template(self):
 		'''
@@ -711,25 +767,13 @@ class biography(article):
 					return 'yes'
 				else:
 					return p.value
+		phrase,sentence,verb = self._is_a(full=True)
+		if (verb == 'is')|(verb == 'are'):
+			return 'yes'
+		elif (verb == 'was')|(verb == 'were'):
+			return 'no'
 		return 'NA'
 
-
-		#r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
-		#wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
-		#templates = wikicode.filter_templates()
-		#for t in templates:
-		#	if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
-		#		self._is_bio = True
-		#		for p in t.params:
-		#			if p.name.strip().replace(' ','').lower() == 'living':
-		#				living = drop_comments(p.value.lower().strip())
-		#				if (living[0] == 'n'):
-		#					return 'no'
-		#				elif (living[0] == 'y'):
-		#					return 'yes'
-		#				else:
-		#					return p.value
-		#return 'NA'
 
 	def death_date(self,raw=False):
 		'''

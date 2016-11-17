@@ -1,8 +1,8 @@
-import requests,os
+import os
 from parse_functions import drop_comments
 from crisjfpy import chunker
 from pandas import DataFrame
-from query import wd_q,wp_q,chunker
+from query import wd_q,wp_q,chunker,rget
 from itertools import chain
 from classes import article
 
@@ -22,7 +22,7 @@ def get_curid(title,as_df=False):
 		out = {}
 		for chunk in chunker(title,50):
 			API_URL = wiki_API + '&titles='+'|'.join(chunk)
-			r = requests.get(API_URL).json()
+			r = rget(API_URL).json()
 			pages = r['query']['pages']
 			if 'normalized' in r['query'].keys():
 				normalized = r['query']['normalized']
@@ -41,7 +41,7 @@ def get_curid(title,as_df=False):
 		return DataFrame([(k,out[k][0],out[k][1]) for k in out],columns=['title','normalized','en_curid']) if as_df else out
 	else:
 		API_URL = wiki_API + '&titles='+title
-		r = requests.get(API_URL).json()
+		r = rget(API_URL).json()
 		return int(r['query']['pages'].values()[0]['pageid'])
 
 def get_title(curid,wdid=None,as_df=False):
@@ -69,7 +69,7 @@ def get_title(curid,wdid=None,as_df=False):
 		out = {}
 		for chunk in chunker(wdid,50):
 			url = wikidata_API+'&languages=en&ids='+'|'.join(chunk)
-			r = requests.get(url).json()[u'entities']
+			r = rget(url).json()[u'entities']
 			for w in chunk:
 				try:
 					out[w] = r[w]['sitelinks']['enwiki']['title']
@@ -85,13 +85,13 @@ def get_title(curid,wdid=None,as_df=False):
 			out = dict(zip(curid,['NA']*len(curid)))
 			for chunk in chunker(curid,50):
 				API_URL = wiki_API+'&pageids='+'|'.join([str(c) for c in chunk])
-				r = requests.get(API_URL).json()
+				r = rget(API_URL).json()
 				for page in r['query']['pages'].values():
 					out[page['pageid']] = page['title']
 			return DataFrame(out.items(),columns=['en_curid','title']) if as_df else out
 		else:
 			API_URL = wiki_API+'&pageids='+str(curid)
-			r = requests.get(API_URL).json()
+			r = rget(API_URL).json()
 			return r['query']['pages'].values()[0]['title']
 
 
@@ -108,7 +108,7 @@ def get_extract(title='',curid=None):
 			url = wiki_API+'&prop=extracts&exintro=&explaintext=&pageids='+str(curid)
 		else:
 			url = wiki_API+'&prop=extracts&exintro=&explaintext=&titles='+title
-		r = requests.get(url)
+		r = rget(url)
 		ex = r.json()[u'query'][u'pages'][str(curid)][u'extract']
 	except:
 		ex = ''
@@ -148,7 +148,7 @@ def get_L(title=None,curid=None,as_df=False):
 		out = dict(zip(curid,[1]*len(curid)))
 		for chunk in chunker(curid,50):
 			API_URL = wiki_API+'&prop=langlinks&lllimit=500&pageids='+'|'.join([str(c) for c in chunk])
-			r = requests.get(API_URL).json()
+			r = rget(API_URL).json()
 			while True:
 				pages = r['query']['pages']
 				for c in pages:
@@ -157,12 +157,12 @@ def get_L(title=None,curid=None,as_df=False):
 						out[int(c)] += len(page['langlinks'])
 				if ('continue' in r.keys()):
 					llcontinue = r['continue']['llcontinue']
-					r = requests.get(API_URL+'&llcontinue='+llcontinue).json()
+					r = rget(API_URL+'&llcontinue='+llcontinue).json()
 				else:
 					break
 		return DataFrame(out.items(),columns=['en_curid','L']) if as_df else out
 	else:
-		r = requests.get(API_URL).json()
+		r = rget(API_URL).json()
 		r = r['query']['pages'].values()[0]
 		return len(r['langlinks'])+1 if ('langlinks' in r.keys()) else 1
 
@@ -184,12 +184,12 @@ def get_wdid(title='',curid=None,as_df=False):
 		out = dict(zip(curid,['NA']*len(curid)))
 		for chunk in chunker(curid,50):
 			url = wiki_API+'&prop=pageprops&ppprop=wikibase_item&pageids='+'|'.join([str(c) for c in chunk])
-			r = requests.get(url).json()
+			r = rget(url).json()
 			for page in r['query']['pages'].values():
 				out[page['pageid']] = page['pageprops'][u'wikibase_item']
 		return DataFrame(out.items(),columns=['en_curid','wd_id']) if as_df else out
 	else:
-		r = requests.get(url).json()
+		r = rget(url).json()
 		wd_id = r[u'query'][u'pages'].values()[0][u'pageprops'][u'wikibase_item']
 		return wd_id
 
@@ -209,13 +209,13 @@ def get_wd_name(prop,as_df=False):
 		out = dict(zip(prop,['NA']*len(prop)))
 		for chunk in chunker(prop,50):
 			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
-			r = requests.get(url).json()
+			r = rget(url).json()
 			for page in r['entities'].values():
 				out[page['id']] = page['labels']['en']['value']
 		return DataFrame(out.items(),columns=['wd_id','name']) if as_df else out
 	else:
 		url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+prop
-		r = requests.get(url).json()
+		r = rget(url).json()
 		return r['entities'][prop]['labels']['en']['value']
 
 def get_wd_coords(wdids,prop = 'P625',as_df=False):
@@ -224,7 +224,7 @@ def get_wd_coords(wdids,prop = 'P625',as_df=False):
 	results = {}
 	for wd_ids in chunker(wdids,50):
 		url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = requests.get(url)
+		r = rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
 			if prop in wdid_data.keys():
@@ -276,7 +276,7 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 	values = set([])
 	for wd_ids in chunker(wdids,50):
 		url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = requests.get(url)
+		r = rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
 			if prop in wdid_data.keys():
@@ -542,7 +542,7 @@ def get_multiple_image(curid):
 	NEEDS TO BE UPDATED
 	'''
 	API_url  = 'https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&pageids='+str(curid)+'&rvsection=0'
-	result = requests.get(API_url).json()[u'query'][u'pages']
+	result = rget(API_url).json()[u'query'][u'pages']
 	r = result[unicode(curid)][u'revisions'][0][u'*']
 	wikicode = mwparserfromhell.parse(r)
 	templates = wikicode.filter_templates()
@@ -589,12 +589,12 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 		url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng+'&project=Pantheon&key='+key
 	else:
 		url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng
-	r = requests.get(url).json()
+	r = rget(url).json()
 
 	ZERO_RESULTS = False
 	if r['status'] == 'OVER_QUERY_LIMIT':
 		time.sleep(1)
-		r = requests.get(url).json()
+		r = rget(url).json()
 	if r['status'] != 'OK':
 		if r['status'] == 'OVER_QUERY_LIMIT':
 			raise NameError('Query limit reached')

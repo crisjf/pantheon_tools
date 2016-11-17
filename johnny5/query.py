@@ -3,6 +3,10 @@ from collections import defaultdict
 from itertools import chain
 import urllib
 
+def rget(url):
+	'''Function used to track the requests that are performed.'''
+	return requests.get(url)
+
 def _isnum(n):
 	try:
 		nn = n+1
@@ -84,7 +88,7 @@ def wd_q(d,show=False):
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
 			print url.replace(' ','_')
-		rr = requests.get(url).json()
+		rr = rget(url).json()
 		r.append(rr)
 	return merge_jsons(r)
 
@@ -129,7 +133,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
 			print url.replace(' ','_')
-		rr = requests.get(url).json()
+		rr = rget(url).json()
 		while True:
 			r.append(rr)
 			if ('continue' in rr.keys())&(not continue_override):
@@ -140,7 +144,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 				continue_dict = {continue_keys[0] : rr['continue'][continue_keys[0]]}
 				if show:
 					print (url+'&'+urllib.urlencode(continue_dict)).replace(' ','_')
-				rr = requests.get(url+'&'+urllib.urlencode(continue_dict)).json()
+				rr = rget(url+'&'+urllib.urlencode(continue_dict)).json()
 			else:
 				break
 	return merge_jsons(r)
