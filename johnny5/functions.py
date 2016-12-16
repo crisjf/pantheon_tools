@@ -607,19 +607,17 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 		f = open(path+latlng+'.json','w')
 		json.dump(r,f)
 		f.close()
-	country = ('NA','NA')
+	country = ('NULL','NULL')
 	if not ZERO_RESULTS:
 		for res in r['results']:
 			for rr in  res[u'address_components']:
 				if ('country' in  rr['types']):
 					country = (rr['long_name'],rr['short_name'])
-				if country != ('NA','NA'):
+				if country != ('NULL','NULL'):
 					break
-			if country != ('NA','NA'):
+			if country != ('NULL','NULL'):
 				break
 	return country
-
-
 
 def read_article(file_name):
 	'''
