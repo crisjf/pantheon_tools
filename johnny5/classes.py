@@ -754,6 +754,8 @@ class biography(article):
 		self._is_bio = None
 		self._wpbio = None
 		self._isa_values = None
+		if not self.is_bio():
+			print 'Warning: Not a biography'
 
 	def _is_a(self,full=False):
 		'''
@@ -802,6 +804,17 @@ class biography(article):
 	def desc(self):
 		phrase,sentence,verb = self._is_a(full=True)
 		return sentence
+
+	def is_bio(self):
+		if self._is_bio is None:
+			if self._wpbio is None:
+				self._is_bio = False
+			else:
+				if self._is_group():
+					self._is_bio = False
+				else:
+					self._is_bio = True
+		return self._is_bio
 
 	def _is_group(self):
 		phrase,sentence,verb = self._is_a(full=True)
