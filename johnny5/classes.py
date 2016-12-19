@@ -807,7 +807,7 @@ class biography(article):
 
 	def is_bio(self):
 		if self._is_bio is None:
-			if self._wpbio is None:
+			if self._wpbio_template is None:
 				self._is_bio = False
 			else:
 				if self._is_group():
@@ -841,10 +841,7 @@ class biography(article):
 					self._wpbio = t
 					self._is_bio = True
 					break
-		if self._is_bio:
-			return self._wpbio
-		else:
-			return 'NA'
+		return self._wpbio
 
 	def living(self):
 		'''
