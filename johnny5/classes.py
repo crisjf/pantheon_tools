@@ -844,6 +844,10 @@ class biography(article):
 		return self._wpbio
 
 	def living(self):
+		print 'Warning: This function will be dropped.'
+		return self.alive()
+
+	def alive(self):
 		'''
 		Retrieves the information whether the biography is about a living or dead person.
 		It uses the WikiProject Biography template from the Talk page to get this information.
