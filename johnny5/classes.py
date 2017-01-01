@@ -754,8 +754,10 @@ class biography(article):
 		self._is_bio = None
 		self._wpbio = None
 		self._isa_values = None
-		if not self.is_bio():
-			print 'Warning: Not a biography'
+		self._death_date = None
+		self._birth_date = None
+		#if not self.is_bio():
+		#	print 'Warning: Not a biography ('+str(self.curid())+')'
 
 	def _is_a(self,full=False):
 		'''
@@ -862,21 +864,24 @@ class biography(article):
 			if not self._is_bio:
 				print 'Warning: Not within WPBio'
 			return 'NA'
-		for p in t.params:
-			if p.name.strip().replace(' ','').lower() == 'living':
-				living = drop_comments(p.value.lower().strip())
-				if (living[0] == 'n'):
-					return 'no'
-				elif (living[0] == 'y'):
-					return 'yes'
-				else:
-					return p.value
-		phrase,sentence,verb = self._is_a(full=True)
-		if (verb == 'is')|(verb == 'are'):
-			return 'yes'
-		elif (verb == 'was')|(verb == 'were'):
-			return 'no'
-		return 'NA'
+		if t is not None:
+			for p in t.params:
+				if p.name.strip().replace(' ','').lower() == 'living':
+					living = drop_comments(p.value.lower().strip())
+					if (living[0] == 'n'):
+						return 'no'
+					elif (living[0] == 'y'):
+						return 'yes'
+					else:
+						return p.value
+			phrase,sentence,verb = self._is_a(full=True)
+			if (verb == 'is')|(verb == 'are'):
+				return 'yes'
+			elif (verb == 'was')|(verb == 'were'):
+				return 'no'
+			return 'NA'
+		else:
+			return 'NA'
 
 
 	def death_date(self,raw=False):
@@ -895,24 +900,33 @@ class biography(article):
 			(yyyy,mm,dd)
 		t : string (if raw)
 			Raw text from the infobox.
+
+		MISSING TAG: d-da (490286)
 		'''
-		if self.living() =='yes':
-			return 'alive'
-		d = 'NA'
-		t = 'NA'
-		if len(self.infobox()) !=0:
-			for box in self.infobox().values():
-				if 'death_date' in box.keys():
-					t = box['death_date']
-					break
-			if t != 'NA':
-				d = parse_date(t)
-		else:
-			t = 'wd'
-			d = self.wd_prop('P570')[0]['time'].split('T')[0][1:].split('-')
-		if d[0] == 'NA':
-			t = 'wd' if t =='NA' else t
-			d = self.wd_prop('P570')[0]['time'].split('T')[0][1:].split('-')    
+		if self._death_date is None:
+			if self.alive() =='yes':
+				return 'alive'
+			d = ['NA']
+			t = 'NA'
+			if len(self.infobox()) !=0:
+				for box in self.infobox().values():
+					if 'death_date' in box.keys():
+						t = box['death_date']
+						break
+				if t != 'NA':
+					d = parse_date(t)
+			else:
+				t = 'wd'
+				d = self.wd_prop('P570')[0]['time']
+				if d != 'NA':
+					d = d.split('T')[0][1:].split('-')
+			if d[0] == 'NA':
+				t = 'wd' if t =='NA' else t
+				d = self.wd_prop('P570')[0]['time']
+				if d != 'NA':
+					d = d.split('T')[0][1:].split('-')
+			self._death_date = (d,t)
+		d,t = self._death_date
 		if raw:
 			return (d,t)
 		else:
