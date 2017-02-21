@@ -102,6 +102,7 @@ class article(object):
 		self._creation_date = defaultdict(lambda:'')
 		self._feats = ''
 		self._occ   = ''
+		self._previous_titles = None
 
 
 	def data_wp(self):
@@ -405,6 +406,21 @@ class article(object):
 		>>> [a.L() for a in articles]
 		'''
 		return len(self.langlinks())
+
+	def previous_titles(self):
+		'''
+		Gets all the previous titles the page had
+		'''
+		if self._previous_titles is None:
+			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user','comment'],'rvlimit':'500'})
+			titles = set([])
+			for rev in r['query']['pages'].values()[0]['revisions']:
+    			if 'comment' in rev.keys():
+        			if 'moved page' in rev['comment']:
+            			comment = rev['comment']
+            			titles.add(comment[comment.find('[[')+2:].split(']]')[0])
+            self._previous_titles = titles
+        return self._previous_titles
 
 	def image_url(self):
 		'''
