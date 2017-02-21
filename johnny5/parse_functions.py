@@ -186,3 +186,39 @@ def parse_date(t):
         else:
             raise NameError('Unrecognized tag '+tag)
     return str(yy),str(mm),str(dd)
+
+def permute(title):
+    '''Creates all combinations of upper and lower cases in the title'''
+    start = [0]+[i+1 for i,char in enumerate(title) if char == ' ']
+    titles = [] 
+    n = 2**len(start)
+    if n < 100:
+        combinations= [('0'*len(start)+bin(i).split('b')[-1])[-len(start):] for i in xrange(n)]
+        for c in combinations:
+            tt = ''
+            for i,val in enumerate(c):
+                if val =='0':
+                    tt += title[start[i]].lower()+title[start[i]+1:].split(' ')[0]+' '
+                elif val == '1':
+                    tt += title[start[i]].upper()+title[start[i]+1:].split(' ')[0]+' '
+            titles.append(tt)
+    return titles[::-1]
+
+def correct_titles(title):
+    '''Checks the capitalization of the given title and returns a set of possible uses'''
+    titles = set([title])
+    title = title.lower()
+    bag = set(['a','an','the','for','and','nor','but','or','yet','so','at','around','by','after','along','for','from','of','on','to','with','without'])
+    words = title.split(' ')
+    words[0] = words[0][0].upper()+words[0][1:]
+    titles.add(' '.join(words))
+    words[-1] = words[-1][0].upper()+words[-1][1:]
+    titles.add(' '.join(words))
+    for i,word in enumerate(words):
+        if i!=0:
+            if word not in bag:
+                words[i] = words[i][0].upper()+words[i][1:]
+    titles.add(' '.join(words))
+    words[-1] = words[-1][0].upper()+words[-1][1:]
+    titles.add(' '.join(words))
+    return list(titles)

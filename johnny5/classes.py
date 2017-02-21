@@ -747,6 +747,40 @@ class place(article):
 					self._coords = ('NA','NA')
 		return self._coords
 
+class song(article):
+	def __init__(self,I,Itype=None):
+		super(song, self).__init__(I,Itype=None)
+		self._is_song = None
+		self._wpsong  = None
+		self._genre   = None
+	
+	def is_song(self):
+		if self._is_song is None:
+			if self._wpsong_template() is None:
+				self._is_song = False
+			else:
+				self._is_song = True
+		return self._is_song
+
+	def _wpsong_template(self):
+		'''
+		Returns the template associated to the WP Songs when available.
+		'''
+		if self._wpsong is None:
+			self._is_song = False
+			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
+			r = r['query']['pages'].values()[0]
+			if 'revisions' in r.keys():
+				wikicode = mwparserfromhell.parse(r['revisions'][0]['*'])
+				templates = wikicode.filter_templates()
+				for t in templates:
+					if ('songs' in t.name.lower().replace(' ','')):
+						self._wpsong = t
+						self._is_song = True
+						break
+		return self._wpsong
+
+
 
 class biography(article):
 	def __init__(self,I,Itype=None):
@@ -809,7 +843,7 @@ class biography(article):
 
 	def is_bio(self):
 		if self._is_bio is None:
-			if self._wpbio_template is None:
+			if self._wpbio_template() is None:
 				self._is_bio = False
 			else:
 				if self._is_group():
