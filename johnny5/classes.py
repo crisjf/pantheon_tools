@@ -415,12 +415,12 @@ class article(object):
 			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user','comment'],'rvlimit':'500'})
 			titles = set([])
 			for rev in r['query']['pages'].values()[0]['revisions']:
-    			if 'comment' in rev.keys():
-        			if 'moved page' in rev['comment']:
-            			comment = rev['comment']
-            			titles.add(comment[comment.find('[[')+2:].split(']]')[0])
-            self._previous_titles = titles
-        return self._previous_titles
+				if 'comment' in rev.keys():
+					if 'moved page' in rev['comment']:
+						comment = rev['comment']
+						titles.add(comment[comment.find('[[')+2:].split(']]')[0])
+			self._previous_titles = titles
+		return self._previous_titles
 
 	def image_url(self):
 		'''
