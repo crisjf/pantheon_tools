@@ -41,8 +41,6 @@ class article(object):
 		self._wd_claims      = {}
 		self._wd_claims_data = {}
 
-		
-
 		self._content = None
 
 		self._creation_date = {}
@@ -55,6 +53,7 @@ class article(object):
 		self._revisions = None
 		self._views = {}
 		self._daily_views = {}
+		self._previous_titles = None
 
 	def __repr__(self):
 		out = ''
@@ -102,7 +101,6 @@ class article(object):
 		self._creation_date = defaultdict(lambda:'')
 		self._feats = ''
 		self._occ   = ''
-		self._previous_titles = None
 
 
 	def data_wp(self):
