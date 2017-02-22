@@ -23,6 +23,20 @@ def drop_nowrap(text):
         text = text.replace(nowrap,nowrap[9:-2])
     return text
 
+def get_links(text):
+    '''
+    Gets the links from the provided in Wiki Markup.
+    Links are between square brackets [[]].
+    '''
+    links = []
+    while '[[' in text:
+        link = text[text.find('[[')+2:].split(']]')[0]
+        text = text.replace('[['+link+']]','')
+        if '|' in link:
+            link = link.split('|')[-1].strip()
+        links.append(link.strip())
+    return links
+
 def find_nth(haystack, needle, n):
 	'''Returns the index of the nth occurrence of needle in haystack.
 	

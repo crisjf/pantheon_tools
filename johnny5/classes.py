@@ -11,7 +11,7 @@ import multiprocessing
 from joblib import Parallel, delayed
 
 from query import wd_q,wp_q,_string,_isnum,rget
-from parse_functions import drop_comments,find_nth,parse_date
+from parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles
 from collections import defaultdict
 
 
@@ -54,6 +54,8 @@ class article(object):
 		self._views = {}
 		self._daily_views = {}
 		self._previous_titles = None
+
+		self._isa_values = None
 
 	def __repr__(self):
 		out = ''
@@ -181,7 +183,7 @@ class article(object):
 				self.I['curid'] = d
 		return self.I['curid']
 
-	def title(self):
+	def title(self,force_get=False):
 		'''
 		Returns the title of the article.
 		Will get it if it is not provided.
@@ -190,7 +192,7 @@ class article(object):
 		>>> wp_data(articles)
 		>>> [a.wdid() for a in articles]
 		'''
-		if (self.I['title'] is None):
+		if (self.I['title'] is None)|force_get:
 			if 'missing' in self.data_wp().keys():
 				self._missing_wp()
 			if self.I['title'] is None:
@@ -540,7 +542,7 @@ class article(object):
 		return self._content
 
 
-	def redirect(self,ret=False):
+	def redirect(self):
 		'''
 		Handles redirects if the page has one.
 		'''
@@ -723,89 +725,21 @@ class article(object):
 			for day in r['daily_views']:
 				self._daily_views[lang][day] = r['daily_views'][day]
 
-class place(article):
-	def __init__(self,I,Itype=None):
-		super(place, self).__init__(I,Itype=None)
-		self._coords = None
-		self._is_city = None
-		self._wpcities = None
-
-
-	def coords(self,wiki='wp'):
+	def find_article(self):
 		'''
-		Get the coordinates either from Wikipedia or Wikidata.
-		
-		Parameters
-		----------
-		wiki : string
-			Wiki to use, either 'wd' or 'wp'.
-			Default is 'wp'
+		Find the article by trying different combinations of the title's capitalization.
 		'''
-		if self._coords is None:
-			if wiki=='wd':
-				try:
-					coords = self.wd_prop('P625')[0]
-					self._coords = (coords['latitude'],coords['longitude'])
-				except:
-					self._coords = ('NA','NA')
-			else:
-				wiki ='en' if wiki == 'wp' else wiki
-				try:
-					if wiki !='en':
-						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
-					else:
-						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
-					coords = r['query']['pages'].values()[0]['coordinates'][0]
-					self._coords = (coords['lat'],coords['lon'])
-				except:
-					self._coords = ('NA','NA')
-		return self._coords
-
-class song(article):
-	def __init__(self,I,Itype=None):
-		super(song, self).__init__(I,Itype=None)
-		self._is_song = None
-		self._wpsong  = None
-		self._genre   = None
-	
-	def is_song(self):
-		if self._is_song is None:
-			if self._wpsong_template() is None:
-				self._is_song = False
-			else:
-				self._is_song = True
-		return self._is_song
-
-	def _wpsong_template(self):
-		'''
-		Returns the template associated to the WP Songs when available.
-		'''
-		if self._wpsong is None:
-			self._is_song = False
-			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
-			r = r['query']['pages'].values()[0]
-			if 'revisions' in r.keys():
-				wikicode = mwparserfromhell.parse(r['revisions'][0]['*'])
-				templates = wikicode.filter_templates()
-				for t in templates:
-					if ('songs' in t.name.lower().replace(' ','')):
-						self._wpsong = t
-						self._is_song = True
-						break
-		return self._wpsong
-
-
-
-class biography(article):
-	def __init__(self,I,Itype=None):
-		super(biography, self).__init__(I,Itype=None)
-		self._is_bio = None
-		self._wpbio = None
-		self._isa_values = None
-		self._death_date = None
-		self._birth_date = None
-		#if not self.is_bio():
-		#	print 'Warning: Not a biography ('+str(self.curid())+')'
+		self.redirect()
+		if self.curid() == 'NA':
+			old_title = self.title()
+			titles = correct_titles(self.title())
+			for title in titles:
+				self.__init__(title,Itype='title')
+				self.redirect()
+				if self.curid() != 'NA':
+					break
+			if self.curid() == 'NA':
+				self.__init__(old_title,Itype='title')
 
 	def _is_a(self,full=False):
 		'''
@@ -850,6 +784,163 @@ class biography(article):
 			return self._isa_values
 		else:
 			return self._isa_values[0]
+
+class place(article):
+	def __init__(self,I,Itype=None):
+		super(place, self).__init__(I,Itype=None)
+		self._coords = None
+		self._is_city = None
+		self._wpcities = None
+
+
+	def coords(self,wiki='wp'):
+		'''
+		Get the coordinates either from Wikipedia or Wikidata.
+		
+		Parameters
+		----------
+		wiki : string
+			Wiki to use, either 'wd' or 'wp'.
+			Default is 'wp'
+		'''
+		if self._coords is None:
+			if wiki=='wd':
+				try:
+					coords = self.wd_prop('P625')[0]
+					self._coords = (coords['latitude'],coords['longitude'])
+				except:
+					self._coords = ('NA','NA')
+			else:
+				wiki ='en' if wiki == 'wp' else wiki
+				try:
+					if wiki !='en':
+						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
+					else:
+						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
+					coords = r['query']['pages'].values()[0]['coordinates'][0]
+					self._coords = (coords['lat'],coords['lon'])
+				except:
+					self._coords = ('NA','NA')
+		return self._coords
+
+
+
+
+class song(article):
+	def __init__(self,I,Itype=None):
+		super(song, self).__init__(I,Itype=None)
+		self._is_song = None
+		self._wpsong  = None
+		self._genre   = None
+
+	def disambiguate(self,artist=None):
+		'''
+		If the provided page is a disambiguation page, it returns the song that it was able to find within the links.
+
+		Parameters
+		----------
+		artist : str (optional)
+			If provided it will get the song associated with the given artist.
+		'''
+		song_titles = []
+		if "(disambiguation)" not in self.title().lower():
+			self.__init__(self.title()+' (disambiguation)',Itype='title')
+		self.redirect()
+		if ("(disambiguation)" in self.title().lower())&(self.curid()!='NA'):
+			for link in get_links(self.content()):
+				if song(link).is_song():
+					song_titles.append(link)
+			if len(song_titles) == 0:
+				return []
+			if artist is None:
+				return song_titles
+			else:
+				a = article(artist)
+				a.find_article()
+				if a.curid() == "NA":
+					for sep in ['and','&']:
+						if sep in artist.lower():
+							a = article(artist[:artist.lower().find(sep)].strip())
+							a.find_article()
+							break
+				if a.curid() != 'NA':
+					for t in song_titles:
+						perf = song(t).performer()
+						if perf == a.title():
+							return [t]
+				return []
+		else:
+			return []
+
+	def find_article(self):
+		'''
+		Find the article by trying different combinations of the title.
+		'''
+		self.redirect()
+		if self.curid() == 'NA':
+			old_title = self.title()
+			titles = correct_titles(self.title())
+			titles += [title+' (song)' for title in titles]
+			disamb = []
+			for title in titles:
+				self.__init__(title,Itype='title')
+				self.redirect()
+				disamb.append(('(disambiguation)' in self.title()))
+				if (self.curid() != 'NA')&(self.is_song()):
+					break
+			if self.curid() == 'NA':
+				self.__init__(old_title,Itype='title')
+				for i,d in enumerate(disamb):
+					if d:
+						self.__init__(titles[i],Itype='title')
+						self.redirect()
+
+	def is_song(self):
+		if self._is_song is None:
+			if self.curid()=='NA':
+				self._is_song=False
+			elif self._wpsong_template() is None:
+				if ('song' in self._is_a().lower())|('single' in self._is_a().lower()):
+					self._is_song = True
+				else:
+					self._is_song = False
+			else:
+				self._is_song = True
+		return self._is_song
+
+	def _wpsong_template(self):
+		'''
+		Returns the template associated to the WP Songs when available.
+		'''
+		if self._wpsong is None:
+			self._is_song = False
+			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
+			r = r['query']['pages'].values()[0]
+			if 'revisions' in r.keys():
+				wikicode = mwparserfromhell.parse(r['revisions'][0]['*'])
+				templates = wikicode.filter_templates()
+				for t in templates:
+					if ('songs' in t.name.lower().replace(' ','')):
+						self._wpsong = t
+						self._is_song = True
+						break
+		return self._wpsong
+
+	def performer(self):
+		return article(self.wd_prop('P175')[0]['id']).title()
+
+
+
+
+class biography(article):
+	def __init__(self,I,Itype=None):
+		super(biography, self).__init__(I,Itype=None)
+		self._is_bio = None
+		self._wpbio = None
+		self._death_date = None
+		self._birth_date = None
+		#if not self.is_bio():
+		#	print 'Warning: Not a biography ('+str(self.curid())+')'
 
 	def desc(self):
 		phrase,sentence,verb = self._is_a(full=True)
