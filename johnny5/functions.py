@@ -4,7 +4,6 @@ from crisjfpy import chunker
 from pandas import DataFrame
 from query import wd_q,wp_q,chunker,rget
 from itertools import chain
-from classes import article
 
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
 wikidata_API = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json'
@@ -430,29 +429,6 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 			if country != ('NULL','NULL'):
 				break
 	return country
-
-def read_article(file_name):
-	'''
-	Reads an article from a json file created with article.dump().
-	'''
-	with open(file_name) as data_file:
-		data_json = json.load(data_file)
-	for i in ['curid','title','wdid']:
-		if data_json['I'][i] is not None:
-			out = article(data_json['I'][i],Itype=i)
-			break
-	out.I = data_json['I']
-	out._data = data_json['_data']
-	out._ex = data_json['_ex']
-	out._langlinks_dat = data_json['_langlinks_dat']
-	out._langlinks = data_json['_langlinks']
-	out._infobox = data_json['_infobox']
-	out.raw_box  = data_json['raw_box']
-	out._image_url = data_json['_image_url']
-	out._wd_claims      = data_json['_wd_claims']
-	out._wd_claims_data = data_json['_wd_claims_data']
-	out._creation_date = data_json['_creation_date']
-	return out
 
 
 def chunker(seq, size):

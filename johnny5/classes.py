@@ -2,6 +2,7 @@ import json,os,operator,copy,mwparserfromhell,datetime,codecs
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
+from functions import country
 from geopy.distance import vincenty
 try:
     import cPickle as pickle
@@ -791,6 +792,7 @@ class place(article):
 		self._coords = None
 		self._is_city = None
 		self._wpcities = None
+		self._country = None
 
 
 	def coords(self,wiki='wp'):
@@ -823,7 +825,29 @@ class place(article):
 					self._coords = ('NA','NA')
 		return self._coords
 
+	def country(self,GAPI_KEY=None,name=False):
+		'''
+		Uses google places API to get the country of the given place.
 
+		Parameters
+		----------
+		GAPI_KEY : str
+			Name of the environment variable that has the API key.
+		name : boolean (False)
+			If True it returns the name of the country.
+
+		Returns
+		-------
+		ccode : str
+			Country code.
+		'''
+		if self._country is None:
+			ctr,ccode = country(self.coords(),save=False,GAPI_KEY=GAPI_KEY)
+			self._country = (ctr,ccode)
+		if name:
+			return self._country[0]
+		else:
+			return self._country[1]
 
 
 class song(article):
@@ -1295,3 +1319,27 @@ def id_type(I):
 		return 'wdid'
 	else:
 		return 'title'
+
+
+def read_article(file_name):
+	'''
+	Reads an article from a json file created with article.dump().
+	'''
+	with open(file_name) as data_file:
+		data_json = json.load(data_file)
+	for i in ['curid','title','wdid']:
+		if data_json['I'][i] is not None:
+			out = article(data_json['I'][i],Itype=i)
+			break
+	out.I = data_json['I']
+	out._data = data_json['_data']
+	out._ex = data_json['_ex']
+	out._langlinks_dat = data_json['_langlinks_dat']
+	out._langlinks = data_json['_langlinks']
+	out._infobox = data_json['_infobox']
+	out.raw_box  = data_json['raw_box']
+	out._image_url = data_json['_image_url']
+	out._wd_claims      = data_json['_wd_claims']
+	out._wd_claims_data = data_json['_wd_claims_data']
+	out._creation_date = data_json['_creation_date']
+	return out
