@@ -249,6 +249,7 @@ class article(object):
 			wikicode = mwparserfromhell.parse(self.raw_box)
 			templates = wikicode.filter_templates()
 			box = {}
+			box_pos = 0
 			for template in templates:
 				name = template.name.strip().lower()
 				if 'infobox' in name:
@@ -256,11 +257,12 @@ class article(object):
 					box_type = drop_comments(_string(name).replace('infobox','')).strip()
 					for param in template.params:
 						key = drop_comments(_string(param.name.strip_code())).strip().lower()
-						#value = _string(param.value.strip_code()).strip()
 						value = _string(param.value).strip()
 
 						box_[key] = value
-					box[box_type] = box_
+					box_['box_pos'] = box_pos
+					box_pos+=1
+					box[box_type] = box_					
 			if box is None:
 				self._infobox = {}
 			else:
@@ -285,6 +287,7 @@ class article(object):
 		wikicode = mwparserfromhell.parse(rbox)
 		templates = wikicode.filter_templates()
 		box = {}
+		box_pos = 0
 		lengths = []
 		for template in templates:
 			name = template.name.strip().lower()
@@ -296,7 +299,10 @@ class article(object):
 					key = drop_comments(_string(param.name.strip_code())).strip().lower()
 					value = _string(param.value).strip()
 					box_[key] = value
+				box_['box_pos'] = box_pos
+				box_pos+=1
 				box[box_type] = box_
+				
 		if (box == {}) & force:
 			lengths.append(7) #Infobox should have at least 7 fields
 			length = max(lengths)
@@ -309,7 +315,10 @@ class article(object):
 						key = drop_comments(_string(param.name.strip_code())).strip().lower()
 						value = _string(param.value).strip()
 						box_[key] = value
+					box_['box_pos'] = box_pos
+					box_pos+=1
 					box[box_type] = box_
+					
 		return box
 
 	def extract(self):
@@ -452,9 +461,18 @@ class article(object):
 		ibox = self.infobox(lang=lang,force=True)
 		for btype in ibox:
 			box = ibox[btype]
-			for tag in tags:
-				if tag in box.keys():
-					images.append(box[tag].strip())
+			box_pos = box['box_pos']
+			if box_pos==0:
+				for tag in tags:
+					if tag in box.keys():
+						images.append(box[tag].strip())
+		for btype in ibox:
+			box = ibox[btype]
+			box_pos = box['box_pos']
+			if box_pos==1:
+				for tag in tags:
+					if tag in box.keys():
+						images.append(box[tag].strip())
 		imgs = []
 		for image in images:
 			if image.strip() != '':
