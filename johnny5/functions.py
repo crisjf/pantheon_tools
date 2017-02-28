@@ -433,3 +433,11 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 
 def chunker(seq, size):
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
+def dms2dd(lat):
+    direc = lat[-1].lower()
+    degs,mins,secs = (map(float,map(str,lat[:-1]))+[0.,0.])[:3]
+    dd = degs+mins/60.+secs/(3600.)
+    if (direc == 's')|(direc == 'w'):
+        dd *=-1
+    return dd

@@ -2,7 +2,7 @@ import json,os,operator,copy,mwparserfromhell,datetime,codecs
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
-from functions import country
+from functions import country,dms2dd
 from geopy.distance import vincenty
 try:
     import cPickle as pickle
@@ -840,7 +840,46 @@ class place(article):
 					coords = r['query']['pages'].values()[0]['coordinates'][0]
 					self._coords = (coords['lat'],coords['lon'])
 				except:
-					self._coords = ('NA','NA')
+					wikicode = mwparserfromhell.parse(self.content())
+					templates = wikicode.filter_templates()
+					lat,lon = ('NA','NA')
+					names = set([template.name.strip().lower() for template in templates])
+					if 'coord' in names:
+						for template in templates:
+							name = template.name.strip().lower()
+							if name == 'coord':
+								lat = []
+								lon = []
+								values = template.params
+								for i,val in enumerate(values):
+									lat.append(val)
+									if (val.lower() == 'n')|(val.lower() == 's'):
+										break
+								for val in values[i+1:]:
+									lon.append(val)
+									if (val.lower() == 'e')|(val.lower() == 'w'):
+										break
+								lat,lon= (dms2dd(lat),dms2dd(lon))
+								break
+					else:
+						parameters = {'latd':'NA','latns':'','longd':'NA','longew':''}
+						for template in templates:
+							name = template.name.strip().lower()
+							if 'infobox settlement' in name:
+								for param in template.params:
+									name = param.name.strip().lower()
+									for ppp in parameters:
+										if name == ppp:
+											parameters[ppp] = param.value.strip().lower()
+								parameters['latd'] = float(parameters['latd'])
+								parameters['longd'] = float(parameters['longd'])
+								if parameters['latns'] == 's':
+									parameters['latd'] *= -1
+								if parameters['latew'] == 'w':
+									parameters['longd'] *= -1
+								break
+						lat,lon = (parameters['latd'],parameters['longd'])
+					self._coords = (lat,lon)
 		return self._coords
 
 	def country(self,GAPI_KEY=None,name=False):
