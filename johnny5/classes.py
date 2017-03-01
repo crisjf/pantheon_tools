@@ -68,9 +68,17 @@ class article(object):
 	def __str__(self):
 		self.redirect()
 		out = ''
-		out+= 'curid : '+str(self.curid())+'\n' if self.title() != '' else 'curid : NA\n'
-		out+= 'title : '+self.title()+'\n' if self.title() != '' else 'title : NA\n'
-		out+= 'wdid  : '+self.wdid()+'\n' if self.wdid() !='' else 'wdid  : NA\n'
+		self.title(),self.curid(),self.wdid()
+		if not self.no_wp:
+			out+= 'curid : '+str(self.curid())+'\n'
+			out+= 'title : '+self.title()+'\n'
+		else:
+			out+= 'curid : None\n'
+			out+= 'title : None\n'
+		if not self.no_wd:
+			out+= 'wdid  : '+self.wdid()+'\n'
+		else:
+			out+= 'wdid  : None\n'
 		out+= 'L     : '+str(self.L()) 
 		return out.encode('utf-8')
 
@@ -79,38 +87,24 @@ class article(object):
 		This function is used to signal that the article does not correspond to a Wikidata page.
 		'''
 		self.no_wd = True
-		self.I['wdid'] = ''
-		self._data['wd'] = defaultdict(lambda:{})
-
-		self._wd_claims      = defaultdict(lambda:'')
-		self._wd_claims_data = defaultdict(lambda:'')
+		self.I['wdid'] = None
+		self._data['wd'] = None
 
 	def _missing_wp(self):
 		'''
 		This function is used to signal that the article does not correspond to a Wikipedia page.
 		'''
 		self.no_wp = True
-		self.I['title'] = 'NA' if self.I['title'] is None else self.I['title']
-		self.I['curid'] = 'NA' if self.I['curid'] is None else self.I['curid']
-		self._data['wp'] = defaultdict(lambda:{})
-		self._ex = ''
-		self._langlinks_dat = '' 
-		self._langlinks = ''
-
-		self._infobox = ''
-		self.raw_box  = ''
-		self._image_url = ''
-		self._content = ''
-		self._creation_date = defaultdict(lambda:'')
-		self._feats = ''
-		self._occ   = ''
+		self.I['title'] = None
+		self.I['curid'] = None
+		self._data['wp'] = None
 
 
 	def data_wp(self):
 		'''
 		Returns the metadata about the Wikipedia page.
 		'''
-		if (self._data['wp'] is None):
+		if (self._data['wp'] is None)&(not self.no_wp):
 			if (self.I['curid'] is not None):
 				self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':self.I['curid']})['query']['pages'].values()[0]
 			elif (self.I['title'] is not None):
@@ -132,15 +126,16 @@ class article(object):
 					self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values()[0]
 			else:
 				raise NameError('No identifier found.')
-			if ('missing' in self._data['wp'].keys())|('invalid' in self._data['wp'].keys()):
-				self._missing_wp()
+			if not self.no_wp:
+				if ('missing' in self._data['wp'].keys())|('invalid' in self._data['wp'].keys()):
+					self._missing_wp()
 		return self._data['wp']
 
 	def data_wd(self):
 		'''
 		Returns the metadata about the Wikidata page.
 		'''
-		if (self._data['wd'] is None):
+		if (self._data['wd'] is None)&(not self.no_wd):
 			if (self.I['wdid'] is None):
 				d = self.data_wp()
 				d = self._data['wp']
@@ -161,7 +156,7 @@ class article(object):
 		>>> wp_data(articles)
 		>>> [a.wdid() for a in articles]
 		'''
-		if (self.I['wdid'] is None):
+		if (self.I['wdid'] is None)&(not self.no_wd):
 			d = self.data_wp()
 			if 'pageprops' in d:
 				d = self.data_wp()['pageprops']
@@ -178,13 +173,12 @@ class article(object):
 		Returns the english curid of the article.
 		Will get it if it is not provided.
 		'''
-		if (self.I['curid'] is None):
-			d = self.data_wp()['pageid']
-			if self.I['curid'] is None:
-				self.I['curid'] = d
+		if (self.I['curid'] is None)&(not self.no_wp):
+			if self.data_wp() is not None:
+				self.I['curid'] = self.data_wp()['pageid']
 		return self.I['curid']
 
-	def title(self,force_get=False):
+	def title(self):
 		'''
 		Returns the title of the article.
 		Will get it if it is not provided.
@@ -193,10 +187,9 @@ class article(object):
 		>>> wp_data(articles)
 		>>> [a.wdid() for a in articles]
 		'''
-		if (self.I['title'] is None)|force_get:
-			if 'missing' in self.data_wp().keys():
-				self._missing_wp()
-			if self.I['title'] is None:
+		
+		if (self.I['title'] is None)&(not self.no_wp):
+			if self.data_wp() is not None:
 				self.I['title'] = self.data_wp()['title']
 		return self.I['title']
 
@@ -233,7 +226,7 @@ class article(object):
 			If True it will 'force' the search for the infobox by getting the template that is the most similar to an Infobox.
 			Only used for non english editions.
 		"""
-		if (self._infobox is None)&(lang == 'en'):
+		if (self._infobox is None)&(lang == 'en')&(not self.no_wp):
 			if self.raw_box is None:
 				rbox = '#redirect'
 				while '#redirect' in rbox.lower():
@@ -356,13 +349,31 @@ class article(object):
 		"""
 		if self._langlinks is None:
 			if self._langlinks_dat is None:
-				r = wp_q({'prop':'langlinks','lllimit':500,'pageids':self.curid()})
-				if 'langlinks' in r['query']['pages'].values()[0].keys():
-					self._langlinks_dat = r['query']['pages'].values()[0]['langlinks']  
-				else:
-					self._langlinks_dat = []
+				for Itype in ['curid','title','wdid']:
+					if self.I[Itype] is not None:
+						if Itype == 'wdid':
+							if 'sitelinks' in self.data_wd().keys():
+								sitelinks = self.data_wd()[u'sitelinks']
+								self._langlinks_dat = []
+								for lan in sitelinks:
+									lan = lan.strip().lower()
+									if (lan[-4:]=='wiki')&(lan!='commonswiki'):
+										val = {'lang':lan[:-4],'*':sitelinks[lan]['title']}
+										self._langlinks_dat.append(val)
+							else:
+								self._langlinks_dat = []
+						else:
+							if Itype == 'curid':
+								r = wp_q({'prop':'langlinks','lllimit':500,'pageids':self.I[Itype]})
+							elif Itype == 'title':
+								r = wp_q({'prop':'langlinks','lllimit':500,'titles':self.I[Itype]})
+							if 'langlinks' in r['query']['pages'].values()[0].keys():
+								self._langlinks_dat = r['query']['pages'].values()[0]['langlinks']  
+							else:
+								self._langlinks_dat = []
+						break
 			self._langlinks = {val['lang']:val['*'] for val in self._langlinks_dat}
-			if 'en' not in self._langlinks.keys():
+			if ('en' not in self._langlinks.keys())&(self.title() is not None):
 				self._langlinks['en'] = self.title()
 		return self._langlinks if lang is None else self._langlinks[lang]
 
@@ -437,14 +448,23 @@ class article(object):
 		Gets the url for the image that appears in the infobox.
 		It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.
 		'''
+		self.data_wp()
 		if self._image_url is None:
-			for lang in ['en','sv','ceb','de','nl','fr','ru','it','es','war','pl','vi','ja','pt','zh','uk','ca','fa','no','ar','sh','fi']:
-				results = self._image_url_lang(lang)
-				if len(results) != 0:
-					self._image_url = results[0]
-					break
+			if not self.no_wp:
+				for lang in ['en','sv','ceb','de','nl','fr','ru','it','es','war','pl','vi','ja','pt','zh','uk','ca','fa','no','ar','sh','fi']:
+					results = self._image_url_lang(lang)
+					if len(results) != 0:
+						self._image_url = results[0]
+						break
+			elif not self.no_wd:
+				try:
+					images = 'File:'+self.wd_prop('P18')[0]['value'].replace(' ','_')
+					r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
+					self._image_url = r['query']['pages'].values()[0]['imageinfo'][0]['url']
+				except:
+					pass
 			if self._image_url is None:
-				self._image_url = 'NA'
+				self._image_url = 'NULL'
 		return self._image_url
 
 	def _image_url_lang(self,lang):
@@ -549,15 +569,17 @@ class article(object):
 			json.dump(out, outfile)
 
 	def content(self):
-		if self._content is None:
-			r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
-			if ('interwiki' in r['query'].keys()):
-				self._missing_wp()
-				return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
-			elif ('missing' in r['query']['pages'].values()[0].keys())|('invalidreason' in r['query']['pages'].values()[0].keys()):
-				self._missing_wp()
-			else:
-				self._content = r['query']['pages'].values()[0]['revisions'][0]['*'] 
+		if (self._content is None)&(not self.no_wp):
+			if self.title() is not None:
+				r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
+				if ('interwiki' in r['query'].keys()):
+					self._missing_wp()
+					return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
+				elif ('missing' in r['query']['pages'].values()[0].keys())|('invalidreason' in r['query']['pages'].values()[0].keys()):
+					self._missing_wp()
+				else:
+					if not self.no_wp:
+						self._content = r['query']['pages'].values()[0]['revisions'][0]['*'] 
 		return self._content
 
 
@@ -1020,8 +1042,22 @@ class biography(article):
 		self._wpbio = None
 		self._death_date = None
 		self._birth_date = None
+		self._name = None
 		#if not self.is_bio():
 		#	print 'Warning: Not a biography ('+str(self.curid())+')'
+
+	def name(self):
+		if self._name is not None:
+			if self.title() is not None:
+				self._name = re.sub(r'\([^\(\)]*\)','',b.title()).strip()
+			else:
+				data = self.data_wd()
+				if 'aliases' in data.keys():
+					if 'en' in data['aliases'].keys():
+						self._name = data['aliases']['en'][0]['value']
+					else:
+						self._name = data['aliases'].values()[0][0]['value']
+		return self._name
 
 	def desc(self):
 		phrase,sentence,verb = self._is_a(full=True)
@@ -1069,7 +1105,7 @@ class biography(article):
 		print 'Warning: This function will be dropped.'
 		return self.alive()
 
-	def alive(self):
+	def alive(self,boolean=False):
 		'''
 		Retrieves the information whether the biography is about a living or dead person.
 		It uses the WikiProject Biography template from the Talk page to get this information.
@@ -1080,28 +1116,31 @@ class biography(article):
 			Returns either 'yes' or 'no'.
 		'''
 		t = self._wpbio_template()
-		if t =='NA':
-			if not self._is_bio:
-				print 'Warning: Not within WPBio'
-			return 'NA'
-		if t is not None:
+		alive = 'NULL'
+		if (t !='NA')&(t is not None):
 			for p in t.params:
 				if p.name.strip().replace(' ','').lower() == 'living':
 					living = drop_comments(p.value.lower().strip())
 					if (living[0] == 'n'):
-						return 'no'
+						alive = 'no'
+						break
 					elif (living[0] == 'y'):
-						return 'yes'
+						alive = 'yes'
+						break
 					else:
-						return p.value
-			phrase,sentence,verb = self._is_a(full=True)
-			if (verb == 'is')|(verb == 'are'):
-				return 'yes'
-			elif (verb == 'was')|(verb == 'were'):
-				return 'no'
-			return 'NA'
+						alive = p.value
+						break
+			if alive == 'NULL':
+				phrase,sentence,verb = self._is_a(full=True)
+				if (verb == 'is')|(verb == 'are'):
+					alive = 'yes'
+				elif (verb == 'was')|(verb == 'were'):
+					alive = 'no'
+		if boolean:
+			mp = defaultdict(lambda: 'NULL',{'yes':True,'no':False})
+			return mp[alive]
 		else:
-			return 'NA'
+			return alive
 
 
 	def death_date(self,raw=False):
