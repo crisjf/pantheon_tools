@@ -212,6 +212,12 @@ class article(object):
 		else:
 			raise NameError('Wrong wiki')
 
+	def wiki_links(self):
+		'''Gets all the wiki links connected from the article'''
+		links = mwparserfromhell.parse(self.content()).filter_wikilinks()
+		titles = set([link.encode('utf-8').split('|')[0].replace('[[','').replace(']]','').strip() for link in links])
+		return titles
+
 	def infobox(self,lang='en',force=False):
 		"""
 		Returns the infobox of the article.
@@ -1067,7 +1073,7 @@ class biography(article):
 		return sentence
 
 	def is_bio(self):
-		if self._is_bio is None:
+		if (self._is_bio is None)&(not self.no_wp):
 			if self._wpbio_template() is None:
 				self._is_bio = False
 			else:
@@ -1095,13 +1101,16 @@ class biography(article):
 		if self._wpbio is None:
 			self._is_bio = False
 			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
-			wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
-			templates = wikicode.filter_templates()
-			for t in templates:
-				if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
-					self._wpbio = t
-					self._is_bio = True
-					break
+			try:
+				wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
+				templates = wikicode.filter_templates()
+				for t in templates:
+					if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
+						self._wpbio = t
+						self._is_bio = True
+						break
+			except:
+				pass
 		return self._wpbio
 
 	def living(self):
