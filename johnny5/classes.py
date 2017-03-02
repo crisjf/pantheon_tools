@@ -1050,7 +1050,7 @@ class biography(article):
 	def name(self):
 		if self._name is None:
 			if self.title() is not None:
-				self._name = re.sub(r'\([^\(\)]*\)','',b.title()).strip()
+				self._name = re.sub(r'\([^\(\)]*\)','',self.title()).strip()
 			else:
 				data = self.data_wd()
 				if 'aliases' in data.keys():
