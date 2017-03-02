@@ -1,5 +1,6 @@
 import json,os,operator,copy,mwparserfromhell,datetime,codecs
 import nltk.data,nltk
+import re
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
 from functions import country,dms2dd
