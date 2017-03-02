@@ -1047,7 +1047,7 @@ class biography(article):
 		#	print 'Warning: Not a biography ('+str(self.curid())+')'
 
 	def name(self):
-		if self._name is not None:
+		if self._name is None:
 			if self.title() is not None:
 				self._name = re.sub(r'\([^\(\)]*\)','',b.title()).strip()
 			else:
@@ -1057,6 +1057,8 @@ class biography(article):
 						self._name = data['aliases']['en'][0]['value']
 					else:
 						self._name = data['aliases'].values()[0][0]['value']
+				else:
+					self._name = 'NULL'
 		return self._name
 
 	def desc(self):
