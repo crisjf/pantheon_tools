@@ -880,15 +880,22 @@ class place(article):
 								lat = []
 								lon = []
 								values = template.params
+								dms = False
 								for i,val in enumerate(values):
-									lat.append(val)
-									if (val.lower() == 'n')|(val.lower() == 's'):
-										break
-								for val in values[i+1:]:
-									lon.append(val)
-									if (val.lower() == 'e')|(val.lower() == 'w'):
-										break
-								lat,lon= (dms2dd(lat),dms2dd(lon))
+									if (val.name.lower().strip() == 'format')&(val.value.lower().strip()=='dms'):
+										dms = True
+								if not dms:
+									for i,val in enumerate(values):
+										lat.append(val)
+										if (val.lower() == 'n')|(val.lower() == 's'):
+											break
+									for val in values[i+1:]:
+										lon.append(val)
+										if (val.lower() == 'e')|(val.lower() == 'w'):
+											break
+									lat,lon= (dms2dd(lat),dms2dd(lon))
+								else:
+									lat,lon = (float(str(values[0])),float(str(values[1])))
 								break
 					else:
 						parameters = {'latd':'NA','latns':'','longd':'NA','longew':''}
