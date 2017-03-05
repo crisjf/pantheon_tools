@@ -1,3 +1,6 @@
 .DS_Store
 *.pyc
 johnny5.egg-info/
+johnny5/data/*.nt
+johnny5/data/*.gz
+johnny5/data/instances/*

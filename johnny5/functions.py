@@ -4,6 +4,9 @@ from crisjfpy import chunker
 from pandas import DataFrame
 from query import wd_q,wp_q,chunker,rget
 from itertools import chain
+import urllib2
+from urllib import urlretrieve
+from bs4 import BeautifulSoup
 
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
 wikidata_API = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json'
@@ -441,3 +444,80 @@ def dms2dd(lat):
     if (direc == 's')|(direc == 'w'):
         dd *=-1
     return dd
+
+
+def latest_wddump():
+	'''Gets the latest Wikidata RDF dump.'''
+	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports.html'
+	conn = urllib2.urlopen(url)
+	html = conn.read()
+	soup = BeautifulSoup(html, "html.parser")
+	for tag in soup.find_all('a'):
+		link = tag.get('href',None)
+		if link is not None:
+			if link.split('/')[0] == 'exports':
+				top_date = link.split('/')[1]
+				break
+	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
+	return url,top_date
+
+def _path(path):
+	path_os = path[:]
+	for c in [' ','(',')']:
+		path_os = path_os.replace(c,'\\'+c)
+	return path_os
+
+def download_latest():
+	'''Downloads the latest Wikidata RDF dump.'''
+	url,top_date = latest_wddump()
+	print "Downloading file from:",url
+	filename = url.split('/')[-1]
+	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
+	path = os.path.split(__file__)[0]+'/data/'
+
+	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
+		print "Saving file into",path+filename
+		urlretrieve(url, path+filename)
+	else:
+		print "Download aborted, file already exists"
+
+	if filename in set(os.listdir(path)):
+		print "Unzipping file"
+		path_os = _path(path)
+		os.system('gunzip '+path_os+filename)
+
+	print 'Cleaning up'
+	remove = [f for f in os.listdir(path) if ('wikidata-statements' in f)&(f != filename.replace('.gz',''))]
+	for f in remove:
+		os.remove(path+f)
+
+def wd_instances(cl):
+	'''
+	Gets all the instances of the given class.
+
+	Example
+	-------
+	To get all universities:
+	>>> wd_instances('Q3918')
+
+	Returns
+	-------
+	instances : set
+		wd_id for every instance of the given class.
+	'''
+	path = os.path.split(__file__)[0]+'/data/'
+	path_os = _path(path)
+	files = os.listdir(path+'instances/')
+	if cl+'.nt' not in files:
+		print 'Parsing the dump'
+		filename = [f for f in files if 'wikidata-statements' in f][0]
+		os.system("grep 'P31[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
+
+	lines = open(path+'instances/'+cl+".nt").read().split('\n')
+	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
+	return instances
+
+
+
+
+
