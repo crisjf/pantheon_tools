@@ -509,8 +509,12 @@ def wd_instances(cl):
 	path_os = _path(path)
 	files = os.listdir(path+'instances/')
 	if cl+'.nt' not in files:
-		print 'Parsing the dump'
-		filename = [f for f in files if 'wikidata-statements' in f][0]
+		filename = [f for f in files if 'wikidata-statements' in f]
+		if len(filename) == 0:
+			raise NameError('No dump found, please run:\n\t>>> download_latest()')
+		else:
+			filename=filename[0]
+		print 'Parsing the dump ',filename
 		os.system("grep 'P31[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
 
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
