@@ -29,6 +29,7 @@ class article(object):
 		self.I = {'title':None,'curid':None,'wdid':None}
 		self.I[Itype] = I
 		self._data = {'wp':None,'wd':None}
+		self._curid_nonen = None
 
 		self._ex = None
 
@@ -211,6 +212,23 @@ class article(object):
 			print 'https://www.wikidata.org/wiki/'+self.wdid()
 		else:
 			raise NameError('Wrong wiki')
+
+	def curid_nonen(self):
+		'''
+		Gets the curid in a non-english language.
+
+		The curid has the form:
+			lang.curid
+		'''
+		if self._curid_nonen is None:
+			for lang,title in self.langlinks().items():
+				try:
+					r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':title},lang=lang)['query']['pages'].values()[0]
+					self._curid_nonen = lang+'.'+str(r['pageid'])
+					break
+				except:
+					pass
+		return self._curid_nonen
 
 	def wiki_links(self):
 		'''Gets all the wiki links connected from the article'''
@@ -1060,6 +1078,23 @@ class biography(article):
 		#if not self.is_bio():
 		#	print 'Warning: Not a biography ('+str(self.curid())+')'
 
+	def __str__(self):
+		self.redirect()
+		out = ''
+		self.title(),self.curid(),self.wdid()
+		if not self.no_wp:
+			out+= 'curid : '+str(self.curid())+'\n'
+			out+= 'title : '+self.title()+'\n'
+		else:
+			out+= 'curid : None\n'
+			out+= 'name  : '+self.name()+'\n' if self.name() !='NULL' else 'name  : None\n'
+		if not self.no_wd:
+			out+= 'wdid  : '+self.wdid()+'\n'
+		else:
+			out+= 'wdid  : None\n'
+		out+= 'L     : '+str(self.L()) 
+		return out.encode('utf-8')
+
 	def name(self):
 		if self._name is None:
 			if self.title() is not None:
@@ -1070,7 +1105,10 @@ class biography(article):
 					if 'en' in data['aliases'].keys():
 						self._name = data['aliases']['en'][0]['value']
 					else:
-						self._name = data['aliases'].values()[0][0]['value']
+						if len(data['aliases'].values())!=0:
+							self._name = data['aliases'].values()[0][0]['value']
+						else:
+							self._name = 'NULL'
 				else:
 					self._name = 'NULL'
 		return self._name
@@ -1080,14 +1118,17 @@ class biography(article):
 		return sentence
 
 	def is_bio(self):
-		if (self._is_bio is None)&(not self.no_wp):
-			if self._wpbio_template() is None:
-				self._is_bio = False
-			else:
-				if self._is_group():
+		if (self._is_bio is None):
+			if (not self.no_wp):
+				if self._wpbio_template() is None:
 					self._is_bio = False
 				else:
-					self._is_bio = True
+					if self._is_group():
+						self._is_bio = False
+					else:
+						self._is_bio = True
+			else:
+				self._is_bio = False
 		return self._is_bio
 
 	def _is_group(self):
@@ -1105,7 +1146,7 @@ class biography(article):
 		'''
 		Returns the template associated to the WP Biography when available.
 		'''
-		if self._wpbio is None:
+		if (self._wpbio is None)&(self.title() is not None):
 			self._is_bio = False
 			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
 			try:

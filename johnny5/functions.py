@@ -468,12 +468,18 @@ def _path(path):
 	return path_os
 
 def download_latest():
-	'''Downloads the latest Wikidata RDF dump.'''
+	'''
+	Downloads the latest Wikidata RDF dump.
+	
+	If the dump is updated, it will delete all the instances files.
+	'''
 	url,top_date = latest_wddump()
 	print "Downloading file from:",url
 	filename = url.split('/')[-1]
 	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
 	path = os.path.split(__file__)[0]+'/data/'
+
+	drop_instances=False
 
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
 		print "Saving file into",path+filename
@@ -485,11 +491,17 @@ def download_latest():
 		print "Unzipping file"
 		path_os = _path(path)
 		os.system('gunzip '+path_os+filename)
+		drop_instances=True
 
-	print 'Cleaning up'
 	remove = [f for f in os.listdir(path) if ('wikidata-statements' in f)&(f != filename.replace('.gz',''))]
+	if (len(remove) != 0)|drop_instances:
+		print 'Cleaning up'
 	for f in remove:
 		os.remove(path+f)
+	if drop_instances:
+		remove = os.listdir(path+'instances/')
+		for f in remove:
+			os.remove(path+'instances/'+f)
 
 def wd_instances(cl):
 	'''
@@ -499,6 +511,8 @@ def wd_instances(cl):
 	-------
 	To get all universities:
 	>>> wd_instances('Q3918')
+	To get all humans:
+	>>> wd_instances('Q5')
 
 	Returns
 	-------
@@ -507,8 +521,9 @@ def wd_instances(cl):
 	'''
 	path = os.path.split(__file__)[0]+'/data/'
 	path_os = _path(path)
-	files = os.listdir(path+'instances/')
-	if cl+'.nt' not in files:
+	files = os.listdir(path)
+	instances = os.listdir(path+'instances/')
+	if cl+'.nt' not in instances:
 		filename = [f for f in files if 'wikidata-statements' in f]
 		if len(filename) == 0:
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
@@ -520,8 +535,4 @@ def wd_instances(cl):
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
 	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return instances
-
-
-
-
 
