@@ -1,4 +1,4 @@
-import os
+import os,time,codecs
 from parse_functions import drop_comments
 from crisjfpy import chunker
 from pandas import DataFrame
