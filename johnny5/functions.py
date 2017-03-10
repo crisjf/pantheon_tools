@@ -461,6 +461,24 @@ def latest_wddump():
 	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
 	return url,top_date
 
+def check_wddump():
+	url,top_date = latest_wddump()
+	path = os.path.split(__file__)[0]+'/data/'
+	files = os.listdir(path)
+	filename = [f for f in files if 'wikidata-statements' in f]
+	if len(filename) == 0:
+		raise 'No dump found, please run:\n\t>>> download_latest()'
+		return True
+	else:
+		filename=filename[0]
+	if filename.split('-')[-1].split('.')[0] == top_date:
+		print 'Wikidata dump is up to date'
+		return False
+	else:
+		print 'Wikidata dump is outdated, please update\n:>>> download_latest()'
+		return True
+
+
 def _path(path):
 	path_os = path[:]
 	for c in [' ','(',')']:
@@ -480,7 +498,6 @@ def download_latest():
 	path = os.path.split(__file__)[0]+'/data/'
 
 	drop_instances=False
-
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
 		print "Saving file into",path+filename
 		urlretrieve(url, path+filename)
@@ -535,4 +552,39 @@ def wd_instances(cl):
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
 	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return instances
+
+def all_wikipages(update=False):
+	'''Downloads all the names of the Wikipedia articles'''
+	path = os.path.split(__file__)[0]+'/data/'
+	files = os.listdir(path)
+	if ('enwiki-allarticles.txt' not in files)|update:
+		if ('enwiki-latest-abstract.xml' not in files)|update:
+			print 'Downloading dump'
+			urlretrieve('https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-abstract.xml',path+'enwiki-latest-abstract.xml')
+		if ('enwiki-latest-titles.xml' not in files)|update:
+			print 'Parsing titles from dump'
+			os.system("grep '<title>'  enwiki-latest-abstract.xml > enwiki-latest-titles.xml")
+		print 'Cleaning titles'
+		f = codecs.open(path+'enwiki-latest-titles.xml',encoding='utf-8')
+		g = open(path+'enwiki-allarticles.txt',mode='w')
+		while True:
+			line = f.readline()
+			line = line[17:-9].strip()
+			g.write((line+'\n').encode('utf-8'))
+			if not line: break
+		f.close()
+		g.close()
+		print 'Cleaning up'
+		os.remove(path+'enwiki-latest-titles.xml')
+	titles = set(codecs.open(path+'enwiki-allarticles.txt',encoding='utf-8').read().split('\n'))
+	titles.discard('')
+	return titles
+
+def check_wpdump():
+	path = os.path.split(__file__)[0]+'/data/'
+	dt = time.ctime(os.path.getmtime(path+'enwiki-latest-abstract.xml'))
+	print 'Dump downloaded on:'
+	print '\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1]
+	print 'To update run:\n\t>>> all_wikipages(update=True)'
+
 
