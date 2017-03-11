@@ -563,7 +563,7 @@ def all_wikipages(update=False):
 			urlretrieve('https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-abstract.xml',path+'enwiki-latest-abstract.xml')
 		if ('enwiki-latest-titles.xml' not in files)|update:
 			print 'Parsing titles from dump'
-			os.system("grep '<title>'  data/enwiki-latest-abstract.xml > data/enwiki-latest-titles.xml")
+			os.system("grep '<title>'  "+_path(path)+"enwiki-latest-abstract.xml > "+_path(path)+"enwiki-latest-titles.xml")
 		print 'Cleaning titles'
 		f = codecs.open(path+'enwiki-latest-titles.xml',encoding='utf-8')
 		g = open(path+'enwiki-allarticles.txt',mode='w')
