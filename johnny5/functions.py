@@ -575,7 +575,10 @@ def all_wikipages(update=False):
 		f.close()
 		g.close()
 		print 'Cleaning up'
-		os.remove(path+'enwiki-latest-titles.xml')
+		try:
+			os.remove(path+'enwiki-latest-titles.xml')
+		except:
+			pass
 	titles = set(codecs.open(path+'enwiki-allarticles.txt',encoding='utf-8').read().split('\n'))
 	titles.discard('')
 	return titles
