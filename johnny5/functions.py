@@ -461,9 +461,17 @@ def latest_wddump():
 	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
 	return url,top_date
 
+
+def dumps_path():
+	path = os.path.split(__file__)[0]+'/data/'
+	files = os.listdir(path)
+	if 'dumps.txt' in files:
+		path = open(path+'dumps.txt').read().split('\n')[0]
+	return path
+
 def check_wddump():
 	url,top_date = latest_wddump()
-	path = os.path.split(__file__)[0]+'/data/'
+	path = dumps_path()
 	files = os.listdir(path)
 	filename = [f for f in files if 'wikidata-statements' in f]
 	if len(filename) == 0:
@@ -495,7 +503,7 @@ def download_latest():
 	print "Downloading file from:",url
 	filename = url.split('/')[-1]
 	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
-	path = os.path.split(__file__)[0]+'/data/'
+	path = dumps_path()
 
 	drop_instances=False
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
@@ -536,7 +544,7 @@ def wd_instances(cl):
 	instances : set
 		wd_id for every instance of the given class.
 	'''
-	path = os.path.split(__file__)[0]+'/data/'
+	path = dumps_path()
 	path_os = _path(path)
 	files = os.listdir(path)
 	instances = os.listdir(path+'instances/')
@@ -555,7 +563,7 @@ def wd_instances(cl):
 
 def all_wikipages(update=False):
 	'''Downloads all the names of the Wikipedia articles'''
-	path = os.path.split(__file__)[0]+'/data/'
+	path = dumps_path()
 	files = os.listdir(path)
 	if ('enwiki-allarticles.txt' not in files)|update:
 		if ('enwiki-latest-abstract.xml' not in files)|update:
@@ -575,16 +583,13 @@ def all_wikipages(update=False):
 		f.close()
 		g.close()
 		print 'Cleaning up'
-		try:
-			os.remove(path+'enwiki-latest-titles.xml')
-		except:
-			pass
+		os.remove(path+'enwiki-latest-titles.xml')
 	titles = set(codecs.open(path+'enwiki-allarticles.txt',encoding='utf-8').read().split('\n'))
 	titles.discard('')
 	return titles
 
 def check_wpdump():
-	path = os.path.split(__file__)[0]+'/data/'
+	path = dumps_path()
 	dt = time.ctime(os.path.getmtime(path+'enwiki-latest-abstract.xml'))
 	print 'Dump downloaded on:'
 	print '\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1]
