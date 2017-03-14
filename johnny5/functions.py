@@ -134,12 +134,7 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 			return DataFrame(results.items(),columns=['wd_id',get_wd_name(prop)]) if as_df else results
 
 
-
-
-
-
-
-def langlinks(articles,ret=False):
+def langlinks(articles,ret=False,use='curid'):
 	'''
 	Gets the langlinks for the provided set of articles.
 
@@ -149,21 +144,31 @@ def langlinks(articles,ret=False):
 		List of wiki_tool article objects to query.
 	ret : boolean (False)
 		If True it will return a dictionary with curids as keys and langlinks as values.
+	use : str (default='curid')
+		What identifier to use: 'curid' or 'title'
 
 	Returns
 	-------
 	langlinks : dict
 		Dictionary with curids as keys and langlinks as values.
 	'''
-	pageids = [a.curid() for a in articles if (a._langlinks_dat is None)]
+	if use=='curid':
+		pages = [a.curid() for a in articles if (a._langlinks_dat is None)]
+	elif use == 'title':
+		pages = [a.curid() for a in articles if (a._langlinks_dat is None)]
 	if len(pageids) != 0:
-		r = wp_q({'prop':'langlinks','lllimit':500,'pageids':pageids})
+		if use=='curid':
+			r = wp_q({'prop':'langlinks','lllimit':500,'pageids':pages})
+		elif use == 'title':
+			r = wp_q({'prop':'langlinks','lllimit':500,'titles':pages})
 		for i,a in enumerate(articles):
 			if a._langlinks_dat is None:
 				if 'langlinks' in r['query']['pages'][str(a.curid())].keys():
 					articles[i]._langlinks_dat = r['query']['pages'][str(a.curid())]['langlinks']
 				else:
 					articles[i]._langlinks_dat = []
+			if ('en' not in a._langlinks.keys())&(a.title() is not None):
+				a._langlinks['en'] = a.title()
 	if ret:
 		return {a.curid():a.langlinks() for a in articles}
 
