@@ -1064,7 +1064,14 @@ class song(article):
 	def performer(self):
 		return article(self.wd_prop('P175')[0]['id']).title()
 
+class band(article):
+	def __init__(self,I,Itype=None):
+		super(biography, self).__init__(I,Itype=None)
+		self._is_band = None
+		self._origin = None
+		self._name = None
 
+	
 
 
 class biography(article):
