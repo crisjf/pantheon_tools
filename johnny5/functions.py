@@ -566,6 +566,38 @@ def wd_instances(cl):
 	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return instances
 
+
+def wd_subclasses(cl):
+	'''
+	Gets all the subclasses of the given class.
+
+	Example
+	-------
+	To get all subclasses of musical ensemble:
+	>>> wd_subclasses('Q2088357')
+
+	Returns
+	-------
+	subclasses : set
+		wd_id for every subclass of the given class.
+	'''
+	path = dumps_path()
+	path_os = _path(path)
+	files = os.listdir(path)
+	subclasses = os.listdir(path+'subclasses/')
+	if cl+'.nt' not in subclasses:
+		filename = [f for f in files if 'wikidata-statements' in f]
+		if len(filename) == 0:
+			raise NameError('No dump found, please run:\n\t>>> download_latest()')
+		else:
+			filename=filename[0]
+		print 'Parsing the dump ',filename
+		os.system("grep 'P279[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+".nt")
+
+	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
+	subclasses = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
+	return subclasses
+
 def all_wikipages(update=False):
 	'''Downloads all the names of the Wikipedia articles'''
 	path = dumps_path()
