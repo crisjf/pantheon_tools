@@ -9,12 +9,17 @@ try:
     import cPickle as pickle
 except:
     import pickle
+try:
+	import spotipy
+except:
+	print 'Warning: spotipy module not found'
 import multiprocessing
 from joblib import Parallel, delayed
 
 from query import wd_q,wp_q,_string,_isnum,rget
 from parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
 from collections import defaultdict
+from numpy import mean
 
 
 class article(object):
@@ -119,10 +124,13 @@ class article(object):
 						self._missing_wd()
 					else:
 						self._data['wd'] = r['entities'].values()[0]
-				sitelinks = self._data['wd']['sitelinks']
-				if 'enwiki' in sitelinks.keys():
-					self.I['title'] = sitelinks['enwiki']["title"]
-				elif not self.no_wd:
+				if 'sitelinks' in self._data['wd'].keys():
+					sitelinks = self._data['wd']['sitelinks']
+					if 'enwiki' in sitelinks.keys():
+						self.I['title'] = sitelinks['enwiki']["title"]
+					elif not self.no_wd:
+						self._missing_wp()
+				else:
 					self._missing_wp()
 				if (self._data['wp'] is None)&(self.I['title'] is not None):
 					self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values()[0]
@@ -1285,6 +1293,7 @@ class band(article):
 		self._inception = None
 		self._formation_place = None
 		self._spotify_id = None
+		self._top_songs = None
 
 	def btypes(self):
 		'''Returns the categories this band is an instance of.'''
@@ -1390,6 +1399,25 @@ class band(article):
 			self._spotify_id = i
 		return self._spotify_id
 
+	def spotify_pop(self):
+		'''Average popularity of the top 10 songs of the band
+
+		Returns
+		-------
+		mean(pop),max(pop),len(pop)'''
+		if self._top_songs is None:
+			if self.spotify_id() != 'NULL':
+				lz_uri = 'spotify:artist:'+self.spotify_id()
+				spotify = spotipy.Spotify()
+				results = spotify.artist_top_tracks(lz_uri)
+				self._top_songs = results['tracks']
+			else:
+				self._top_songs = 'NULL'
+		if self._top_songs != 'NULL':
+			pops = [track['popularity'] for track in self._top_songs]
+			return mean(pops),max(pops),len(pops)
+		else:
+			return ('NULL','NULL','NULL')
 
 class CTY(object):
 	def __init__(self,city_data='geonames'):
