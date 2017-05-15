@@ -1361,13 +1361,15 @@ class band(article):
 						o = o[:o.find(']]')].replace('[[','').strip()
 					if '|' in o:
 						o = o.split('|')[0]
+					if '/' in o:
+						o = o.split('/')[0]
 					fplace = place(o)
 					fplace.find_article()
 					pname = fplace.title()
 					lat,lon = fplace.coords()
 				except:
 					pname ='NULL'
-				if pname != 'NULL':
+				if (pname != 'NULL')&(pname is not None):
 					out = (pname,lat,lon)
 				else:
 					out = ('NULL','NULL','NULL')
