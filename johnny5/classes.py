@@ -1406,7 +1406,7 @@ class band(article):
 		-------
 		mean(pop),max(pop),len(pop)'''
 		if self._top_songs is None:
-			if self.spotify_id() != 'NULL':
+			if (self.spotify_id() != 'NULL')&(self.spotify_id()!='NA'):
 				lz_uri = 'spotify:artist:'+self.spotify_id()
 				spotify = spotipy.Spotify()
 				results = spotify.artist_top_tracks(lz_uri)
