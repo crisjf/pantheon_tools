@@ -1360,7 +1360,10 @@ class band(article):
 					ctr.append(place(c['id']).wd_prop('P298')[0]['value'])
 				except:
 					pass
-			if (len(formation)!=0)&(formation[0]!='NA')&(formation[0] is not None):
+			keep = (len(formation)!=0)
+			if keep:
+				keep = keep&(formation[0]!='NA')&(formation[0] is not None)
+			if keep:
 				lat,lon = coords[0]
 				out = (formation[0],lat,lon)
 			else:
