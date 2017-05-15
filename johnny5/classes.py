@@ -13,7 +13,7 @@ import multiprocessing
 from joblib import Parallel, delayed
 
 from query import wd_q,wp_q,_string,_isnum,rget
-from parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles
+from parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
 from collections import defaultdict
 
 
@@ -197,9 +197,9 @@ class article(object):
 
 	def url(self,wiki='wp',lang='en'):
 		if wiki == 'wp':
-			if self.no_wp:
+			if self.title() is None:
 				print "No Wikipedia page corresponding to this article"
-			if lang == 'en':
+			elif lang == 'en':
 				print 'https://en.wikipedia.org/wiki/'+self.title().replace(' ','_')
 			else:
 				if lang in self.langlinks().keys():
@@ -1064,14 +1064,7 @@ class song(article):
 	def performer(self):
 		return article(self.wd_prop('P175')[0]['id']).title()
 
-class band(article):
-	def __init__(self,I,Itype=None):
-		super(biography, self).__init__(I,Itype=None)
-		self._is_band = None
-		self._origin = None
-		self._name = None
 
-	
 
 
 class biography(article):
@@ -1280,6 +1273,120 @@ class biography(article):
 			else:
 				prob_ratio = self._occ[0][1]/self._occ[1][1]
 				return self._occ[0][0],prob_ratio
+
+class band(article):
+	def __init__(self,I,Itype=None):
+		super(band, self).__init__(I,Itype=None)
+		self._is_band = None
+		self._origin = None
+		self._name = None
+		self._btypes = None
+		self._genres = None
+		self._inception = None
+		self._formation_place = None
+		self._spotify_id = None
+
+	def btypes(self):
+		'''Returns the categories this band is an instance of.'''
+		if self._btypes is None:
+			tps = []
+			for i in self.wd_prop('P31'):
+				try:
+					tps.append(article(i['id']).title())
+				except:
+					pass
+			self._btypes = tps
+		return self._btypes
+
+	def genres(self):
+		if self._genres is None:
+			genres = []
+			for g in self.wd_prop('P136'):
+				try:
+					genres.append(article(g['id']).title())
+				except:
+					pass
+			self._genres = genres
+		return self._genres
+
+	def inception(self):
+		if self._inception is None:
+			years = []
+			for n in self.wd_prop('P571'):
+				try:
+					i = n['time']
+					y = int(i[0]+i[1:].split('-')[0])
+					cal = n['calendarmodel'].split('/')[-1]
+					if cal !='Q1985727':
+						print 'Warning: Unrecognized calendar type ',cal
+					years.append(y)
+				except:
+					pass
+			if len(years) == 0:
+				try:
+					self._inception = parse_ints(self.infobox()['musical artist']['years_active'])[0]
+				except:
+					self._inception = 'NULL'
+			else:
+				self._inception = min(years)
+		return self._inception
+
+	def formation_place(self):
+		'''Returns: place_name,country_code,lat,lon'''
+		if self._formation_place is None:
+			formation = []
+			coords = []
+			for p in self.wd_prop('P740'):
+				try:
+					fplace = place(p['id'])
+					pname = fplace.title()
+					lat,lon = fplace.coords()
+					formation.append(pname)
+					coords.append((lat,lon))
+				except:
+					pass
+			ctr = []
+			for c in self.wd_prop('P495'):
+				try:
+					ctr.append(place(c['id']).wd_prop('P298')[0]['value'])
+				except:
+					pass
+			if (len(formation)!=0)&(formation[0]!='NA')&(formation[0] is not None):
+				lat,lon = coords[0]
+				out = (formation[0],lat,lon)
+			else:
+				try:
+					o = self.infobox()['musical artist']['origin']
+					if '[[' in o:
+						o = o[:o.find(']]')].replace('[[','').strip()
+					if '|' in o:
+						o = o.split('|')[0]
+					fplace = place(o)
+					fplace.find_article()
+					pname = fplace.title()
+					lat,lon = fplace.coords()
+				except:
+					pname ='NULL'
+				if pname != 'NULL':
+					out = (pname,lat,lon)
+				else:
+					out = ('NULL','NULL','NULL')
+			if len(ctr) !=0:
+				self._formation_place = (out[0],ctr[0],out[1],out[2])
+			else:
+				self._formation_place = (out[0],'NULL',out[1],out[2])
+
+				
+		return self._formation_place
+
+	def spotify_id(self):
+		if self._spotify_id is None:
+			try:
+				i = self.wd_prop('P1902')[0]['value']
+			except:
+				i = 'NULL'
+			self._spotify_id = i
+		return self._spotify_id
 
 
 class CTY(object):
