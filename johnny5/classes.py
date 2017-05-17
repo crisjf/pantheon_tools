@@ -1335,7 +1335,10 @@ class band(article):
 				try:
 					self._inception = parse_ints(self.infobox()['musical artist']['years_active'])[0]
 				except:
-					self._inception = 'NULL'
+					try:
+						self._inception = parse_ints(self.infobox()['orchestra']['founded'])[0]
+					except:
+						self._inception = 'NULL'
 			else:
 				self._inception = min(years)
 		return self._inception
@@ -1368,7 +1371,10 @@ class band(article):
 				out = (formation[0],lat,lon)
 			else:
 				try:
-					o = self.infobox()['musical artist']['origin']
+					try:
+						o = self.infobox()['musical artist']['origin']
+					except:
+						o = self.infobox()['orchestra']['origin']
 					if '[[' in o:
 						o = o[:o.find(']]')].replace('[[','').strip()
 					if '|' in o:
