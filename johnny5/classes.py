@@ -616,7 +616,7 @@ class article(object):
 				if ('interwiki' in list(r['query'].keys())):
 					self._missing_wp()
 					return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
-				elif ('missing' in list(r['query']['pages'].values[0].keys()))|('invalidreason' in list(r['query']['pages'].values())[0].keys()):
+				elif ('missing' in set(list(r['query']['pages'].values())[0].keys()))|('invalidreason' in list(r['query']['pages'].values())[0].keys()):
 					self._missing_wp()
 				else:
 					if not self.no_wp:
@@ -900,7 +900,7 @@ class place(article):
 						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
 					else:
 						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
-					coords = list(r['query']['pages'].values()[0])['coordinates'][0]
+					coords = list(r['query']['pages'].values())[0]['coordinates'][0]
 					self._coords = (coords['lat'],coords['lon'])
 				except:
 					wikicode = mwparserfromhell.parse(self.content())
