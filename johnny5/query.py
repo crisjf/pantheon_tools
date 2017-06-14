@@ -138,19 +138,19 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	-------
 	>>> wp_q({'pageids':[306,207]})
 	"""
-	print(d)
 	base_url = 'https://'+lang+'.wikipedia.org/w/api.php?'
 	d['action'] = 'query' if 'action' not in set(d.keys()) else d['action']
 	d['format'] = 'json'  if 'format' not in set(d.keys()) else d['format']
 	if ('titles' in set(d.keys()))&('pageids' in set(d.keys())):
 		raise NameError("Cannot use 'pageids' at the same time as 'titles'")
 	use = 'pageids' if ('pageids' in set(d.keys())) else 'titles'
+	print(use)
+	print(d)
 	pages = d[use]
 	pages = pages if isiter(pages) else [pages]
 	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	#if use == 'titles':
 	#	pages = [page.encode('utf-8') for page in pages if page is not None]  #IS ENCODING TO UTF-8
-	print(pages)
 	props = {}
 	for u,v in d.items():
 		if u not in ['titles','pageids']:
