@@ -87,14 +87,19 @@ class article(object):
 		if not self.no_wp:
 			out+= 'curid : '+str(self.curid())+'\n'
 			out+= 'title : '+self.title()+'\n'
+			print(out)
 		else:
 			out+= 'curid : None\n'
 			out+= 'title : None\n'
+			print(out)
 		if not self.no_wd:
 			out+= 'wdid  : '+self.wdid()+'\n'
+			print(out)
 		else:
 			out+= 'wdid  : None\n'
+			print(out)
 		out+= 'L     : '+str(self.L()) 
+		print(out)
 		return out#.encode('utf-8')
 
 	def _missing_wd(self):
