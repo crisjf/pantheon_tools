@@ -91,7 +91,7 @@ def wd_q(d,show=False):
 		p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
-			print url.replace(' ','_')
+			print(url.replace(' ','_'))
 		rr = rget(url).json()
 		r.append(rr)
 	return merge_jsons(r)
@@ -136,18 +136,18 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 		p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
-			print url.replace(' ','_')
+			print(url.replace(' ','_'))
 		rr = rget(url).json()
 		while True:
 			r.append(rr)
 			if ('continue' in rr.keys())&(not continue_override):
 				continue_keys = [c for c in rr['continue'].keys() if c !='continue']
 				if len(continue_keys) >1:
-					print 'Warning: more than one continue parameter found.'
-					print url.replace(' ','_')
+					print('Warning: more than one continue parameter found.')
+					print(url.replace(' ','_'))
 				continue_dict = {continue_keys[0] : rr['continue'][continue_keys[0]]}
 				if show:
-					print (url+'&'+urllib.urlencode(continue_dict)).replace(' ','_')
+					print(url+'&'+urllib.urlencode(continue_dict)).replace(' ','_')
 				rr = rget(url+'&'+urllib.urlencode(continue_dict)).json()
 			else:
 				break

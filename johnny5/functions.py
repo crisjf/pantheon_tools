@@ -424,7 +424,7 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 		elif r['status'] == 'ZERO_RESULTS':
 			ZERO_RESULTS = True
 		else:
-			print r
+			print(r)
 			raise NameError('Unrecognized error')
 	if save:
 		f = open(path+latlng+'.json','w')
@@ -489,10 +489,10 @@ def check_wddump():
 	else:
 		filename=filename[0]
 	if filename.split('-')[-1].split('.')[0] == top_date:
-		print 'Wikidata dump is up to date'
+		print('Wikidata dump is up to date')
 		return False
 	else:
-		print 'Wikidata dump is outdated, please update\n:>>> download_latest()'
+		print('Wikidata dump is outdated, please update\n:>>> download_latest()')
 		return True
 
 
@@ -509,27 +509,27 @@ def download_latest():
 	If the dump is updated, it will delete all the instances files.
 	'''
 	url,top_date = latest_wddump()
-	print "Downloading file from:",url
+	print("Downloading file from:",url)
 	filename = url.split('/')[-1]
 	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
 	path = dumps_path()
 
 	drop_instances=False
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
-		print "Saving file into",path+filename
+		print("Saving file into",path+filename)
 		urlretrieve(url, path+filename)
 	else:
-		print "Download aborted, file already exists"
+		print("Download aborted, file already exists")
 
 	if filename in set(os.listdir(path)):
-		print "Unzipping file"
+		print("Unzipping file")
 		path_os = _path(path)
 		os.system('gunzip '+path_os+filename)
 		drop_instances=True
 
 	remove = [f for f in os.listdir(path) if ('wikidata-statements' in f)&(f != filename.replace('.gz',''))]
 	if (len(remove) != 0)|drop_instances:
-		print 'Cleaning up'
+		print('Cleaning up')
 	for f in remove:
 		os.remove(path+f)
 	if drop_instances:
@@ -563,7 +563,7 @@ def wd_instances(cl):
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
 			filename=filename[0]
-		print 'Parsing the dump ',filename
+		print('Parsing the dump ',filename)
 		os.system("grep 'P31[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
 
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
@@ -595,7 +595,7 @@ def wd_subclasses(cl):
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
 			filename=filename[0]
-		print 'Parsing the dump ',filename
+		print('Parsing the dump ',filename)
 		os.system("grep 'P279[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+".nt")
 
 	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
@@ -608,12 +608,12 @@ def all_wikipages(update=False):
 	files = os.listdir(path)
 	if ('enwiki-allarticles.txt' not in files)|update:
 		if ('enwiki-latest-abstract.xml' not in files)|update:
-			print 'Downloading dump'
+			print('Downloading dump')
 			urlretrieve('https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-abstract.xml',path+'enwiki-latest-abstract.xml')
 		if ('enwiki-latest-titles.xml' not in files)|update:
-			print 'Parsing titles from dump'
+			print('Parsing titles from dump')
 			os.system("grep '<title>'  "+_path(path)+"enwiki-latest-abstract.xml > "+_path(path)+"enwiki-latest-titles.xml")
-		print 'Cleaning titles'
+		print('Cleaning titles')
 		f = codecs.open(path+'enwiki-latest-titles.xml',encoding='utf-8')
 		g = open(path+'enwiki-allarticles.txt',mode='w')
 		while True:
@@ -623,7 +623,7 @@ def all_wikipages(update=False):
 			if not line: break
 		f.close()
 		g.close()
-		print 'Cleaning up'
+		print('Cleaning up')
 		os.remove(path+'enwiki-latest-titles.xml')
 	titles = set(codecs.open(path+'enwiki-allarticles.txt',encoding='utf-8').read().split('\n'))
 	titles.discard('')
@@ -632,8 +632,8 @@ def all_wikipages(update=False):
 def check_wpdump():
 	path = dumps_path()
 	dt = time.ctime(os.path.getmtime(path+'enwiki-latest-abstract.xml'))
-	print 'Dump downloaded on:'
-	print '\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1]
-	print 'To update run:\n\t>>> all_wikipages(update=True)'
+	print('Dump downloaded on:')
+	print('\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1])
+	print('To update run:\n\t>>> all_wikipages(update=True)')
 
 

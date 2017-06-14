@@ -16,7 +16,7 @@ except:
 try:
 	import spotipy
 except:
-	print 'Warning: spotipy module not found'
+	print('Warning: spotipy module not found')
 import multiprocessing
 from joblib import Parallel, delayed
 
@@ -124,7 +124,7 @@ class article(object):
 				if self._data['wd'] is None:
 					r = wd_q({'languages':'en','ids':self.I['wdid']})
 					if 'error' in r.keys():
-						print r['error']['info']
+						print(r['error']['info'])
 						self._missing_wd()
 					else:
 						self._data['wd'] = r['entities'].values()[0]
@@ -210,18 +210,18 @@ class article(object):
 	def url(self,wiki='wp',lang='en'):
 		if wiki == 'wp':
 			if self.title() is None:
-				print "No Wikipedia page corresponding to this article"
+				print("No Wikipedia page corresponding to this article")
 			elif lang == 'en':
-				print 'https://en.wikipedia.org/wiki/'+self.title().replace(' ','_')
+				print('https://en.wikipedia.org/wiki/'+self.title().replace(' ','_'))
 			else:
 				if lang in self.langlinks().keys():
-					print 'https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_')
+					print('https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_'))
 				else:
-					print 'No article in this edition'
+					print('No article in this edition')
 		elif wiki =='wd':
 			if self.no_wd:
-				print "No Wikidata page corresponding to this article"
-			print 'https://www.wikidata.org/wiki/'+self.wdid()
+				print("No Wikidata page corresponding to this article")
+			print('https://www.wikidata.org/wiki/'+self.wdid())
 		else:
 			raise NameError('Wrong wiki')
 
@@ -1174,7 +1174,7 @@ class biography(article):
 		return self._wpbio
 
 	def living(self):
-		print 'Warning: This function will be dropped.'
+		print('Warning: This function will be dropped.')
 		return self.alive()
 
 	def alive(self,boolean=False):
@@ -1271,7 +1271,7 @@ class biography(article):
 		>>> C = wt.Occ()
 		>>> C.classify(article)
 		'''
-		print 'Warning: This function runs very slow because it loads a new classifier each time.'
+		print('Warning: This function runs very slow because it loads a new classifier each time.')
 		if self._occ is None:
 			C = Occ()
 			article = copy.deepcopy(self)
@@ -1331,7 +1331,7 @@ class band(article):
 					y = int(i[0]+i[1:].split('-')[0])
 					cal = n['calendarmodel'].split('/')[-1]
 					if cal !='Q1985727':
-						print 'Warning: Unrecognized calendar type ',cal
+						print('Warning: Unrecognized calendar type ',cal)
 					years.append(y)
 				except:
 					pass
@@ -1442,7 +1442,7 @@ class CTY(object):
 		'''
 		self.city_data=city_data
 		path = os.path.split(__file__)[0]+'/data/'
-		print 'Loading data from:\n'+path
+		print('Loading data from:\n'+path)
 		if city_data == 'geonames':
 			header = ['geonameid','name','asciiname','alternatenames','latitude','longitude','feature class','feature code',
 				'country code','cc2','admin1 code','admin2 code','admin3 code','admin4 code','population','elevation',
@@ -1497,7 +1497,7 @@ class Occ(object):
 		Occupation classifier based onf Wikipedia and Wikidata information.
 		'''
 		path = os.path.split(__file__)[0]+'/data/'
-		print 'Loading data from:\n'+path
+		print('Loading data from:\n'+path)
 		f = open(path+'trained_classifier.pkl', 'rb')
 		self._classifier = pickle.load(f)
 		f.close()
