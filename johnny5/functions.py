@@ -39,9 +39,9 @@ def get_wd_name(prop,as_df=False):
 			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+str.join('|', prop)
 			#url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
 			r = rget(url).json()
-			for page in r['entities'].values():
+			for page in list(r['entities'].values()):
 				out[page['id']] = page['labels']['en']['value']
-		return DataFrame(out.items(),columns=['wd_id','name']) if as_df else out
+		return DataFrame(list(out.items()),columns=['wd_id','name']) if as_df else out
 	else:
 		url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+prop
 		r = rget(url).json()
@@ -68,7 +68,7 @@ def get_wd_coords(wdids,prop = 'P625',as_df=False):
 				prop_wdid = ('NA','NA','NA')
 			results[wdid] = prop_wdid
 	if not it:
-		return results.values()[0]
+		return list(results.values())[0]
 	else:
 		return DataFrame([(k,i[0],i[1],i[2]) for  k,i in results.items()],columns=['wd_id','lat','lon','precision']) if as_df else results
 
@@ -146,12 +146,12 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 		else:
 			results = {k:val_names[results[k]] for k in results}
 	if not it:
-		return results.values()[0]
+		return list(results.values())[0]
 	else:
 		if date:
 			return DataFrame([(k,i[0],i[1],i[2]) for  k,i in results.items()],columns=['wd_id','time','calendarmodel','precision']) if as_df else results
 		else:
-			return DataFrame(results.items(),columns=['wd_id',get_wd_name(prop)]) if as_df else results
+			return DataFrame(list(results.items()),columns=['wd_id',get_wd_name(prop)]) if as_df else results
 
 
 def langlinks(articles,ret=False,use='curid'):
@@ -302,11 +302,11 @@ def image_url(article,ret=False):
 							images.append(box[tag])
 				images = ['Image:'+image for image in images]
 				img[i] = images
-			r = wp_q({'titles':list(chain.from_iterable(img.values())),'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
+			r = wp_q({'titles':list(chain.from_iterable(list(img.values()))),'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
 			norm = {}
 			if 'normalized' in r['query'].keys(): #This is to keep the order
 				norm = {val['from']:val['to'] for val in r['query']['normalized']}
-			pages = {val['title']:val['imageinfo'][0]['url'] for val in r['query']['pages'].values()}
+			pages = {val['title']:val['imageinfo'][0]['url'] for val in list(r['query']['pages'].values())}
 			for i in I:
 				images = img[i]
 				results = []

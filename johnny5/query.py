@@ -36,7 +36,7 @@ def _string(val):
 
 def _join_list_of_jsons(r):
     out = {}
-    keys = set(chain.from_iterable([rr.keys() for rr in r]))
+    keys = set(chain.from_iterable([list(rr.keys()) for rr in r]))
     keys_continue = []
     for key in keys:
         elements = []
@@ -86,8 +86,8 @@ def chunker(seq, size):
 
 def wd_q(d,show=False):
 	base_url = 'https://www.wikidata.org/w/api.php?'
-	d['action'] = 'wbgetentities' if 'action' not in d.keys() else d['action']
-	d['format'] = 'json'  if 'format' not in d.keys() else d['format']
+	d['action'] = 'wbgetentities' if 'action' not in set(d.keys()) else d['action']
+	d['format'] = 'json'  if 'format' not in set(d.keys()) else d['format']
 	use = 'ids'
 	pages = d[use]
 	pages = [pages] if isinstance(pages, six.string_types) else pages
@@ -131,11 +131,11 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	"""
 	print(d)
 	base_url = 'https://'+lang+'.wikipedia.org/w/api.php?'
-	d['action'] = 'query' if 'action' not in d.keys() else d['action']
-	d['format'] = 'json'  if 'format' not in d.keys() else d['format']
-	if ('titles' in d.keys())&('pageids' in d.keys()):
+	d['action'] = 'query' if 'action' not in set(d.keys()) else d['action']
+	d['format'] = 'json'  if 'format' not in set(d.keys()) else d['format']
+	if ('titles' in set(d.keys()))&('pageids' in set(d.keys())):
 		raise NameError("Cannot use 'pageids' at the same time as 'titles'")
-	use = 'pageids' if ('pageids' in d.keys()) else 'titles'
+	use = 'pageids' if ('pageids' in set(d.keys())) else 'titles'
 	pages = d[use]
 	pages = [pages] if isinstance(pages, six.string_types) else pages
 	#pages = pages if hasattr(pages,'__iter__') else [pages]

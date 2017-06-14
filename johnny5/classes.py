@@ -121,31 +121,31 @@ class article(object):
 		'''
 		if (self._data['wp'] is None)&(not self.no_wp):
 			if (self.I['curid'] is not None):
-				self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':self.I['curid']})['query']['pages'].values()[0]
+				self._data['wp'] = list(wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':self.I['curid']})['query']['pages'].values())[0]
 			elif (self.I['title'] is not None):
-				self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values()[0]
+				self._data['wp'] = list(wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values())[0]
 			elif (self.I['wdid'] is not None):
 				if self._data['wd'] is None:
 					r = wd_q({'languages':'en','ids':self.I['wdid']})
-					if 'error' in r.keys():
+					if 'error' in list(r.keys()):
 						print(r['error']['info'])
 						self._missing_wd()
 					else:
-						self._data['wd'] = r['entities'].values()[0]
-				if 'sitelinks' in self._data['wd'].keys():
+						self._data['wd'] = list(r['entities'].values())[0]
+				if 'sitelinks' in list(self._data['wd'].keys()):
 					sitelinks = self._data['wd']['sitelinks']
-					if 'enwiki' in sitelinks.keys():
+					if 'enwiki' in list(sitelinks.keys()):
 						self.I['title'] = sitelinks['enwiki']["title"]
 					elif not self.no_wd:
 						self._missing_wp()
 				else:
 					self._missing_wp()
 				if (self._data['wp'] is None)&(self.I['title'] is not None):
-					self._data['wp'] = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values()[0]
+					self._data['wp'] = list(wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':self.I['title']})['query']['pages'].values())[0]
 			else:
 				raise NameError('No identifier found.')
 			if not self.no_wp:
-				if ('missing' in self._data['wp'].keys())|('invalid' in self._data['wp'].keys()):
+				if ('missing' in list(self._data['wp'].keys()))|('invalid' in list(self._data['wp'].keys())):
 					self._missing_wp()
 		return self._data['wp']
 
@@ -157,12 +157,12 @@ class article(object):
 			if (self.I['wdid'] is None):
 				d = self.data_wp()
 				d = self._data['wp']
-				if 'wikibase_item' in d['pageprops'].keys():
+				if 'wikibase_item' in list(d['pageprops'].keys()):
 					self.I['wdid'] = d['pageprops'][u'wikibase_item']
 				else:
 					self._missing_wd()
 			if self._data['wd'] is None:
-				self._data['wd'] = wd_q({'languages':'en','ids':self.I['wdid']})['entities'].values()[0]
+				self._data['wd'] = list(wd_q({'languages':'en','ids':self.I['wdid']})['entities'].values())[0]
 		return self._data['wd']
 
 	def wdid(self):
@@ -178,7 +178,7 @@ class article(object):
 			d = self.data_wp()
 			if 'pageprops' in d:
 				d = self.data_wp()['pageprops']
-				if 'wikibase_item' in d.keys():
+				if 'wikibase_item' in list(d.keys()):
 					self.I['wdid']  = d['wikibase_item']
 				else:
 					self._missing_wd()
@@ -218,7 +218,7 @@ class article(object):
 			elif lang == 'en':
 				print('https://en.wikipedia.org/wiki/'+self.title().replace(' ','_'))
 			else:
-				if lang in self.langlinks().keys():
+				if lang in list(self.langlinks().keys()):
 					print('https://'+lang+'.wikipedia.org/wiki/'+self.langlinks(lang).replace(' ','_'))
 				else:
 					print('No article in this edition')
@@ -237,9 +237,9 @@ class article(object):
 			lang.curid
 		'''
 		if self._curid_nonen is None:
-			for lang,title in self.langlinks().items():
+			for lang,title in list(self.langlinks().items()):
 				try:
-					r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':title},lang=lang)['query']['pages'].values()[0]
+					r = list(wp_q({'prop':'pageprops','ppprop':'wikibase_item','titles':title},lang=lang)['query']['pages'].values())[0]
 					self._curid_nonen = lang+'.'+str(r['pageid'])
 					break
 				except:
@@ -273,7 +273,7 @@ class article(object):
 				while '#redirect' in rbox.lower():
 					r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':self.curid()})
 					try:
-						rbox = r['query']['pages'].values()[0]['revisions'][0]['*']
+						rbox = list(r['query']['pages'].values())[0]['revisions'][0]['*']
 					except:
 						rbox = ''
 					if '#redirect' in rbox.lower():
@@ -310,11 +310,11 @@ class article(object):
 														'ru':u'\u0433\u043e\u0441\u0443\u0434\u0430\u0440\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439'
 														})
 		self.redirect()
-		if lang not in self.langlinks().keys():
+		if lang not in list(self.langlinks().keys()):
 			return {}
 		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':self.langlinks(lang)},lang=lang)
 		try:
-			rbox = r['query']['pages'].values()[0]['revisions'][0]['*']
+			rbox = list(r['query']['pages'].values())[0]['revisions'][0]['*']
 		except:
 			rbox = ''
 		ibox_name = ibox_codebook[lang]
@@ -365,7 +365,7 @@ class article(object):
 		'''
 		if self._ex is None:
 			r = wp_q({'prop':'extracts','exintro':'','explaintext':'','pageids':self.curid()})
-			self._ex = r['query']['pages'].values()[0]['extract']
+			self._ex = list(r['query']['pages'].values())[0]['extract']
 		return self._ex
 
 	def langlinks(self,lang=None):
@@ -393,7 +393,7 @@ class article(object):
 				for Itype in ['curid','title','wdid']:
 					if self.I[Itype] is not None:
 						if Itype == 'wdid':
-							if 'sitelinks' in self.data_wd().keys():
+							if 'sitelinks' in list(self.data_wd().keys()):
 								sitelinks = self.data_wd()[u'sitelinks']
 								self._langlinks_dat = []
 								for lan in sitelinks:
@@ -408,13 +408,13 @@ class article(object):
 								r = wp_q({'prop':'langlinks','lllimit':500,'pageids':self.I[Itype]})
 							elif Itype == 'title':
 								r = wp_q({'prop':'langlinks','lllimit':500,'titles':self.I[Itype]})
-							if 'langlinks' in r['query']['pages'].values()[0].keys():
-								self._langlinks_dat = r['query']['pages'].values()[0]['langlinks']  
+							if 'langlinks' in list(list(r['query']['pages'].values())[0].keys()):
+								self._langlinks_dat = list(r['query']['pages'].values())[0]['langlinks']  
 							else:
 								self._langlinks_dat = []
 						break
 			self._langlinks = {val['lang']:val['*'] for val in self._langlinks_dat}
-			if ('en' not in self._langlinks.keys())&(self.title() is not None):
+			if ('en' not in list(self._langlinks.keys()))&(self.title() is not None):
 				self._langlinks['en'] = self.title()
 		return self._langlinks if lang is None else self._langlinks[lang]
 
@@ -436,23 +436,23 @@ class article(object):
 		'''
 		if lang is None:
 			for lang in self.langlinks():
-				if lang not in self._creation_date.keys():
+				if lang not in list(self._creation_date.keys()):
 					title = self.langlinks(lang=lang)
 					r = wp_q({'prop':'revisions','titles':title,'rvlimit':1,'rvdir':'newer'},lang=lang,continue_override=True)
 					try:
-						timestamp = r['query']['pages'].values()[0]['revisions'][0]['timestamp']
+						timestamp = list(r['query']['pages'].values())[0]['revisions'][0]['timestamp']
 					except:
 						timestamp = 'NA'
 					self._creation_date[lang] = timestamp
 			return self._creation_date
 		else:
-			if lang not in self.langlinks().keys():
+			if lang not in list(self.langlinks().keys()):
 				raise NameError('No edition for language: '+lang)
-			if (lang not in self._creation_date.keys()):
+			if (lang not in list(self._creation_date.keys())):
 				title = self.langlinks(lang=lang)
 				r = wp_q({'prop':'revisions','titles':title,'rvlimit':1,'rvdir':'newer'},lang=lang,continue_override=True)
 				try:
-					timestamp = r['query']['pages'].values()[0]['revisions'][0]['timestamp']
+					timestamp = list(r['query']['pages'].values())[0]['revisions'][0]['timestamp']
 				except:
 					timestamp = 'NA'
 				self._creation_date[lang] = timestamp
@@ -476,8 +476,8 @@ class article(object):
 		if self._previous_titles is None:
 			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user','comment'],'rvlimit':'500'})
 			titles = set([])
-			for rev in r['query']['pages'].values()[0]['revisions']:
-				if 'comment' in rev.keys():
+			for rev in list(r['query']['pages'].values())[0]['revisions']:
+				if 'comment' in list(rev.keys()):
 					if 'moved page' in rev['comment']:
 						comment = rev['comment']
 						titles.add(comment[comment.find('[[')+2:].split(']]')[0])
@@ -501,7 +501,7 @@ class article(object):
 				try:
 					images = 'File:'+self.wd_prop('P18')[0]['value'].replace(' ','_')
 					r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
-					self._image_url = r['query']['pages'].values()[0]['imageinfo'][0]['url']
+					self._image_url = list(r['query']['pages'].values())[0]['imageinfo'][0]['url']
 				except:
 					pass
 			if self._image_url is None:
@@ -525,14 +525,14 @@ class article(object):
 			box_pos = box['box_pos']
 			if box_pos==0:
 				for tag in tags:
-					if tag in box.keys():
+					if tag in list(box.keys()):
 						images.append(box[tag].strip())
 		for btype in ibox:
 			box = ibox[btype]
 			box_pos = box['box_pos']
 			if box_pos==1:
 				for tag in tags:
-					if tag in box.keys():
+					if tag in list(box.keys()):
 						images.append(box[tag].strip())
 		imgs = []
 		for image in images:
@@ -548,17 +548,17 @@ class article(object):
 			try:
 				r = wp_q({'titles':images,'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
 				norm = {}
-				if 'normalized' in r['query'].keys(): #This is to keep the order
+				if 'normalized' in list(r['query'].keys()): #This is to keep the order
 					norm = {val['from']:val['to'] for val in r['query']['normalized']}
 				pages = {}
-				for val in r['query']['pages'].values():
+				for val in list(r['query']['pages'].values()):
 					try:
 						pages[val['title']] = val['imageinfo'][0]['url']
 					except:
 						pass
 				results = []
 				for image in images:
-					if image in norm.keys():
+					if image in list(norm.keys()):
 						image = norm[image]
 					results.append(pages[image])
 			except:
@@ -581,9 +581,9 @@ class article(object):
 			List of all the values provided for the property.
 			Each value can be a string, number, or json object.
 		'''
-		if prop not in self._wd_claims.keys():
+		if prop not in list(self._wd_claims.keys()):
 			data = self.data_wd()
-			if prop in data['claims'].keys():
+			if prop in list(data['claims'].keys()):
 				vals = data['claims'][prop]
 				try:
 					out = []
@@ -613,14 +613,14 @@ class article(object):
 		if (self._content is None)&(not self.no_wp):
 			if self.title() is not None:
 				r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
-				if ('interwiki' in r['query'].keys()):
+				if ('interwiki' in list(r['query'].keys())):
 					self._missing_wp()
 					return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
-				elif ('missing' in r['query']['pages'].values()[0].keys())|('invalidreason' in r['query']['pages'].values()[0].keys()):
+				elif ('missing' in list(r['query']['pages'].values[0].keys()))|('invalidreason' in list(r['query']['pages'].values())[0].keys()):
 					self._missing_wp()
 				else:
 					if not self.no_wp:
-						self._content = r['query']['pages'].values()[0]['revisions'][0]['*'] 
+						self._content = list(r['query']['pages'].values())[0]['revisions'][0]['*'] 
 		return self._content
 
 
@@ -651,7 +651,7 @@ class article(object):
 		'''
 		if self._revisions is None:
 			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user'],'rvlimit':'500'})
-			self._revisions = [(rev['timestamp'],rev['user']) for rev in r['query']['pages'].values()[0]['revisions']]
+			self._revisions = [(rev['timestamp'],rev['user']) for rev in list(r['query']['pages'].values())[0]['revisions']]
 		if user:
 			return self._revisions
 		else:
@@ -678,16 +678,16 @@ class article(object):
 		'''
 		if lang is None:
 			out = {}
-			for lang in self.langlinks().keys():
+			for lang in list(self.langlinks().keys()):
 				if agg:
-					out[lang] = sum(self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily).values())
+					out[lang] = sum(list(self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily).values()))
 				else:
 					out[lang] = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
 			return out
 		else:
 			if agg:
 				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override)
-				return sum(out.values())
+				return sum(list(out.values()))
 			else:
 				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
 				return out
@@ -711,7 +711,7 @@ class article(object):
 			yf,mf = end_date.split('-')
 			mf,yf = int(mf),int(yf)
 
-		if lang not in self._views.keys():
+		if lang not in list(self._views.keys()):
 			self._views[lang] = {}
 
 		if not cdate_override:
@@ -747,7 +747,7 @@ class article(object):
 		rest_start = None
 		rest_end   = None
 		for y,m in dates:
-			if y+'-'+m not in self._views[lang].keys():
+			if y+'-'+m not in list(self._views[lang].keys()):
 				if ((y=='2015')&(int(m)>=7))|(y=='2016'):#Here is the cutoff to go to rest
 					rest_start = (y,m) if (rest_start is None) else rest_start
 					rest_end   = (y,m)
@@ -758,7 +758,7 @@ class article(object):
 
 		if daily:
 			dates = set([y+'-'+m for y,m in dates])
-			days = [day for day in self._daily_views[lang].keys() if day[:find_nth(day,'-',2)] in dates]
+			days = [day for day in list(self._daily_views[lang].keys()) if day[:find_nth(day,'-',2)] in dates]
 			out = {day:self._daily_views[lang][day] for day in days}
 		else:	
 			_out = defaultdict(lambda:0,self._views[lang])
@@ -767,9 +767,9 @@ class article(object):
 		return out
 
 	def _pageviews_rest(self,rest_start,rest_end,lang='en',daily=False):
-		if not lang in self._views.keys():
+		if not lang in list(self._views.keys()):
 			self._views[lang] = {}
-		if (not lang in self._daily_views.keys())&daily:
+		if (not lang in list(self._daily_views.keys()))&daily:
 			self._daily_views[lang] = {}
 
 		sd = rest_start[0]+rest_start[1]+'01'
@@ -780,14 +780,14 @@ class article(object):
 
 		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
 		r = rget(url).json()
-		if ('title' not in r.keys()):
+		if ('title' not in list(r.keys())):
 			monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
 			monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
 			out = dict(monthly)
 		else:
 			out = defaultdict(lambda: 0)
 
-		for date in out.keys():
+		for date in list(out.keys()):
 			self._views[lang][date] = out[date]
 		if daily:
 			out = dict([(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]])
@@ -795,14 +795,14 @@ class article(object):
 				self._daily_views[lang][day] = out[day]
 	
 	def _pageviews_grok(self,y,m,lang='en',daily=False):
-		if not lang in self._views.keys():
+		if not lang in list(self._views.keys()):
 			self._views[lang] = {}
-		if (not lang in self._daily_views.keys())&daily:
+		if (not lang in list(self._daily_views.keys()))&daily:
 			self._daily_views[lang] = {}
 		title = self.langlinks(lang)
 		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
 		r = rget(url).json()
-		self._views[lang][y+'-'+m] = sum(r['daily_views'].values())
+		self._views[lang][y+'-'+m] = sum(list(r['daily_views'].values()))
 		if daily:
 			for day in r['daily_views']:
 				self._daily_views[lang][day] = r['daily_views'][day]
@@ -900,7 +900,7 @@ class place(article):
 						r = wp_q({'prop':'coordinates',"titles":self.langlinks(wiki)},lang=wiki)
 					else:
 						r = wp_q({'prop':'coordinates',"pageids":self.curid()})
-					coords = r['query']['pages'].values()[0]['coordinates'][0]
+					coords = list(r['query']['pages'].values()[0])['coordinates'][0]
 					self._coords = (coords['lat'],coords['lon'])
 				except:
 					wikicode = mwparserfromhell.parse(self.content())
@@ -1066,8 +1066,8 @@ class song(article):
 		if self._wpsong is None:
 			self._is_song = False
 			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
-			r = r['query']['pages'].values()[0]
-			if 'revisions' in r.keys():
+			r = list(r['query']['pages'].values())[0]
+			if 'revisions' in list(r.keys()):
 				wikicode = mwparserfromhell.parse(r['revisions'][0]['*'])
 				templates = wikicode.filter_templates()
 				for t in templates:
@@ -1117,12 +1117,12 @@ class biography(article):
 				self._name = re.sub(r'\([^\(\)]*\)','',self.title()).strip()
 			else:
 				data = self.data_wd()
-				if 'aliases' in data.keys():
-					if 'en' in data['aliases'].keys():
+				if 'aliases' in list(data.keys()):
+					if 'en' in list(data['aliases'].keys()):
 						self._name = data['aliases']['en'][0]['value']
 					else:
-						if len(data['aliases'].values())!=0:
-							self._name = data['aliases'].values()[0][0]['value']
+						if len(list(data['aliases'].values()))!=0:
+							self._name = list(data['aliases'].values())[0][0]['value']
 						else:
 							self._name = 'NULL'
 				else:
@@ -1166,7 +1166,7 @@ class biography(article):
 			self._is_bio = False
 			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'titles':'Talk:'+self.title()})
 			try:
-				wikicode = mwparserfromhell.parse(r['query']['pages'].values()[0]['revisions'][0]['*'])
+				wikicode = mwparserfromhell.parse(list(r['query']['pages'].values())[0]['revisions'][0]['*'])
 				templates = wikicode.filter_templates()
 				for t in templates:
 					if ('biography' in t.name.lower().replace(' ',''))|('bio' in t.name.lower().replace(' ','')):
@@ -1244,8 +1244,8 @@ class biography(article):
 			d = ['NA']
 			t = 'NA'
 			if len(self.infobox()) !=0:
-				for box in self.infobox().values():
-					if 'death_date' in box.keys():
+				for box in list(self.infobox().values()):
+					if 'death_date' in list(box.keys()):
 						t = box['death_date']
 						break
 				if t != 'NA':
@@ -1463,17 +1463,17 @@ class CTY(object):
 	def city(self,coords):
 		if (len(coords) == 2)&(isinstance(coords[0], six.string_types)):
 		#if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
-			if coords not in self._out.keys():
+			if coords not in list(self._out.keys()):
 				self._out[coords] = _city(self,coords)
 			return self._out[coords]
 		else:
-			coords_ = [coord for coord in coords if coord not in self._out.keys()]
+			coords_ = [coord for coord in coords if coord not in list(self._out.keys())]
 			n_jobs = multiprocessing.cpu_count()
 			distances = Parallel(n_jobs=n_jobs)(delayed(_city)(self,coord) for coord in coords_)
 			dmap = dict(zip(coords_,distances))
 			out = []
 			for coord in coords:
-				if coord not in self._out.keys():
+				if coord not in list(self._out.keys()):
 					self._out[coord] = dmap[coord]
 				out.append(self._out[coord])
 			return out
@@ -1592,7 +1592,7 @@ class Occ(object):
 		'''
 		Gets the type of the first infobox of the provided Wikipedia page using the controlled vocabulary provided in box_controlled.tsv
 		'''
-		types = [self.bmap[val.replace('_',' ').strip().replace(' ','_')] for val in article.infobox().keys()]
+		types = [self.bmap[val.replace('_',' ').strip().replace(' ','_')] for val in list(article.infobox().keys())]
 		try:
 			types.remove('NA')
 		except:
