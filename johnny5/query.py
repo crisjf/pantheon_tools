@@ -88,11 +88,13 @@ def wd_q(d,show=False):
 	props = {}
 	for u,v in d.items():
 		if u != use:
-			props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
 	for chunk in chunker(pages,50):
 		v = chunk
-		p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
 			print(url.replace(' ','_'))
@@ -133,11 +135,13 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	props = {}
 	for u,v in d.items():
 		if u not in ['titles','pageids']:
-			props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
 	for chunk in chunker(pages,50):
 		v = chunk
-		p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
 			print(url.replace(' ','_'))

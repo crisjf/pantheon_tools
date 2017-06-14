@@ -33,7 +33,8 @@ def get_wd_name(prop,as_df=False):
 	if it:
 		out = dict(zip(prop,['NA']*len(prop)))
 		for chunk in chunker(prop,50):
-			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
+			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+str.join('|', prop)
+			#url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
 			r = rget(url).json()
 			for page in r['entities'].values():
 				out[page['id']] = page['labels']['en']['value']
@@ -48,7 +49,8 @@ def get_wd_coords(wdids,prop = 'P625',as_df=False):
 	wdids = [_wd_id(wdids)] if not it else [_wd_id(wdid) for wdid in wdids]
 	results = {}
 	for wd_ids in chunker(wdids,50):
-		url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
+		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
+		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
 		r = rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
@@ -100,7 +102,8 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 	results = {}
 	values = set([])
 	for wd_ids in chunker(wdids,50):
-		url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
+		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
+		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
 		r = rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
@@ -117,7 +120,8 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 						mainsnak = p[u'mainsnak']
 						if 'datavalue' in mainsnak.keys():
 							prop_wdid.append(_wd_id(mainsnak[u'datavalue'][u'value'][u'id']))
-					prop_wdid = '|'.join(prop_wdid) if len(prop_wdid) != 0 else 'NA'
+					prop_wdid = str.join('|', prop_wdid) if len(prop_wdid) != 0 else 'NA'
+					#prop_wdid = '|'.join(prop_wdid) if len(prop_wdid) != 0 else 'NA'
 			else:
 				if date:
 					prop_wdid = ('NA','NA','NA')

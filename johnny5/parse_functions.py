@@ -233,14 +233,18 @@ def correct_titles(title):
     bag = set(['a','an','the','for','and','nor','but','or','yet','so','at','around','by','after','along','for','from','of','on','to','with','without'])
     words = title.split(' ')
     words[0] = words[0][0].upper()+words[0][1:]
-    titles.add(' '.join(words))
+    titles.add(str.join(' ', words))
+    #titles.add(' '.join(words))
     words[-1] = words[-1][0].upper()+words[-1][1:]
-    titles.add(' '.join(words))
+    titles.add(str.join(' ', words))
+    #titles.add(' '.join(words))
     for i,word in enumerate(words):
         if i!=0:
             if word not in bag:
                 words[i] = words[i][0].upper()+words[i][1:]
-    titles.add(' '.join(words))
+    titles.add(str.join(' ', words))
+    #titles.add(' '.join(words))
     words[-1] = words[-1][0].upper()+words[-1][1:]
-    titles.add(' '.join(words))
+    titles.add(str.join(' ', words))
+    #titles.add(' '.join(words))
     return list(titles)

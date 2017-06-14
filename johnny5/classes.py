@@ -1574,7 +1574,8 @@ class Occ(object):
 					if self.lmt.lemmatize(word, pos='v') == 'be':
 						first_occ = 'NA'
 						second_occ = 'NA'
-						for ww in nltk.word_tokenize(self._normalize(' '.join([w for w,t in words[i+1:]]))):
+						for ww in nltk.word_tokenize(self._normalize(str.join(' ', [w for w,t in words[i+1:]]))):
+						#for ww in nltk.word_tokenize(self._normalize(' '.join([w for w,t in words[i+1:]]))):
 							if (ww in self.occ_vocab):
 								if (second_occ == 'NA')&(first_occ != 'NA'):
 									second_occ = ww
