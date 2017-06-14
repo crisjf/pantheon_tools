@@ -4,7 +4,6 @@ except:
 	pass
 import os,time,codecs
 from .parse_functions import drop_comments
-from crisjfpy import chunker
 from pandas import DataFrame
 from .query import wd_q,wp_q,chunker,rget
 from itertools import chain
