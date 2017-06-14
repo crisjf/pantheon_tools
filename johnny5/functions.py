@@ -544,7 +544,7 @@ def download_latest():
 		for f in remove:
 			os.remove(path+'instances/'+f)
 
-def _wd_instances(cl,include_subclasses=False):
+def wd_instances(cl):
 	'''
 	Gets all the instances of the given class.
 
