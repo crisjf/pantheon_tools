@@ -1,3 +1,7 @@
+try:
+    import past
+except:
+    pass
 import mwparserfromhell,re
 
 def drop_comments(value):

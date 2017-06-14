@@ -1,3 +1,7 @@
+try:
+	import past
+except:
+	pass
 import json,os,operator,copy,mwparserfromhell,datetime,codecs
 import nltk.data,nltk
 import re

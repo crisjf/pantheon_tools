@@ -1,3 +1,7 @@
+try:
+	import past
+except:
+	pass
 import os,time,codecs
 from parse_functions import drop_comments
 from crisjfpy import chunker

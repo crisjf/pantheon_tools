@@ -1,3 +1,7 @@
+try:
+	import past
+except:
+	pass
 import requests
 from collections import defaultdict
 from itertools import chain
