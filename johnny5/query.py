@@ -10,6 +10,8 @@ import requests
 from collections import defaultdict
 from itertools import chain
 import urllib
+import six
+
 
 def rget(url):
 	'''Function used to track the requests that are performed.'''
@@ -84,16 +86,17 @@ def wd_q(d,show=False):
 	d['format'] = 'json'  if 'format' not in d.keys() else d['format']
 	use = 'ids'
 	pages = d[use]
-	pages = pages if hasattr(pages,'__iter__') else [pages]
+	pages = [pages] if isinstance(pages, six.string_types) else pages
+	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	props = {}
 	for u,v in d.items():
 		if u != use:
-			props[u] = str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
 	for chunk in chunker(pages,50):
 		v = chunk
-		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
@@ -131,20 +134,21 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	use = 'pageids' if ('pageids' in d.keys()) else 'titles'
 	pages = d[use]
 	print(pages)
-	pages = pages if hasattr(pages,'__iter__') else [pages]
+	pages = [pages] if isinstance(v, six.string_types) else pages
+	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	if use == 'titles':
 		pages = [page.encode('utf-8') for page in pages if page is not None]  #IS ENCODING TO UTF-8
 	print(pages)
 	props = {}
 	for u,v in d.items():
 		if u not in ['titles','pageids']:
-			props[u] = str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
 	print(pages)
 	for chunk in chunker(pages,50):
 		v = chunk
-		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
 		if show:
