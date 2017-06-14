@@ -10,6 +10,10 @@ import requests
 from collections import defaultdict
 from itertools import chain
 import urllib
+try:
+	urlencode = urllib.urlencode
+except:
+	urlencode = urllib.parse.urlencode
 import six
 
 
@@ -98,7 +102,7 @@ def wd_q(d,show=False):
 		v = chunk
 		p = {use:str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
-		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
+		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))
 		rr = rget(url).json()
@@ -149,7 +153,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 		v = chunk
 		p = {use:str.join('|', [_string(vv) for vv in v]) if not isinstance(v, six.string_types) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
-		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
+		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))
 		rr = rget(url).json()
@@ -162,8 +166,8 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 					print(url.replace(' ','_'))
 				continue_dict = {continue_keys[0] : rr['continue'][continue_keys[0]]}
 				if show:
-					print(url+'&'+urllib.urlencode(continue_dict)).replace(' ','_')
-				rr = rget(url+'&'+urllib.urlencode(continue_dict)).json()
+					print(url+'&'+urlencode(continue_dict)).replace(' ','_')
+				rr = rget(url+'&'+urlencode(continue_dict)).json()
 			else:
 				break
 	return merge_jsons(r)
