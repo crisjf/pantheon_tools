@@ -130,9 +130,11 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 		raise NameError("Cannot use 'pageids' at the same time as 'titles'")
 	use = 'pageids' if ('pageids' in d.keys()) else 'titles'
 	pages = d[use]
+	print(pages)
 	pages = pages if hasattr(pages,'__iter__') else [pages]
 	if use == 'titles':
 		pages = [page.encode('utf-8') for page in pages if page is not None]  #IS ENCODING TO UTF-8
+	print(pages)
 	props = {}
 	for u,v in d.items():
 		if u not in ['titles','pageids']:
@@ -141,11 +143,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	r = []
 	print(pages)
 	for chunk in chunker(pages,50):
-		print(chunk)
 		v = chunk
-		print(hasattr(v,'__iter__'))
-		print([_string(vv) for vv in v])
-		print(use)
 		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
