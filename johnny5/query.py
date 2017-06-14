@@ -144,8 +144,6 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	if ('titles' in set(d.keys()))&('pageids' in set(d.keys())):
 		raise NameError("Cannot use 'pageids' at the same time as 'titles'")
 	use = 'pageids' if ('pageids' in set(d.keys())) else 'titles'
-	print(use)
-	print(d)
 	pages = d[use]
 	pages = pages if isiter(pages) else [pages]
 	#pages = pages if hasattr(pages,'__iter__') else [pages]
@@ -157,7 +155,6 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 			props[u] = str.join('|', [_string(vv) for vv in v]) if isiter(v) else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
-	print(pages)
 	for chunk in chunker(pages,50):
 		v = chunk
 		p = {use:str.join('|', [_string(vv) for vv in v]) if isiter(v) else v}

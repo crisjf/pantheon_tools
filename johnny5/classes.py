@@ -748,7 +748,7 @@ class article(object):
 		rest_end   = None
 		for y,m in dates:
 			if y+'-'+m not in list(self._views[lang].keys()):
-				if ((y=='2015')&(int(m)>=7))|(y=='2016'):#Here is the cutoff to go to rest
+				if ((y=='2015')&(int(m)>=7))|(int(y)>=2016):#Here is the cutoff to go to rest
 					rest_start = (y,m) if (rest_start is None) else rest_start
 					rest_end   = (y,m)
 				else:
