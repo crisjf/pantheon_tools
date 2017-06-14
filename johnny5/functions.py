@@ -9,10 +9,10 @@ from .query import wd_q,wp_q,chunker,rget
 from itertools import chain
 try:
 	import urllib2
+	from urllib import urlretrieve
 except:
 	print('Warning: No module urllib2')
 	pass
-from urllib import urlretrieve
 from bs4 import BeautifulSoup
 
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
