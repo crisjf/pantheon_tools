@@ -122,6 +122,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	-------
 	>>> wp_q({'pageids':[306,207]})
 	"""
+	print(d)
 	base_url = 'https://'+lang+'.wikipedia.org/w/api.php?'
 	d['action'] = 'query' if 'action' not in d.keys() else d['action']
 	d['format'] = 'json'  if 'format' not in d.keys() else d['format']
