@@ -1,4 +1,8 @@
 try:
+	xrange
+except NameError:
+	xrange = range
+try:
 	import future
 except:
 	pass

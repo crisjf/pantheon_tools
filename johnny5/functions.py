@@ -1,4 +1,8 @@
 try:
+	xrange
+except NameError:
+	xrange = range
+try:
 	import future
 except:
 	pass
@@ -540,7 +544,7 @@ def download_latest():
 		for f in remove:
 			os.remove(path+'instances/'+f)
 
-def wd_instances(cl):
+def _wd_instances(cl,include_subclasses=False):
 	'''
 	Gets all the instances of the given class.
 
