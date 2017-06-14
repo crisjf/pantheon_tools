@@ -1,5 +1,5 @@
 try:
-	import past,future,builtins,six
+	import future
 except:
 	pass
 import json,os,operator,copy,mwparserfromhell,datetime,codecs
@@ -7,7 +7,7 @@ import nltk.data,nltk
 import re
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
-from functions import country,dms2dd
+from .functions import country,dms2dd
 from geopy.distance import vincenty
 try:
     import cPickle as pickle
@@ -19,9 +19,8 @@ except:
 	print('Warning: spotipy module not found')
 import multiprocessing
 from joblib import Parallel, delayed
-
-from query import wd_q,wp_q,_string,_isnum,rget
-from parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
+from .query import wd_q,wp_q,_string,_isnum,rget
+from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
 from collections import defaultdict
 from numpy import mean
 

@@ -1,5 +1,5 @@
 try:
-	import past,future,builtins,six
+	import future
 except:
 	pass
 import requests
