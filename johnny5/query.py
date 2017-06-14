@@ -138,8 +138,13 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 			props[u] = str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
+	print(pages)
 	for chunk in chunker(pages,50):
+		print(chunk)
 		v = chunk
+		print(hasattr(v,'__iter__'))
+		print([_string(vv) for vv in v])
+		print(use)
 		p = {use:str.join('|', [_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urllib.urlencode(props) + '&' + urllib.urlencode(p)
