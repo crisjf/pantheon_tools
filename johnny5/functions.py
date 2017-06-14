@@ -6,6 +6,7 @@ try:
 	import future
 except:
 	pass
+import six
 import os,time,codecs
 from .parse_functions import drop_comments
 from pandas import DataFrame
@@ -29,7 +30,9 @@ def _wd_id(trigger):
     return trigger
 
 def get_wd_name(prop,as_df=False):
-	it = hasattr(prop,'__iter__')
+	
+	it = not isinstance(prop, six.string_types)
+	#it = hasattr(prop,'__iter__')
 	if it:
 		out = dict(zip(prop,['NA']*len(prop)))
 		for chunk in chunker(prop,50):
@@ -45,7 +48,8 @@ def get_wd_name(prop,as_df=False):
 		return r['entities'][prop]['labels']['en']['value']
 
 def get_wd_coords(wdids,prop = 'P625',as_df=False):
-	it = hasattr(wdids, '__iter__')
+	it = not isinstance(wdids, six.string_types)
+	#it = hasattr(wdids, '__iter__')
 	wdids = [_wd_id(wdids)] if not it else [_wd_id(wdid) for wdid in wdids]
 	results = {}
 	for wd_ids in chunker(wdids,50):
@@ -97,7 +101,8 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 		If wdids is not a list, it will return a string when date=False and a tuple with (time,calendarmodel,precision) when date=True.
 		If as_df=True and wdids is a list, then it will return a pandas DataFrame.
 	'''
-	it = hasattr(wdids, '__iter__')
+	it = not isinstance(wdids, six.string_types)
+	#it = hasattr(wdids, '__iter__')
 	wdids = [_wd_id(wdids)] if not it else [_wd_id(w) for w in wdids]
 	results = {}
 	values = set([])
@@ -276,8 +281,8 @@ def image_url(article,ret=False):
 	urls : dict
 		If ret=True it returns a dictionary with curids as keys and list of urls as values.
 	'''
-
-	it = hasattr(article,'__iter__')
+	it = not isinstance(article, six.string_types)
+	#it = hasattr(article,'__iter__')
 	if not it:
 		url = article.image_url()
 		if ret:

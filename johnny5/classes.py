@@ -27,6 +27,7 @@ from .query import wd_q,wp_q,_string,_isnum,rget
 from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
 from collections import defaultdict
 from numpy import mean
+import six
 
 
 class article(object):
@@ -1460,7 +1461,8 @@ class CTY(object):
 		self._out = {}
 
 	def city(self,coords):
-		if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
+		if (len(coords) == 2)&(isinstance(coords[0], six.string_types)):
+		#if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
 			if coords not in self._out.keys():
 				self._out[coords] = _city(self,coords)
 			return self._out[coords]

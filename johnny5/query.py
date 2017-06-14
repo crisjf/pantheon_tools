@@ -134,7 +134,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	use = 'pageids' if ('pageids' in d.keys()) else 'titles'
 	pages = d[use]
 	print(pages)
-	pages = [pages] if isinstance(v, six.string_types) else pages
+	pages = [pages] if isinstance(pages, six.string_types) else pages
 	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	if use == 'titles':
 		pages = [page.encode('utf-8') for page in pages if page is not None]  #IS ENCODING TO UTF-8
