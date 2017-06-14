@@ -7,7 +7,11 @@ from .parse_functions import drop_comments
 from pandas import DataFrame
 from .query import wd_q,wp_q,chunker,rget
 from itertools import chain
-import urllib2
+try:
+	import urllib2
+except:
+	print('Warning: No module urllib2')
+	pass
 from urllib import urlretrieve
 from bs4 import BeautifulSoup
 
