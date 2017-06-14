@@ -1,5 +1,5 @@
 try:
-	import past
+	import past,future,builtins,six
 except:
 	pass
 import os,time,codecs

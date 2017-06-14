@@ -1,5 +1,5 @@
 try:
-	import past
+	import past,future,builtins,six
 except:
 	pass
 import json,os,operator,copy,mwparserfromhell,datetime,codecs
