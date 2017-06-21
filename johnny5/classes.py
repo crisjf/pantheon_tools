@@ -11,7 +11,7 @@ import nltk.data,nltk
 import re
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
-from .functions import country,dms2dd
+from .functions import country,_dms2dd
 from geopy.distance import vincenty
 try:
     import cPickle as pickle
@@ -927,7 +927,7 @@ class place(article):
 										lon.append(val)
 										if (val.lower() == 'e')|(val.lower() == 'w'):
 											break
-									lat,lon= (dms2dd(lat),dms2dd(lon))
+									lat,lon= (_dms2dd(lat),_dms2dd(lon))
 								else:
 									lat,lon = (float(str(values[0])),float(str(values[1])))
 								break

@@ -461,7 +461,7 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 def chunker(seq, size):
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
 
-def dms2dd(lat):
+def _dms2dd(lat):
     direc = lat[-1].lower()
     degs,mins,secs = (map(float,map(str,lat[:-1]))+[0.,0.])[:3]
     dd = degs+mins/60.+secs/(3600.)
@@ -487,6 +487,7 @@ def latest_wddump():
 
 
 def dumps_path():
+	'''Returns the path where to store the dumps.'''
 	path = os.path.split(__file__)[0]+'/data/'
 	files = os.listdir(path)
 	if 'dumps.txt' in files:
@@ -494,6 +495,14 @@ def dumps_path():
 	return path
 
 def check_wddump():
+	'''
+	Used to check whether the Wikidata dump found on file is up to date.
+	
+	Returns
+	-------
+	status : boolean
+		True if it is necessary to update
+	'''
 	url,top_date = latest_wddump()
 	path = dumps_path()
 	files = os.listdir(path)
@@ -645,6 +654,10 @@ def all_wikipages(update=False):
 	return titles
 
 def check_wpdump():
+	'''
+	Used to check the current status of the WikiData Dump.
+	It returns None, but prints the information.
+	'''
 	path = dumps_path()
 	dt = time.ctime(os.path.getmtime(path+'enwiki-latest-abstract.xml'))
 	print('Dump downloaded on:')
