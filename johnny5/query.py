@@ -16,7 +16,7 @@ except:
 	urlencode = urllib.parse.urlencode
 import six
 
-def isiter(obj):
+def _isiter(obj):
 	if isinstance(obj, six.string_types):
 		return False
 	else:
@@ -26,7 +26,7 @@ def isiter(obj):
 		except:
 			return False
 
-def rget(url):
+def _rget(url):
 	'''Function used to track the requests that are performed.'''
 	return requests.get(url)
 
@@ -69,7 +69,7 @@ def _join_list_of_jsons(r):
     #return defaultdict(lambda:'NA',out),keys_continue
     return out,keys_continue
 
-def merge_jsons(r):
+def _merge_jsons(r):
     out = {}
     out,k1s = _join_list_of_jsons(r)
     for k1 in k1s:
@@ -90,7 +90,7 @@ def merge_jsons(r):
                                 	raise NameError('Depth exceeded')
     return out
 
-def chunker(seq, size):
+def _chunker(seq, size):
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
 
 def wd_q(d,show=False):
@@ -99,24 +99,24 @@ def wd_q(d,show=False):
 	d['format'] = 'json'  if 'format' not in set(d.keys()) else d['format']
 	use = 'ids'
 	pages = d[use]
-	pages = pages if isiter(pages) else [pages]
+	pages = pages if _isiter(pages) else [pages]
 	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	props = {}
 	for u,v in d.items():
 		if u != use:
-			props[u] = str.join('|', [_string(vv) for vv in v]) if isiter(v) else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
-	for chunk in chunker(pages,50):
+	for chunk in _chunker(pages,50):
 		v = chunk
-		p = {use:str.join('|', [_string(vv) for vv in v]) if isiter(v) else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))
-		rr = rget(url).json()
+		rr = _rget(url).json()
 		r.append(rr)
-	return merge_jsons(r)
+	return _merge_jsons(r)
 
 def wp_q(d,lang='en',continue_override=False,show=False):
 	"""
@@ -145,24 +145,24 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 		raise NameError("Cannot use 'pageids' at the same time as 'titles'")
 	use = 'pageids' if ('pageids' in set(d.keys())) else 'titles'
 	pages = d[use]
-	pages = pages if isiter(pages) else [pages]
+	pages = pages if _isiter(pages) else [pages]
 	#pages = pages if hasattr(pages,'__iter__') else [pages]
 	#if use == 'titles':
 	#	pages = [page.encode('utf-8') for page in pages if page is not None]  #IS ENCODING TO UTF-8
 	props = {}
 	for u,v in d.items():
 		if u not in ['titles','pageids']:
-			props[u] = str.join('|', [_string(vv) for vv in v]) if isiter(v) else v
+			props[u] = str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v
 			#props[u] = '|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v
 	r = []
-	for chunk in chunker(pages,50):
+	for chunk in _chunker(pages,50):
 		v = chunk
-		p = {use:str.join('|', [_string(vv) for vv in v]) if isiter(v) else v}
+		p = {use:str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v}
 		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))
-		rr = rget(url).json()
+		rr = _rget(url).json()
 		while True:
 			r.append(rr)
 			if ('continue' in rr.keys())&(not continue_override):
@@ -173,7 +173,7 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 				continue_dict = {continue_keys[0] : rr['continue'][continue_keys[0]]}
 				if show:
 					print(url+'&'+urlencode(continue_dict)).replace(' ','_')
-				rr = rget(url+'&'+urlencode(continue_dict)).json()
+				rr = _rget(url+'&'+urlencode(continue_dict)).json()
 			else:
 				break
-	return merge_jsons(r)
+	return _merge_jsons(r)

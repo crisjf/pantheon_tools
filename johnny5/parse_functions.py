@@ -116,7 +116,6 @@ def has_num(text):
             pass
     return False
 
-
 def parse_date(t):
     '''
     Parses a date from the given string.

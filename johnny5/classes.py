@@ -23,7 +23,7 @@ except:
 	print('Warning: spotipy module not found')
 import multiprocessing
 from joblib import Parallel, delayed
-from .query import wd_q,wp_q,_string,_isnum,rget
+from .query import wd_q,wp_q,_string,_isnum,_rget
 from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
 from collections import defaultdict
 from numpy import mean
@@ -36,7 +36,7 @@ class article(object):
 		This is the parent class for all the queries. 
 		Note that querying articles separately takes a long time.
 		"""
-		Itype = id_type(I) if Itype is None else Itype
+		Itype = _id_type(I) if Itype is None else Itype
 		if Itype not in ['title','curid','wdid']:
 			raise NameError("Unrecognized Itype, please choose between title, curid, or wdid")
 		self.I = {'title':None,'curid':None,'wdid':None}
@@ -87,19 +87,14 @@ class article(object):
 		if not self.no_wp:
 			out+= 'curid : '+str(self.curid())+'\n'
 			out+= 'title : '+self.title()+'\n'
-			print(out)
 		else:
 			out+= 'curid : None\n'
 			out+= 'title : None\n'
-			print(out)
 		if not self.no_wd:
 			out+= 'wdid  : '+self.wdid()+'\n'
-			print(out)
 		else:
 			out+= 'wdid  : None\n'
-			print(out)
 		out+= 'L     : '+str(self.L()) 
-		print(out)
 		return out#.encode('utf-8')
 
 	def _missing_wd(self):
@@ -784,7 +779,7 @@ class article(object):
 			fd = str(rest_end[0])+('00'+str(int(rest_end[1])+1))[-2:]+'01'
 
 		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
-		r = rget(url).json()
+		r = _rget(url).json()
 		if ('title' not in list(r.keys())):
 			monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
 			monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
@@ -806,7 +801,7 @@ class article(object):
 			self._daily_views[lang] = {}
 		title = self.langlinks(lang)
 		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
-		r = rget(url).json()
+		r = _rget(url).json()
 		self._views[lang][y+'-'+m] = sum(list(r['daily_views'].values()))
 		if daily:
 			for day in r['daily_views']:
@@ -1637,7 +1632,7 @@ class Occ(object):
 		return article._feats
 
 	
-def id_type(I):
+def _id_type(I):
 	if _isnum(I):
 		return 'curid'
 	elif I.isdigit():
@@ -1648,25 +1643,25 @@ def id_type(I):
 		return 'title'
 
 
-def read_article(file_name):
-	'''
-	Reads an article from a json file created with article.dump().
-	'''
-	with open(file_name) as data_file:
-		data_json = json.load(data_file)
-	for i in ['curid','title','wdid']:
-		if data_json['I'][i] is not None:
-			out = article(data_json['I'][i],Itype=i)
-			break
-	out.I = data_json['I']
-	out._data = data_json['_data']
-	out._ex = data_json['_ex']
-	out._langlinks_dat = data_json['_langlinks_dat']
-	out._langlinks = data_json['_langlinks']
-	out._infobox = data_json['_infobox']
-	out.raw_box  = data_json['raw_box']
-	out._image_url = data_json['_image_url']
-	out._wd_claims      = data_json['_wd_claims']
-	out._wd_claims_data = data_json['_wd_claims_data']
-	out._creation_date = data_json['_creation_date']
-	return out
+#def read_article(file_name):
+#	'''
+#	Reads an article from a json file created with article.dump().
+#	'''
+#	with open(file_name) as data_file:
+#		data_json = json.load(data_file)
+#	for i in ['curid','title','wdid']:
+#		if data_json['I'][i] is not None:
+#			out = article(data_json['I'][i],Itype=i)
+#			break
+#	out.I = data_json['I']
+#	out._data = data_json['_data']
+#	out._ex = data_json['_ex']
+#	out._langlinks_dat = data_json['_langlinks_dat']
+#	out._langlinks = data_json['_langlinks']
+#	out._infobox = data_json['_infobox']
+#	out.raw_box  = data_json['raw_box']
+#	out._image_url = data_json['_image_url']
+#	out._wd_claims      = data_json['_wd_claims']
+#	out._wd_claims_data = data_json['_wd_claims_data']
+#	out._creation_date = data_json['_creation_date']
+#	return out

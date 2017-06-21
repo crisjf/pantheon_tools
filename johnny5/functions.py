@@ -10,7 +10,7 @@ import six
 import os,time,codecs
 from .parse_functions import drop_comments
 from pandas import DataFrame
-from .query import wd_q,wp_q,chunker,rget
+from .query import wd_q,wp_q,_rget
 from itertools import chain
 try:
 	import urllib2
@@ -30,7 +30,6 @@ def _wd_id(trigger):
     return trigger
 
 def get_wd_name(prop,as_df=False):
-	
 	it = not isinstance(prop, six.string_types)
 	#it = hasattr(prop,'__iter__')
 	if it:
@@ -38,13 +37,13 @@ def get_wd_name(prop,as_df=False):
 		for chunk in chunker(prop,50):
 			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+str.join('|', prop)
 			#url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
-			r = rget(url).json()
+			r = _rget(url).json()
 			for page in list(r['entities'].values()):
 				out[page['id']] = page['labels']['en']['value']
 		return DataFrame(list(out.items()),columns=['wd_id','name']) if as_df else out
 	else:
 		url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+prop
-		r = rget(url).json()
+		r = _rget(url).json()
 		return r['entities'][prop]['labels']['en']['value']
 
 def get_wd_coords(wdids,prop = 'P625',as_df=False):
@@ -55,7 +54,7 @@ def get_wd_coords(wdids,prop = 'P625',as_df=False):
 	for wd_ids in chunker(wdids,50):
 		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
 		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = rget(url)
+		r = _rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
 			if prop in wdid_data.keys():
@@ -109,7 +108,7 @@ def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
 	for wd_ids in chunker(wdids,50):
 		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
 		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = rget(url)
+		r = _rget(url)
 		for wdid in wd_ids:
 			wdid_data = r.json()[u'entities'][wdid][u'claims']
 			if prop in wdid_data.keys():
@@ -381,7 +380,7 @@ def get_multiple_image(curid):
 	NEEDS TO BE UPDATED
 	'''
 	API_url  = 'https://en.wikipedia.org/w/api.php?action=query&prop=revisions&rvprop=content&format=json&pageids='+str(curid)+'&rvsection=0'
-	result = rget(API_url).json()[u'query'][u'pages']
+	result = _rget(API_url).json()[u'query'][u'pages']
 	r = result[unicode(curid)][u'revisions'][0][u'*']
 	wikicode = mwparserfromhell.parse(r)
 	templates = wikicode.filter_templates()
@@ -428,12 +427,12 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 		url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng+'&project=Pantheon&key='+key
 	else:
 		url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='+latlng
-	r = rget(url).json()
+	r = _rget(url).json()
 
 	ZERO_RESULTS = False
 	if r['status'] == 'OVER_QUERY_LIMIT':
 		time.sleep(1)
-		r = rget(url).json()
+		r = _rget(url).json()
 	if r['status'] != 'OK':
 		if r['status'] == 'OVER_QUERY_LIMIT':
 			raise NameError('Query limit reached')
