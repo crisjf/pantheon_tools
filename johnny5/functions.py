@@ -459,6 +459,21 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 
 
 def chunker(seq, size):
+	'''
+	Used to iterate a list by chunks.
+	
+	Parameters
+	----------
+	seq : list (or iterable)
+		List or iterable to iterate over.
+	size : int
+		Size of each chunk
+
+	Returns
+	-------
+	chunks : list
+		List of lists (chunks)
+	'''
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
 
 def _dms2dd(lat):
@@ -565,8 +580,8 @@ def wd_instances(cl):
 	'''
 	Gets all the instances of the given class.
 
-	Example
-	-------
+	Examples
+	--------
 	To get all universities:
 	>>> wd_instances('Q3918')
 	To get all humans:
@@ -599,8 +614,8 @@ def wd_subclasses(cl):
 	'''
 	Gets all the subclasses of the given class.
 
-	Example
-	-------
+	Examples
+	--------
 	To get all subclasses of musical ensemble:
 	>>> wd_subclasses('Q2088357')
 
@@ -665,3 +680,34 @@ def check_wpdump():
 	print('To update run:\n\t>>> all_wikipages(update=True)')
 
 
+
+def dumps_path(new_path=None):
+    '''
+    Handle the path to the Wikipedia and Wikidata dumps.
+    If new_path is provided, it will set the new path.
+
+    Parameters
+    ----------
+    new_path : str (optional)
+    	If provided it will set the dumps path to this path.
+    	Path where to store the Wikipedia and Wikidata dumps.
+    	(Must be full path)
+    '''
+    data_path = os.path.split(__file__)[0]+'/data/'
+    new_path = new_path if new_path[-1]=='/' else new_path + '/'
+    if 'dumps.txt' in os.listdir(data_path):
+        f = open(data_path+'dumps.txt')
+        current_path = f.read().split('\n')[0]
+        f.close()
+        print('Current path to dumps set to '+current_path)
+    else:
+        print('Current path to dumps set to '+data_path)
+    if new_path is not None:
+        try:
+            os.listdir(new_path)
+            f = open(data_path+'dumps.txt',mode='w')
+            f.write(new_path)
+            f.close()
+            print('New dumps path set to '+data_path)
+        except:
+            raise NameError('Directory not found: '+new_path)

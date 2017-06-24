@@ -17,6 +17,9 @@ except:
 import six
 
 def _isiter(obj):
+	'''
+	Returns True if the object is an iterable, excluding strings.
+	'''
 	if isinstance(obj, six.string_types):
 		return False
 	else:
@@ -31,6 +34,7 @@ def _rget(url):
 	return requests.get(url)
 
 def _isnum(n):
+	'''Returns True if n is a number'''
 	try:
 		nn = n+1
 		return True
@@ -38,6 +42,7 @@ def _isnum(n):
 		return False
 
 def _string(val):
+	'''If val is a number, it returns the string version of the number, otherwise it returns val.'''
 	if _isnum(val):
 		return str(val)
 	else:
@@ -94,6 +99,26 @@ def _chunker(seq, size):
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
 
 def wd_q(d,show=False):
+	"""
+	Queries the Wikidata API provided a dictionary of features.
+	It handles the pages limit and the results limit by doing multiple queries and then merging the resulting json objects.
+
+	Parameters
+	----------
+	d : dict
+		Dictionary.
+	show : boolean (False)
+		If True it will print all the used urls.
+	
+	Returns
+	-------
+	r : dict
+		Dictionary with the result of the query.
+
+	Examples
+	--------
+	>>> XXX
+	"""
 	base_url = 'https://www.wikidata.org/w/api.php?'
 	d['action'] = 'wbgetentities' if 'action' not in set(d.keys()) else d['action']
 	d['format'] = 'json'  if 'format' not in set(d.keys()) else d['format']
@@ -127,15 +152,20 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	----------
 	d : dict
 		Dictionary.
-	lang : string
-		Language edition to query. (default is en)
+	lang : str (default = 'en')
+		Language edition to query.
 	continue_override : boolean (False)
 		If True it will not get any of the continuation queries.
 	show : boolean (False)
-		If True it will show all the used urls.
-
-	Example
+		If True it will print all the used urls.
+	
+	Returns
 	-------
+	r : dict
+		Dictionary with the result of the query.
+
+	Examples
+	--------
 	>>> wp_q({'pageids':[306,207]})
 	"""
 	base_url = 'https://'+lang+'.wikipedia.org/w/api.php?'
@@ -158,7 +188,6 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	for chunk in _chunker(pages,50):
 		v = chunk
 		p = {use:str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v}
-		#p = {use:'|'.join([_string(vv) for vv in v]) if hasattr(v,'__iter__') else v}
 		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))

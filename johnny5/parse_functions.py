@@ -16,6 +16,7 @@ def drop_comments(value):
 	return value
 
 def drop_nowrap(text):
+    '''Drops nowrap'''
     text = re.sub(r'\{\{[^\|]*[Nn]owrap[^\|]*\|','{{nowrap|',text)
     nowrap = ''
     p_count = 0
@@ -247,3 +248,28 @@ def correct_titles(title):
     titles.add(str.join(' ', words))
     #titles.add(' '.join(words))
     return list(titles)
+
+def parse_p(s,sep='()'):
+	'''
+	Parses parenthesis from a string.
+
+	Returns
+	-------
+	ps : list
+		List of parenthesis
+	'''
+	sep0,sep1 = sep
+	ps = []
+	p = ''
+	stack = 0
+	for i in s:
+		if i == sep0:
+			stack+=1
+		if stack>0:
+			p+=i
+		if i == sep1:
+			stack-=1
+		if (stack == 0)&(p!=''):
+			ps.append(p)
+			p = ''
+	return ps

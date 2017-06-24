@@ -6,9 +6,8 @@ try:
 	import future
 except:
 	pass
-import json,os,operator,copy,mwparserfromhell,datetime,codecs
+import json,os,operator,copy,mwparserfromhell,datetime,codecs,re
 import nltk.data,nltk
-import re
 from nltk.stem import WordNetLemmatizer
 from pandas import DataFrame,read_csv
 from .functions import country,_dms2dd
@@ -21,21 +20,30 @@ try:
 	import spotipy
 except:
 	print('Warning: spotipy module not found')
-import multiprocessing
+from multiprocessing import cpu_count
 from joblib import Parallel, delayed
 from .query import wd_q,wp_q,_string,_isnum,_rget
-from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints
+from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints,parse_p
 from collections import defaultdict
 from numpy import mean
 import six
 
 
 class article(object):
+	"""
+	This is the main class for this module.
+	All other classes belong to this class.
+	The class can be initialized by a en_curid, a title, or a wikidata_id.
+
+	Parameters
+	----------
+	I : str or int
+		Either the english curid, the wikidata id, or the title for the english Wikipedia.
+	Itype : str (optional)
+		Either 'title', 'curid', or 'wdid'
+		Type of I.
+	"""
 	def __init__(self,I,Itype=None):
-		"""
-		This is the parent class for all the queries. 
-		Note that querying articles separately takes a long time.
-		"""
 		Itype = _id_type(I) if Itype is None else Itype
 		if Itype not in ['title','curid','wdid']:
 			raise NameError("Unrecognized Itype, please choose between title, curid, or wdid")
@@ -169,10 +177,7 @@ class article(object):
 		'''
 		Returns the wdid of the article.
 		Will get it if it is not provided.
-
-		To speed up for a list of articles, run:
-		>>> wp_data(articles)
-		>>> [a.wdid() for a in articles]
+		
 		'''
 		if (self.I['wdid'] is None)&(not self.no_wd):
 			d = self.data_wp()
@@ -201,9 +206,6 @@ class article(object):
 		Returns the title of the article.
 		Will get it if it is not provided.
 
-		To speed up for a list of articles, run:
-		>>> wp_data(articles)
-		>>> [a.wdid() for a in articles]
 		'''
 		
 		if (self.I['title'] is None)&(not self.no_wp):
@@ -232,9 +234,7 @@ class article(object):
 	def curid_nonen(self):
 		'''
 		Gets the curid in a non-english language.
-
-		The curid has the form:
-			lang.curid
+		The curid has the form: 'lang.curid'
 		'''
 		if self._curid_nonen is None:
 			for lang,title in list(self.langlinks().items()):
@@ -247,7 +247,15 @@ class article(object):
 		return self._curid_nonen
 
 	def wiki_links(self):
-		'''Gets all the wiki links connected from the article'''
+		'''
+		Gets all the Wikipedia pages linked from the article.
+		It only returns Wikipedia pages.
+
+		Returns
+		-------
+		titles : set
+			Set of titles for the Wikipedia pages linked from the article.
+		'''
 		links = mwparserfromhell.parse(self.content()).filter_wikilinks()
 		titles = set([link.encode('utf-8').split('|')[0].replace('[[','').replace(']]','').strip() for link in links])
 		return titles
@@ -255,17 +263,14 @@ class article(object):
 	def infobox(self,lang='en',force=False):
 		"""
 		Returns the infobox of the article.
-		By getting the infobox, the class handles the redirect.
-		If the raw_box is given, it will only parse the box.
-		If raw_box is not given, it will get it.
 
 		Parameters
 		----------
-		lang : str ('en')
+		lang : str (default='en')
 			Language edition to get the infobox from.
 		force : boolean (False)
 			If True it will 'force' the search for the infobox by getting the template that is the most similar to an Infobox.
-			Only used for non english editions.
+			Recommended usage is only for non english editions.
 		"""
 		if (self._infobox is None)&(lang == 'en')&(not self.no_wp):
 			if self.raw_box is None:
@@ -355,27 +360,31 @@ class article(object):
 					
 		return box
 
-	def extract(self):
+	def extract(self,lang='en'):
 		'''
-		Returns the pages extract.
-		It will get it if it is not provided.
-		To speed up the process for multiple articles use:
-		>>> extract(articles)
-		>>> [a.extract() for a in article]
+		Returns the page extract (brief description).
+
+		Parameters
+		----------
+		lang : str (default='en')
+			Language edition to get the infobox from.
+
+		Returns
+		-------
+		extract : str
+			Wikipedia page extract.
 		'''
-		if self._ex is None:
-			r = wp_q({'prop':'extracts','exintro':'','explaintext':'','pageids':self.curid()})
-			self._ex = list(r['query']['pages'].values())[0]['extract']
+		if lang=='en':
+			if self._ex is None:
+				r = wp_q({'prop':'extracts','exintro':'','explaintext':'','pageids':self.curid()})
+				self._ex = list(r['query']['pages'].values())[0]['extract']
+		else:
+			raise NameError('Functionality not supported yet')
 		return self._ex
 
 	def langlinks(self,lang=None):
 		"""
 		Returns the langlinks of the article.
-		Will get them if not provided
-
-		To speed up run:
-		>>> langlinks(articles)
-		>>> [a.langlinks() for a in articles]
 
 		Parameters
 		----------
@@ -461,11 +470,6 @@ class article(object):
 	def L(self):
 		'''
 		Returns the number of language editions of the article.
-		Will get it if not provided.
-
-		To speed up run:
-		>>> langlinks(articles)
-		>>> [a.L() for a in articles]
 		'''
 		return len(self.langlinks())
 
@@ -569,17 +573,23 @@ class article(object):
 
 	def wd_prop(self,prop):
 		'''
-		Gets the Wikidata propery.
-		Is based on the the stored wikidata data, and if the data is not found, it will get it.
-		To speed up the process for multiple articles, use:
-		>>> wd_data(articles)
-		>>> [a.wd_prop(prop) for a in articles]
-
+		Gets the requested Wikidata propery.
+		
 		Parameters
 		----------
-		prop : list
-			List of all the values provided for the property.
-			Each value can be a string, number, or json object.
+		prop : str
+			Wikidata code for the property.
+		
+		Returns
+		-------
+		props : list
+			List of values for the given property.
+
+		Examples
+		--------
+		To get the date of birth of Albert Einstein run:
+		>>> b = johnny5.article('Q937')
+		>>> b.wd_prop('P569')
 		'''
 		if prop not in list(self._wd_claims.keys()):
 			data = self.data_wd()
@@ -609,18 +619,35 @@ class article(object):
 		with open(file_name, 'w') as outfile:
 			json.dump(out, outfile)
 
-	def content(self):
-		if (self._content is None)&(not self.no_wp):
-			if self.title() is not None:
-				r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
-				if ('interwiki' in list(r['query'].keys())):
-					self._missing_wp()
-					return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
-				elif ('missing' in set(list(r['query']['pages'].values())[0].keys()))|('invalidreason' in list(r['query']['pages'].values())[0].keys()):
-					self._missing_wp()
-				else:
-					if not self.no_wp:
-						self._content = list(r['query']['pages'].values())[0]['revisions'][0]['*'] 
+	def content(self,lang='en'):
+		'''
+		Returns the content of the Wikipedia page in the selected language.
+		The output is in Wikipedia markup.
+
+		Parameters
+		----------
+		lang : str (default='en')
+			Language
+
+		Returns 
+		-------
+		content : str
+			Content for the page in the given language.
+		'''
+		if lang=='en':
+			if (self._content is None)&(not self.no_wp):
+				if self.title() is not None:
+					r = wp_q({'titles':self.title(),'prop':'revisions','rvprop':'content'})
+					if ('interwiki' in list(r['query'].keys())):
+						self._missing_wp()
+						return '#REDIRECT [['+r['query']['interwiki'][0]['title'].strip()+']]'
+					elif ('missing' in set(list(r['query']['pages'].values())[0].keys()))|('invalidreason' in list(r['query']['pages'].values())[0].keys()):
+						self._missing_wp()
+					else:
+						if not self.no_wp:
+							self._content = list(r['query']['pages'].values())[0]['revisions'][0]['*'] 
+		else:
+			raise NameError('Functionality not supported yet.')
 		return self._content
 
 
@@ -868,6 +895,7 @@ class article(object):
 			return self._isa_values[0]
 
 class place(article):
+	'''Places (includes methods to get coordinates).'''
 	def __init__(self,I,Itype=None):
 		super(place, self).__init__(I,Itype=None)
 		self._coords = None
@@ -978,6 +1006,7 @@ class place(article):
 
 
 class song(article):
+	'''Class for songs.'''
 	def __init__(self,I,Itype=None):
 		super(song, self).__init__(I,Itype=None)
 		self._is_song = None
@@ -1084,6 +1113,9 @@ class song(article):
 
 
 class biography(article):
+	'''
+	Class for biographies of real people.
+	'''
 	def __init__(self,I,Itype=None):
 		super(biography, self).__init__(I,Itype=None)
 		self._is_bio = None
@@ -1130,10 +1162,25 @@ class biography(article):
 		return self._name
 
 	def desc(self):
+		'''
+		One sentence description of the person.
+		'''
 		phrase,sentence,verb = self._is_a(full=True)
+		ps = parse_p(sentence)
+		for p in ps:
+			sentence = sentence.replace(p,'')
+		sentence = re.sub(r' +',' ',sentence)
 		return sentence
 
 	def is_bio(self):
+		'''
+		Classifier for biographies
+
+		Returns
+		-------
+		is_bio : boolean
+			True if page is a biography.
+		'''
 		if (self._is_bio is None):
 			if (not self.no_wp):
 				if self._wpbio_template() is None:
@@ -1177,15 +1224,11 @@ class biography(article):
 				pass
 		return self._wpbio
 
-	def living(self):
-		print('Warning: This function will be dropped.')
-		return self.alive()
-
 	def alive(self,boolean=False):
 		'''
 		Retrieves the information whether the biography is about a living or dead person.
 		It uses the WikiProject Biography template from the Talk page to get this information.
-
+		
 		Returns
 		-------
 		alive : str
@@ -1223,12 +1266,12 @@ class biography(article):
 		'''
 		Gets the death date from the infobox. 
 		If it is not available in the infobox (or it cannot parse it) it uses Wikidata.
-
+		
 		Parameters
 		----------
 		raw : boolean (False)
 			If True it also returns the raw text from the infobox.
-
+		
 		Returns
 		-------
 		d : tuple
@@ -1272,6 +1315,7 @@ class biography(article):
 		Uses the occupation classifier Occ to predict the occupation.
 		Warning: This function runs very slow because it loads a new classifier each time.
 		Instead use:
+
 		>>> C = wt.Occ()
 		>>> C.classify(article)
 		'''
@@ -1291,6 +1335,11 @@ class biography(article):
 				return self._occ[0][0],prob_ratio
 
 class band(article):
+	'''
+	Class for music bands.
+	It links to Spotify as well.
+	IT SHOULD ALSO LINK TO GENIUS
+	'''
 	def __init__(self,I,Itype=None):
 		super(band, self).__init__(I,Itype=None)
 		self._is_band = None
@@ -1304,7 +1353,7 @@ class band(article):
 		self._top_songs = None
 
 	def btypes(self):
-		'''Returns the categories this band is an instance of.'''
+		'''Categories this band is an instance of.'''
 		if self._btypes is None:
 			tps = []
 			for i in self.wd_prop('P31'):
@@ -1316,6 +1365,14 @@ class band(article):
 		return self._btypes
 
 	def genres(self):
+		'''
+		Genres according to Wikidata
+
+		Returns
+		-------
+		genres : list
+			List of genre names.
+		'''
 		if self._genres is None:
 			genres = []
 			for g in self.wd_prop('P136'):
@@ -1327,6 +1384,14 @@ class band(article):
 		return self._genres
 
 	def inception(self):
+		'''
+		Band's creation year
+
+		Returns
+		-------
+		year : int
+			Formation year
+		'''
 		if self._inception is None:
 			years = []
 			for n in self.wd_prop('P571'):
@@ -1352,7 +1417,20 @@ class band(article):
 		return self._inception
 
 	def formation_place(self):
-		'''Returns: place_name,country_code,lat,lon'''
+		'''
+		Gets the formation place for the band.
+		Uses Wikidata and Wikipedia
+		
+		Returns
+		-------
+		place_name : str
+			Name of the formation place.
+			Typically the title of the Wikipedia page corresponding to the place.
+		country_code : str
+			3-digit code of the country where the band was formed
+		lat,lon : (float,float)
+			Coordinates of the formation place.
+		'''
 		if self._formation_place is None:
 			formation = []
 			coords = []
@@ -1417,11 +1495,13 @@ class band(article):
 		return self._spotify_id
 
 	def spotify_pop(self):
-		'''Average popularity of the top 10 songs of the band
+		'''
+		Average popularity of the top 10 songs of the band
 
 		Returns
 		-------
-		mean(pop),max(pop),len(pop)'''
+		mean(pop),max(pop),len(pop)
+		'''
 		if self._top_songs is None:
 			if (self.spotify_id() != 'NULL')&(self.spotify_id()!='NA'):
 				lz_uri = 'spotify:artist:'+self.spotify_id()
@@ -1440,10 +1520,12 @@ class band(article):
 			return ('NULL','NULL','NULL')
 
 class CTY(object):
+	'''
+	City classifier.
+	Used to classify coordinates into cities.
+	THIS FUNCTION NEEDS TO BE UPDATED!
+	'''
 	def __init__(self,city_data='geonames'):
-		'''
-		Assigns a city to a set of coordinates.
-		'''
 		self.city_data=city_data
 		path = os.path.split(__file__)[0]+'/data/'
 		print('Loading data from:\n'+path)
@@ -1457,10 +1539,10 @@ class CTY(object):
 		elif city_data == 'chandler':
 			self.cities = read_csv(path+'chandler_cities.csv',encoding='utf-8')
 			self.c_coords = [tuple(c) for c in self.cities[['ch_id','Latitude','Longitude']].drop_duplicates().values]
-
 		self._out = {}
 
 	def city(self,coords):
+		'''Returns the city'''
 		if (len(coords) == 2)&(isinstance(coords[0], six.string_types)):
 		#if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
 			if coords not in list(self._out.keys()):
@@ -1468,7 +1550,7 @@ class CTY(object):
 			return self._out[coords]
 		else:
 			coords_ = [coord for coord in coords if coord not in list(self._out.keys())]
-			n_jobs = multiprocessing.cpu_count()
+			n_jobs = cpu_count()
 			distances = Parallel(n_jobs=n_jobs)(delayed(_city)(self,coord) for coord in coords_)
 			dmap = dict(zip(coords_,distances))
 			out = []
@@ -1497,10 +1579,16 @@ def _city(C,coords):
 
 
 class Occ(object):
+	'''
+	Occupation classifier based on Wikipedia and Wikidata information.
+	
+	Examples
+	--------
+	>>> C = johnny5.Occ()
+	>>> b = johnny5.biography('Q937')
+	>>> C.classify(b)
+	'''
 	def __init__(self):
-		'''
-		Occupation classifier based onf Wikipedia and Wikidata information.
-		'''
 		path = os.path.split(__file__)[0]+'/data/'
 		print('Loading data from:\n'+path)
 		f = open(path+'trained_classifier.pkl', 'rb')
@@ -1525,13 +1613,21 @@ class Occ(object):
 
 		Parameters
 		----------
-		article : wiki_tools.article object
-			Article to classify.
+		article : johnny5.biography
+			Biography to classify.
 		return_all : boolean (False)
-			If True it will return the probabilities for all occupations.
+			If True it will return the probabilities for all occupations in as list of 2-tuples.
+
+		Returns
+		-------
+		label : str
+			Most likely occupation
+		prob_ratio : float
+			Ratio between the most likely occupation, and the second most likely occupation.
+			If the biography belongs to the training set, it will return prob_ratio=0.
 		'''	
 		if str(article.curid()) in self.train_keys:
-			return self.train[str(article.curid())],'trained'
+			return self.train[str(article.curid())],0
 		else:
 			probs = self._classifier.prob_classify(self.feats(article))
 			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
@@ -1616,6 +1712,19 @@ class Occ(object):
 		return words
 
 	def feats(self,article):
+		'''
+		Gets the features of the article that feed into the classifier.
+
+		Parameters
+		----------
+		article : johnny5.biography
+			Biography to classify.
+		
+		Returns
+		-------
+		features : collections.defaultdict
+			Dictionary of features.
+		'''
 		if article._feats is None:
 			feats = defaultdict(lambda:False)
 			feats['btype'] = self._box_type(article)
