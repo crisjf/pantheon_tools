@@ -43,7 +43,7 @@ class article(object):
 		Either 'title', 'curid', or 'wdid'
 		Type of I.
 	"""
-	def __init__(self,I,Itype=None):
+	def __init__(self,I,Itype=None,slow_connection=False):
 		Itype = _id_type(I) if Itype is None else Itype
 		if Itype not in ['title','curid','wdid']:
 			raise NameError("Unrecognized Itype, please choose between title, curid, or wdid")
@@ -51,6 +51,8 @@ class article(object):
 		self.I[Itype] = I
 		self._data = {'wp':None,'wd':None}
 		self._curid_nonen = None
+
+		self._slow_connection = slow_connection
 
 		self._ex = None
 
@@ -80,6 +82,9 @@ class article(object):
 		self._previous_titles = None
 
 		self._isa_values = None
+
+		if not self._slow_connection:
+			self.find_article()
 
 	def __repr__(self):
 		out = ''
@@ -207,7 +212,6 @@ class article(object):
 		Will get it if it is not provided.
 
 		'''
-		
 		if (self.I['title'] is None)&(not self.no_wp):
 			if self.data_wp() is not None:
 				self.I['title'] = self.data_wp()['title']
@@ -1310,25 +1314,41 @@ class biography(article):
 		else:
 			return d
 
-	def occupation(self,return_all=False):
+	def occupation(self,C=None,return_all=False):
 		'''
 		Uses the occupation classifier Occ to predict the occupation.
-		Warning: This function runs very slow because it loads a new classifier each time.
+		This function will run slow when C is not passed, since it will need to load the classifier in each call.
 		Instead use:
 
-		>>> C = wt.Occ()
-		>>> C.classify(article)
+		>>> C = johnny5.Occ()
+		>>> article.occupation(C=C)
+
+		Parameters
+		----------
+		C : johnny5.Occ (optional)
+			Occupation classifier included in johnny5. If not provided, this function will be slow.
+		return_all : Boolean (False)
+			If True it will return the probabilities for all occupations in as list of 2-tuples.
+
+		Returns
+		-------
+		label : str
+			Most likely occupation
+		prob_ratio : float
+			Ratio between the most likely occupation, and the second most likely occupation.
+			If the biography belongs to the training set, it will return prob_ratio=0.
 		'''
-		print('Warning: This function runs very slow because it loads a new classifier each time.')
 		if self._occ is None:
-			C = Occ()
+			if C is None:
+				print('Warning: This function will run slow because it needs to load the classifier in each call.')
+			C = Occ() if C is None else C
 			article = copy.deepcopy(self)
 			self._feats = C.feats(article)
 			self._occ = C.classify(article,return_all=True)
 		if return_all:
 			return self._occ
 		else:
-			if self._occ[1] == 'trained':
+			if self._occ[1] == 0:
 				return self._occ
 			else:
 				prob_ratio = self._occ[0][1]/self._occ[1][1]
@@ -1486,6 +1506,14 @@ class band(article):
 		return self._formation_place
 
 	def spotify_id(self):
+		'''
+		Uses Wikidata to get the spotify_id of the band.
+
+		Returns
+		-------
+		spotify_id : str
+			Spotify ID.
+		'''
 		if self._spotify_id is None:
 			try:
 				i = self.wd_prop('P1902')[0]['value']
@@ -1632,7 +1660,8 @@ class Occ(object):
 			probs = self._classifier.prob_classify(self.feats(article))
 			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
 			prob_ratio = probs[0][1]/probs[1][1]
-			article._occ = (probs[0][0],prob_ratio)
+			#article._occ = (probs[0][0],prob_ratio)
+			article._occ = probs
 			if return_all:
 				return probs
 			else:
