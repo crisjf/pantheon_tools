@@ -1,0 +1,997 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Documentation &mdash; johnny5 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="johnny5 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> johnny5
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Documentation</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a><ul>
+<li><a class="reference internal" href="#article-class">Article class</a></li>
+<li><a class="reference internal" href="#article-sub-classes">Article sub-classes</a></li>
+<li><a class="reference internal" href="#other-classes">Other Classes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#functions">Functions</a><ul>
+<li><a class="reference internal" href="#bulk-download-functions">Bulk download functions</a></li>
+<li><a class="reference internal" href="#query-functions">Query functions</a></li>
+<li><a class="reference internal" href="#other-functions">Other functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">johnny5</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/johnny5.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="article-class">
+<h3>Article class<a class="headerlink" href="#article-class" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="johnny5.article">
+<em class="property">class </em><code class="descclassname">johnny5.</code><code class="descname">article</code><span class="sig-paren">(</span><em>I</em>, <em>Itype=None</em>, <em>slow_connection=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the main class for this module.
+All other classes belong to this class.
+The class can be initialized by a en_curid, a title, or a wikidata_id.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>I</strong> : str or int</p>
+<blockquote>
+<div><p>Either the english curid, the wikidata id, or the title for the english Wikipedia.</p>
+</div></blockquote>
+<p><strong>Itype</strong> : str (optional)</p>
+<blockquote class="last">
+<div><p>Either ‘title’, ‘curid’, or ‘wdid’
+Type of I.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="johnny5.article.L">
+<code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.L"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.L" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the number of language editions of the article.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.content">
+<code class="descname">content</code><span class="sig-paren">(</span><em>lang=’en’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content of the Wikipedia page in the selected language.
+The output is in Wikipedia markup.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str (default=’en’)</p>
+<blockquote>
+<div><p>Language</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
+<blockquote class="last">
+<div><p>Content for the page in the given language.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.creation_date">
+<code class="descname">creation_date</code><span class="sig-paren">(</span><em>lang=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.creation_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.creation_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the creation date of the different Wikipedia language editions.
+The Wikipedia API requires this data to be requestes one page at a time, so there is no boost in collecting pages into a list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str (optional)</p>
+<blockquote>
+<div><p>Language to get the creation date for.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>timestamp</strong> : str or dict</p>
+<blockquote class="last">
+<div><p>Timestamp in the format ‘2002-07-26T04:32:17Z’.
+If lang is not provided it will return a dictionary with languages as keys and timestamps as values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.curid">
+<code class="descname">curid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.curid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.curid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the english curid of the article.
+Will get it if it is not provided.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.curid_nonen">
+<code class="descname">curid_nonen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.curid_nonen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.curid_nonen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the curid in a non-english language.
+The curid has the form: ‘lang.curid’</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.data_wd">
+<code class="descname">data_wd</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.data_wd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.data_wd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the metadata about the Wikidata page.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.data_wp">
+<code class="descname">data_wp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.data_wp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.data_wp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the metadata about the Wikipedia page.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.dump">
+<code class="descname">dump</code><span class="sig-paren">(</span><em>path=”</em>, <em>file_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps the object to a file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.extract">
+<code class="descname">extract</code><span class="sig-paren">(</span><em>lang=’en’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the page extract (brief description).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str (default=’en’)</p>
+<blockquote>
+<div><p>Language edition to get the infobox from.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>extract</strong> : str</p>
+<blockquote class="last">
+<div><p>Wikipedia page extract.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.find_article">
+<code class="descname">find_article</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.find_article"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.find_article" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the article by trying different combinations of the title’s capitalization.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.image_url">
+<code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.image_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.image_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the url for the image that appears in the infobox.
+It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.infobox">
+<code class="descname">infobox</code><span class="sig-paren">(</span><em>lang=’en’</em>, <em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.infobox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.infobox" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the infobox of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str (default=’en’)</p>
+<blockquote>
+<div><p>Language edition to get the infobox from.</p>
+</div></blockquote>
+<p><strong>force</strong> : boolean (False)</p>
+<blockquote class="last">
+<div><p>If True it will ‘force’ the search for the infobox by getting the template that is the most similar to an Infobox.
+Recommended usage is only for non english editions.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.langlinks">
+<code class="descname">langlinks</code><span class="sig-paren">(</span><em>lang=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.langlinks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.langlinks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the langlinks of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>lang</strong> : str (optional)</p>
+<blockquote>
+<div><p>Language to get the link for.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>out</strong> : str or dict</p>
+<blockquote class="last">
+<div><p>If a language is provided, it will return the name of the page in that language.
+If no language is provided, it will resturn a dictionary with the languages as keys and the titles as values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.pageviews">
+<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>agg=False</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.pageviews"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.pageviews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pageviews between the provided dates for the given language editions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>start_date</strong> : str</p>
+<blockquote>
+<div><p>Start date in format ‘yyyy-mm’.
+If start_date=None is passed, it will get all the pageviews for that edition.</p>
+</div></blockquote>
+<p><strong>end_date</strong> : str</p>
+<blockquote>
+<div><p>End date in format ‘yyyy-mm’. If it is not provided it will get pagviews until today.</p>
+</div></blockquote>
+<p><strong>lang</strong> : str (‘en’)</p>
+<blockquote>
+<div><p>Language edition to get the pageviews for. 
+If lang=None is passed, it will get the pageviews for all language editions.</p>
+</div></blockquote>
+<p><strong>daily</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will return the daily pageviews.</p>
+</div></blockquote>
+<p><strong>agg</strong> : boolean (False)</p>
+<blockquote class="last">
+<div><p>If True it will sum all the pageviews.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.previous_titles">
+<code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.previous_titles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.previous_titles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the previous titles the page had</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.redirect">
+<code class="descname">redirect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.redirect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.redirect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles redirects if the page has one.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.revisions">
+<code class="descname">revisions</code><span class="sig-paren">(</span><em>user=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.revisions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.revisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the timestamps for the edit history of the Wikipedia article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>user</strong> : boolean (True)</p>
+<blockquote class="last">
+<div><p>If True it returns the user who made the edit as well as the edit timestamp.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.title">
+<code class="descname">title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.title"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.title" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the title of the article.
+Will get it if it is not provided.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.url">
+<code class="descname">url</code><span class="sig-paren">(</span><em>wiki=’wp’</em>, <em>lang=’en’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.wd_prop">
+<code class="descname">wd_prop</code><span class="sig-paren">(</span><em>prop</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.wd_prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.wd_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the requested Wikidata propery.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prop</strong> : str</p>
+<blockquote>
+<div><p>Wikidata code for the property.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>props</strong> : list</p>
+<blockquote class="last">
+<div><p>List of values for the given property.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To get the date of birth of Albert Einstein run:
+&gt;&gt;&gt; b = johnny5.article(‘Q937’)
+&gt;&gt;&gt; b.wd_prop(‘P569’)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.wdid">
+<code class="descname">wdid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.wdid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.wdid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the wdid of the article.
+Will get it if it is not provided.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.wiki_links">
+<code class="descname">wiki_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#article.wiki_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.wiki_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the Wikipedia pages linked from the article.
+It only returns Wikipedia pages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set</p>
+<blockquote class="last">
+<div><p>Set of titles for the Wikipedia pages linked from the article.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="article-sub-classes">
+<h3>Article sub-classes<a class="headerlink" href="#article-sub-classes" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="article_sclasses.html#johnny5.biography" title="johnny5.biography"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.biography</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for biographies of real people.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="article_sclasses.html#johnny5.place" title="johnny5.place"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.place</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Places (includes methods to get coordinates).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="article_sclasses.html#johnny5.band" title="johnny5.band"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.band</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for music bands.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="article_sclasses.html#johnny5.song" title="johnny5.song"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.song</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for songs.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="other-classes">
+<h3>Other Classes<a class="headerlink" href="#other-classes" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="johnny5.CTY">
+<em class="property">class </em><code class="descclassname">johnny5.</code><code class="descname">CTY</code><span class="sig-paren">(</span><em>city_data=’geonames’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#CTY"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.CTY" title="Permalink to this definition">¶</a></dt>
+<dd><p>City classifier.
+Used to classify coordinates into cities.
+THIS FUNCTION NEEDS TO BE UPDATED!</p>
+<dl class="method">
+<dt id="johnny5.CTY.city">
+<code class="descname">city</code><span class="sig-paren">(</span><em>coords</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#CTY.city"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.CTY.city" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the city</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="johnny5.Occ">
+<em class="property">class </em><code class="descclassname">johnny5.</code><code class="descname">Occ</code><a class="reference internal" href="../_modules/johnny5/classes.html#Occ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.Occ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occupation classifier based on Wikipedia and Wikidata information.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">johnny5</span><span class="o">.</span><span class="n">Occ</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">johnny5</span><span class="o">.</span><span class="n">biography</span><span class="p">(</span><span class="s1">&#39;Q937&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="johnny5.Occ.classify">
+<code class="descname">classify</code><span class="sig-paren">(</span><em>article</em>, <em>return_all=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#Occ.classify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.Occ.classify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classifier function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>article</strong> : johnny5.biography</p>
+<blockquote>
+<div><p>Biography to classify.</p>
+</div></blockquote>
+<p><strong>return_all</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will return the probabilities for all occupations in as list of 2-tuples.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>label</strong> : str</p>
+<blockquote>
+<div><p>Most likely occupation</p>
+</div></blockquote>
+<p><strong>prob_ratio</strong> : float</p>
+<blockquote class="last">
+<div><p>Ratio between the most likely occupation, and the second most likely occupation.
+If the biography belongs to the training set, it will return prob_ratio=0.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.Occ.feats">
+<code class="descname">feats</code><span class="sig-paren">(</span><em>article</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#Occ.feats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.Occ.feats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the features of the article that feed into the classifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>article</strong> : johnny5.biography</p>
+<blockquote>
+<div><p>Biography to classify.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>features</strong> : collections.defaultdict</p>
+<blockquote class="last">
+<div><p>Dictionary of features.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bulk-download-functions">
+<h3>Bulk download functions<a class="headerlink" href="#bulk-download-functions" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="johnny5.latest_wddump">
+<code class="descclassname">johnny5.</code><code class="descname">latest_wddump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#latest_wddump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.latest_wddump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the latest Wikidata RDF dump.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.dumps_path">
+<code class="descclassname">johnny5.</code><code class="descname">dumps_path</code><span class="sig-paren">(</span><em>new_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#dumps_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.dumps_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the path to the Wikipedia and Wikidata dumps.
+If new_path is provided, it will set the new path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>new_path</strong> : str (optional)</p>
+<blockquote class="last">
+<div><p>If provided it will set the dumps path to this path.
+Path where to store the Wikipedia and Wikidata dumps.
+(Must be full path)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.check_wddump">
+<code class="descclassname">johnny5.</code><code class="descname">check_wddump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#check_wddump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.check_wddump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to check whether the Wikidata dump found on file is up to date.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>status</strong> : boolean</p>
+<blockquote class="last">
+<div><p>True if it is necessary to update</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.download_latest">
+<code class="descclassname">johnny5.</code><code class="descname">download_latest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#download_latest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.download_latest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads the latest Wikidata RDF dump.</p>
+<p>If the dump is updated, it will delete all the instances files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.wd_instances">
+<code class="descclassname">johnny5.</code><code class="descname">wd_instances</code><span class="sig-paren">(</span><em>cl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#wd_instances"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.wd_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the instances of the given class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>instances</strong> : set</p>
+<blockquote class="last">
+<div><p>wd_id for every instance of the given class.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To get all universities:
+&gt;&gt;&gt; wd_instances(‘Q3918’)
+To get all humans:
+&gt;&gt;&gt; wd_instances(‘Q5’)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.wd_subclasses">
+<code class="descclassname">johnny5.</code><code class="descname">wd_subclasses</code><span class="sig-paren">(</span><em>cl</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#wd_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.wd_subclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets all the subclasses of the given class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>subclasses</strong> : set</p>
+<blockquote class="last">
+<div><p>wd_id for every subclass of the given class.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>To get all subclasses of musical ensemble:
+&gt;&gt;&gt; wd_subclasses(‘Q2088357’)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.all_wikipages">
+<code class="descclassname">johnny5.</code><code class="descname">all_wikipages</code><span class="sig-paren">(</span><em>update=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#all_wikipages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.all_wikipages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads all the names of the Wikipedia articles</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.check_wpdump">
+<code class="descclassname">johnny5.</code><code class="descname">check_wpdump</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#check_wpdump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.check_wpdump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to check the current status of the WikiData Dump.
+It returns None, but prints the information.</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descclassname">johnny5.</code><code class="descname">dumps_path</code><span class="sig-paren">(</span><em>new_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#dumps_path"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Handle the path to the Wikipedia and Wikidata dumps.
+If new_path is provided, it will set the new path.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>new_path</strong> : str (optional)</p>
+<blockquote class="last">
+<div><p>If provided it will set the dumps path to this path.
+Path where to store the Wikipedia and Wikidata dumps.
+(Must be full path)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="query-functions">
+<h3>Query functions<a class="headerlink" href="#query-functions" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="johnny5.wp_q">
+<code class="descclassname">johnny5.</code><code class="descname">wp_q</code><span class="sig-paren">(</span><em>d</em>, <em>lang=’en’</em>, <em>continue_override=False</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/query.html#wp_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.wp_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the Wikipedia API provided a dictionary of features.
+It handles the pages limit and the results limit by doing multiple queries and then merging the resulting json objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary.</p>
+</div></blockquote>
+<p><strong>lang</strong> : str (default = ‘en’)</p>
+<blockquote>
+<div><p>Language edition to query.</p>
+</div></blockquote>
+<p><strong>continue_override</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will not get any of the continuation queries.</p>
+</div></blockquote>
+<p><strong>show</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will print all the used urls.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>r</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary with the result of the query.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;pageids&#39;</span><span class="p">:[</span><span class="mi">306</span><span class="p">,</span><span class="mi">207</span><span class="p">]})</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.wd_q">
+<code class="descclassname">johnny5.</code><code class="descname">wd_q</code><span class="sig-paren">(</span><em>d</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/query.html#wd_q"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.wd_q" title="Permalink to this definition">¶</a></dt>
+<dd><p>Queries the Wikidata API provided a dictionary of features.
+It handles the pages limit and the results limit by doing multiple queries and then merging the resulting json objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>d</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary.</p>
+</div></blockquote>
+<p><strong>show</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will print all the used urls.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>r</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary with the result of the query.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">XXX</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="other-functions">
+<h3>Other functions<a class="headerlink" href="#other-functions" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="johnny5.country">
+<code class="descclassname">johnny5.</code><code class="descname">country</code><span class="sig-paren">(</span><em>coords</em>, <em>path=”</em>, <em>save=True</em>, <em>GAPI_KEY=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#country"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.country" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses the Google geocode API to get the country of a given geographical point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>coords</strong> : (lat,lon) tuple</p>
+<blockquote>
+<div><p>Coordinates to query.</p>
+</div></blockquote>
+<p><strong>path</strong> : string</p>
+<blockquote>
+<div><p>Path to save the json file containing the query result.</p>
+</div></blockquote>
+<p><strong>save</strong> : boolean (True)</p>
+<blockquote>
+<div><p>If True it will save the result of the query as ‘lat,lon.json’</p>
+</div></blockquote>
+<p><strong>GAPI_KEY</strong> : string (None)</p>
+<blockquote>
+<div><p>Name of the environment variable holding the Google API key.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>country</strong> : (name,code) tuple</p>
+<blockquote class="last">
+<div><p>Country name and 2-digit country code.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.chunker">
+<code class="descclassname">johnny5.</code><code class="descname">chunker</code><span class="sig-paren">(</span><em>seq</em>, <em>size</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/functions.html#chunker"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.chunker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to iterate a list by chunks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>seq</strong> : list (or iterable)</p>
+<blockquote>
+<div><p>List or iterable to iterate over.</p>
+</div></blockquote>
+<p><strong>size</strong> : int</p>
+<blockquote>
+<div><p>Size of each chunk</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>chunks</strong> : list</p>
+<blockquote class="last">
+<div><p>List of lists (chunks)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.drop_comments">
+<code class="descclassname">johnny5.</code><code class="descname">drop_comments</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/parse_functions.html#drop_comments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.drop_comments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Drops wikimarkup comments from the provided string.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.correct_titles">
+<code class="descclassname">johnny5.</code><code class="descname">correct_titles</code><span class="sig-paren">(</span><em>title</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/parse_functions.html#correct_titles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.correct_titles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks the capitalization of the given title and returns a set of possible uses</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.get_links">
+<code class="descclassname">johnny5.</code><code class="descname">get_links</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/parse_functions.html#get_links"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.get_links" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the links from the provided in Wiki Markup.
+Links are between square brackets [[]].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.first_month">
+<code class="descclassname">johnny5.</code><code class="descname">first_month</code><span class="sig-paren">(</span><em>pt</em>, <em>as_num=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/parse_functions.html#first_month"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.first_month" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the first month in the string. Returns ‘NA’ when there is no month.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="johnny5.parse_ints">
+<code class="descclassname">johnny5.</code><code class="descname">parse_ints</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/parse_functions.html#parse_ints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.parse_ints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a list of integers from s</p>
+</dd></dl>
+
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, C. Jara-Figueroa.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

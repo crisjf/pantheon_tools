@@ -1,0 +1,432 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Tutorial &mdash; johnny5 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="johnny5 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> johnny5
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Tutorial</a><ul>
+<li><a class="reference internal" href="#getting-started">Getting started</a></li>
+<li><a class="reference internal" href="#the-article-class">The article class</a></li>
+<li><a class="reference internal" href="#using-the-dumps">Using the dumps</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#language-editions">Language editions</a></li>
+<li><a class="reference internal" href="#pageviews">Pageviews</a></li>
+<li><a class="reference internal" href="#occupation-classifier">Occupation classifier</a></li>
+<li><a class="reference internal" href="#list-all-the-universities">List all the universities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">johnny5</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Tutorial</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/rst/tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>This brief tutorial is meant to teach you how to use johnny5</p>
+<div class="section" id="getting-started">
+<h2>Getting started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<p>To use, clone the repository and run</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">develop</span>
+</pre></div>
+</div>
+<p>While using johnny5 you might have to download the latest Wikidata and Wikipedia dumps. Since both of these files can use up a lot of space (over 80G in total), you might wish to specify the folder where you want to save them. If you wish to do so, first create the folder, and then open python and run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">johnny5</span> <span class="k">as</span> <span class="nn">j5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">j5</span><span class="o">.</span><span class="n">dumps_path</span><span class="p">(</span><span class="n">new_path</span><span class="o">=</span><span class="s1">&#39;full_path_to_dumps_folder&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-article-class">
+<h2>The article class<a class="headerlink" href="#the-article-class" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">johnny5.article</span></code></a> class is johnny5’s main class. It can be initiallized using either the english Wikipedia curid of the page, the english title of the page, or the Wikidata ID. The following three examples lead to the same object corresponding to the article about Albert Einstein:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="mi">736</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="s1">&#39;Albert Einstein&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="s1">&#39;Q937&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Any object of this class is immediately linked to its correpsonding pages in all the available language editions of Wikipedia, and its corresponding Wikidata instance.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">a</span>
+<span class="go">curid : 736</span>
+<span class="go">title : Albert Einstein</span>
+<span class="go">wdid  : Q937</span>
+<span class="go">L     : 193</span>
+</pre></div>
+</div>
+<p>Note that everytime you instanciate an <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">johnny5.article</span></code></a> object, johnny5 will handle all the necessary redirects and title normalizations. This leads to two objects initialized with different titles, correspond to the same page:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a1</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="s1">&#39;Cesar Hidalgo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a2</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="s1">&#39;Cesar A. Hidalgo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">a1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">a2</span>
+<span class="go">curid : 49041372</span>
+<span class="go">title : Cesar A. Hidalgo</span>
+<span class="go">wdid  : Q22004920</span>
+<span class="go">L     : 2</span>
+<span class="go">curid : 49041372</span>
+<span class="go">title : Cesar A. Hidalgo</span>
+<span class="go">wdid  : Q22004920</span>
+<span class="go">L     : 2</span>
+</pre></div>
+</div>
+<p>The class <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">johnny5.article</span></code></a> has three main methods to access the identifiers for the article:</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="johnny5.html#johnny5.article.title" title="johnny5.article.title"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.article.title</span></code></a>()</td>
+<td>Returns the title of the article.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="johnny5.html#johnny5.article.curid" title="johnny5.article.curid"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.article.curid</span></code></a>()</td>
+<td>Returns the english curid of the article.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="johnny5.html#johnny5.article.wdid" title="johnny5.article.wdid"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.article.wdid</span></code></a>()</td>
+<td>Returns the wdid of the article.</td>
+</tr>
+</tbody>
+</table>
+<p>Addionally, the <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">johnny5.article</span></code></a> can be instanciated with the <cite>slow_connection</cite> parameter set to <cite>True</cite> to keep the number of URL requests and API calls to the bare minimum. This is used when downloading bulks of articles.</p>
+<p>For more information about the article class, read the full documentation in: <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">johnny5.article</span></code></a>.</p>
+<p>All the other classes in this module are subclasses of article. The currently supported subclasses are listed below.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="article_sclasses.html#johnny5.biography" title="johnny5.biography"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.biography</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for biographies of real people.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="article_sclasses.html#johnny5.place" title="johnny5.place"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.place</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Places (includes methods to get coordinates).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="article_sclasses.html#johnny5.band" title="johnny5.band"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.band</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for music bands.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="article_sclasses.html#johnny5.song" title="johnny5.song"><code class="xref py py-obj docutils literal"><span class="pre">johnny5.song</span></code></a>(I[,&nbsp;Itype])</td>
+<td>Class for songs.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="using-the-dumps">
+<h2>Using the dumps<a class="headerlink" href="#using-the-dumps" title="Permalink to this headline">¶</a></h2>
+<p>Here we will talk about how to use the Wikidata and the Wikipedia dumps to download bulks of data.</p>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="language-editions">
+<h3>Language editions<a class="headerlink" href="#language-editions" title="Permalink to this headline">¶</a></h3>
+<p>To get a list of the titles of a given page in all the available language editions we must first create an instance of the article class:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">article</span><span class="p">(</span><span class="s1">&#39;Albert Einstein&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can directly use the function <a class="reference internal" href="johnny5.html#johnny5.article.langlinks" title="johnny5.article.langlinks"><code class="xref py py-func docutils literal"><span class="pre">langlinks()</span></code></a>, which returns a dictionary with the code of each language edition as keys and the titles as values:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span>
+<span class="go">{u&#39;af&#39;: u&#39;Albert Einstein&#39;,</span>
+<span class="go"> u&#39;als&#39;: u&#39;Albert Einstein&#39;,</span>
+<span class="go"> u&#39;am&#39;: u&#39;\u12a0\u120d\u1260\u122d\u1275 \u12a0\u12ed\u1295\u1235\u1273\u12ed\u1295&#39;,</span>
+<span class="go"> u&#39;an&#39;: u&#39;Albert Einstein&#39;,</span>
+<span class="go"> u&#39;ang&#39;: u&#39;Albert Einstein&#39;,</span>
+<span class="go"> u&#39;ar&#39;: u&#39;\u0623\u0644\u0628\u0631\u062a \u0623\u064a\u0646\u0634\u062a\u0627\u064a\u0646&#39;,</span>
+<span class="go"> u&#39;arz&#39;: u&#39;\u0627\u0644\u0628\u0631\u062a \u0627\u064a\u0646\u0634\u062a\u0627\u064a\u0646&#39;,</span>
+<span class="go"> u&#39;as&#39;: u&#39;\u098f\u09b2\u09ac\u09be\u09f0\u09cd\u099f \u0986\u0987\u09a8\u09b7\u09cd\u099f\u09be\u0987\u09a8&#39;,</span>
+<span class="go"> u&#39;ast&#39;: u&#39;Albert Einstein&#39;,</span>
+<span class="go"> u&#39;ay&#39;: u&#39;Albert Einstein&#39;</span>
+<span class="go"> ...}</span>
+</pre></div>
+</div>
+<blockquote>
+<div><p>However, we can directly pass the language as a parameter to <a class="reference internal" href="johnny5.html#johnny5.article.langlinks" title="johnny5.article.langlinks"><code class="xref py py-func docutils literal"><span class="pre">langlinks()</span></code></a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">langlinks</span><span class="p">(</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;es&#39;</span><span class="p">)</span>
+<span class="go">u&#39;Albert Einstein&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>We must note that the class will only get the langlinks the first time we run the <a class="reference internal" href="johnny5.html#johnny5.article.langlinks" title="johnny5.article.langlinks"><code class="xref py py-func docutils literal"><span class="pre">langlinks()</span></code></a> function. Every time we access a langlink after that, we are accessing information that is already stored in the object.</p>
+<p>Finally, if we are only interested in the number of language editions we can use the <a class="reference internal" href="johnny5.html#johnny5.article.L" title="johnny5.article.L"><code class="xref py py-func docutils literal"><span class="pre">L()</span></code></a> function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">L</span><span class="p">()</span>
+<span class="go">193</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pageviews">
+<h3>Pageviews<a class="headerlink" href="#pageviews" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="occupation-classifier">
+<h3>Occupation classifier<a class="headerlink" href="#occupation-classifier" title="Permalink to this headline">¶</a></h3>
+<p>johnny5 comes with a pre-trained classifier that retrieves a set of features from the english Wikipedia and from Wikidata to classify each biography according to their major field of contribution. The classifier is an object from the <a class="reference internal" href="johnny5.html#johnny5.Occ" title="johnny5.Occ"><code class="xref py py-class docutils literal"><span class="pre">Occ</span></code></a> class.</p>
+<p>First, we must initialize the classifier. This operation takes a couple of seconds since it needs to load the necessary files:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">Occ</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, we must instantiate an object from the <a class="reference internal" href="article_sclasses.html#johnny5.biography" title="johnny5.biography"><code class="xref py py-class docutils literal"><span class="pre">biography</span></code></a> class:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">biography</span><span class="p">(</span><span class="s1">&#39;Cesar A. Hidalgo&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="n">a</span>
+<span class="go">curid : 49041372</span>
+<span class="go">title : Cesar A. Hidalgo</span>
+<span class="go">wdid  : Q22004920</span>
+<span class="go">L     : 2</span>
+</pre></div>
+</div>
+<p>Finally, we run the classifier on our biography using the function <a class="reference internal" href="johnny5.html#johnny5.Occ.classify" title="johnny5.Occ.classify"><code class="xref py py-func docutils literal"><span class="pre">classify()</span></code></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">(&#39;PHYSICIST&#39;, 3.4677045561392363)</span>
+</pre></div>
+</div>
+<p>The first variable returned by <a class="reference internal" href="johnny5.html#johnny5.Occ.classify" title="johnny5.Occ.classify"><code class="xref py py-func docutils literal"><span class="pre">classify()</span></code></a> corresponds to the occupation, and the second is a measure of how confident the classifier is on the result (the ratio between the most likely occupation, and the second most likely occupation). When the biography corresponds to the training set, the second returned variable is set to zero.</p>
+<p>If we are interested in seeing the probabilities for all the occupations, <a class="reference internal" href="johnny5.html#johnny5.Occ.classify" title="johnny5.Occ.classify"><code class="xref py py-func docutils literal"><span class="pre">classify()</span></code></a> has the parameter <cite>return_all</cite>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[(&#39;PHYSICIST&#39;, 0.24419204799823266),</span>
+<span class="go"> (&#39;COMPUTER SCIENTIST&#39;, 0.070418931037799684),</span>
+<span class="go"> (&#39;PHYSICIAN&#39;, 0.048714601309136539),</span>
+<span class="go"> (&#39;ASTRONOMER&#39;, 0.030870808149097931),</span>
+<span class="go"> (&#39;INVENTOR&#39;, 0.029528979978649089),</span>
+<span class="go"> (&#39;EXTREMIST&#39;, 0.028802557416552358),</span>
+<span class="go"> (&#39;BIOLOGIST&#39;, 0.027603077637510905),</span>
+<span class="go"> (&#39;CHEMIST&#39;, 0.027392376292808687),</span>
+<span class="go"> (&#39;POLITICIAN&#39;, 0.024383442762041466),</span>
+<span class="go"> (&#39;MILITARY PERSONNEL&#39;, 0.022729935267372121),</span>
+<span class="go"> ...]</span>
+</pre></div>
+</div>
+<p>Finally, you can also run the classifier without instanciating any <a class="reference internal" href="johnny5.html#johnny5.Occ" title="johnny5.Occ"><code class="xref py py-class docutils literal"><span class="pre">Occ</span></code></a> object, using the <a class="reference internal" href="article_sclasses.html#johnny5.biography.occupation" title="johnny5.biography.occupation"><code class="xref py py-func docutils literal"><span class="pre">occupation()</span></code></a> function from the <a class="reference internal" href="article_sclasses.html#johnny5.biography" title="johnny5.biography"><code class="xref py py-class docutils literal"><span class="pre">biography</span></code></a> class. This is not recommended, however, since it loads a classifier everytime, making this very slow when you need to classify many biographies.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">occupation</span><span class="p">()</span>
+<span class="go">(&#39;PHYSICIST&#39;, 3.4677045561392363)</span>
+</pre></div>
+</div>
+<p>A way to avoid each biography loading a classifier each time is to pass it the classifier as an argument.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">occupation</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">)</span>
+<span class="go">(&#39;PHYSICIST&#39;, 3.4677045561392363)</span>
+</pre></div>
+</div>
+<p>Below is a sample code that iterates over a two biographies and prints the occupations for each of them:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">johnny5</span> <span class="k">as</span> <span class="nn">j5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">Occ</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Cesar A. Hidalgo&#39;</span><span class="p">,</span><span class="s1">&#39;Nicholas Negroponte&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="n">b</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">biography</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span>   <span class="nb">print</span> <span class="n">b</span><span class="o">.</span><span class="n">occupation</span><span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="n">C</span><span class="p">)</span>
+<span class="go">(&#39;PHYSICIST&#39;, 3.4677045561392363)</span>
+<span class="go">(&#39;ARCHITECT&#39;, 4.9926055695222313)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-all-the-universities">
+<h3>List all the universities<a class="headerlink" href="#list-all-the-universities" title="Permalink to this headline">¶</a></h3>
+<p>johnny5 allows users to get a full list of articles that belong to a certain Wikidata category.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, C. Jara-Figueroa.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>johnny5.query &mdash; johnny5 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="johnny5 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> johnny5
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../johnny5.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">johnny5</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>johnny5.query</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for johnny5.query</h1><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+	<span class="n">xrange</span>
+<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+	<span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="kn">import</span> <span class="nn">future</span>
+<span class="k">except</span><span class="p">:</span>
+	<span class="k">pass</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
+<span class="kn">import</span> <span class="nn">urllib</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="n">urlencode</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlencode</span>
+<span class="k">except</span><span class="p">:</span>
+	<span class="n">urlencode</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="k">def</span> <span class="nf">_isiter</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Returns True if the object is an iterable, excluding strings.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+		<span class="k">return</span> <span class="kc">False</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+			<span class="k">return</span> <span class="kc">True</span>
+		<span class="k">except</span><span class="p">:</span>
+			<span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Function used to track the requests that are performed.&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_isnum</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Returns True if n is a number&#39;&#39;&#39;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">nn</span> <span class="o">=</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span>
+		<span class="k">return</span> <span class="kc">True</span>
+	<span class="k">except</span><span class="p">:</span>
+		<span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">_string</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;If val is a number, it returns the string version of the number, otherwise it returns val.&#39;&#39;&#39;</span>
+	<span class="k">if</span> <span class="n">_isnum</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">val</span>
+
+<span class="k">def</span> <span class="nf">_join_list_of_jsons</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">rr</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">for</span> <span class="n">rr</span> <span class="ow">in</span> <span class="n">r</span><span class="p">]))</span>
+    <span class="n">keys_continue</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rr</span> <span class="ow">in</span> <span class="n">r</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="n">elements</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">elements</span><span class="p">))</span> <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">element</span><span class="p">,</span><span class="nb">list</span><span class="p">)</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">])</span> <span class="k">else</span> <span class="n">elements</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">elements</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">elements</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">elements</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+            <span class="n">keys_continue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Cannot merge jsons&#39;</span><span class="p">)</span>
+    <span class="c1">#return defaultdict(lambda:&#39;NA&#39;,out),keys_continue</span>
+    <span class="k">return</span> <span class="n">out</span><span class="p">,</span><span class="n">keys_continue</span>
+
+<span class="k">def</span> <span class="nf">_merge_jsons</span><span class="p">(</span><span class="n">r</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">out</span><span class="p">,</span><span class="n">k1s</span> <span class="o">=</span> <span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k1</span> <span class="ow">in</span> <span class="n">k1s</span><span class="p">:</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">],</span><span class="n">k2s</span> <span class="o">=</span> <span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">k2</span> <span class="ow">in</span> <span class="n">k2s</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">],</span><span class="n">k3s</span> <span class="o">=</span> <span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">k3</span> <span class="ow">in</span> <span class="n">k3s</span><span class="p">:</span>
+                <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">],</span><span class="n">k4s</span><span class="o">=</span><span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">k4</span> <span class="ow">in</span> <span class="n">k4s</span><span class="p">:</span>
+                    <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">],</span><span class="n">k5s</span><span class="o">=</span><span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">k5</span> <span class="ow">in</span> <span class="n">k5s</span><span class="p">:</span>
+                        <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">],</span><span class="n">k6s</span><span class="o">=</span><span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">])</span>
+                        <span class="k">for</span> <span class="n">k6</span> <span class="ow">in</span> <span class="n">k6s</span><span class="p">:</span>
+                            <span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">][</span><span class="n">k6</span><span class="p">],</span><span class="n">k7s</span><span class="o">=</span><span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">][</span><span class="n">k6</span><span class="p">])</span>
+                            <span class="k">for</span> <span class="n">k7</span> <span class="ow">in</span> <span class="n">k7s</span><span class="p">:</span>
+                            	<span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">][</span><span class="n">k6</span><span class="p">][</span><span class="n">k7</span><span class="p">],</span><span class="n">k8s</span><span class="o">=</span><span class="n">_join_list_of_jsons</span><span class="p">(</span><span class="n">out</span><span class="p">[</span><span class="n">k1</span><span class="p">][</span><span class="n">k2</span><span class="p">][</span><span class="n">k3</span><span class="p">][</span><span class="n">k4</span><span class="p">][</span><span class="n">k5</span><span class="p">][</span><span class="n">k6</span><span class="p">][</span><span class="n">k7</span><span class="p">])</span>
+                            	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k8s</span><span class="p">):</span>
+                                	<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Depth exceeded&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="k">def</span> <span class="nf">_chunker</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">),</span> <span class="n">size</span><span class="p">))</span>
+
+<div class="viewcode-block" id="wd_q"><a class="viewcode-back" href="../../johnny5.html#johnny5.query.wd_q">[docs]</a><span class="k">def</span> <span class="nf">wd_q</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Queries the Wikidata API provided a dictionary of features.</span>
+<span class="sd">	It handles the pages limit and the results limit by doing multiple queries and then merging the resulting json objects.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	d : dict</span>
+<span class="sd">		Dictionary.</span>
+<span class="sd">	show : boolean (False)</span>
+<span class="sd">		If True it will print all the used urls.</span>
+<span class="sd">	</span>
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	r : dict</span>
+<span class="sd">		Dictionary with the result of the query.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+<span class="sd">	&gt;&gt;&gt; XXX</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?&#39;</span>
+	<span class="n">d</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;wbgetentities&#39;</span> <span class="k">if</span> <span class="s1">&#39;action&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span>
+	<span class="n">d</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span>  <span class="k">if</span> <span class="s1">&#39;format&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span>
+	<span class="n">use</span> <span class="o">=</span> <span class="s1">&#39;ids&#39;</span>
+	<span class="n">pages</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">use</span><span class="p">]</span>
+	<span class="n">pages</span> <span class="o">=</span> <span class="n">pages</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">pages</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">pages</span><span class="p">]</span>
+	<span class="c1">#pages = pages if hasattr(pages,&#39;__iter__&#39;) else [pages]</span>
+	<span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">u</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">use</span><span class="p">:</span>
+			<span class="n">props</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">_string</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span>
+			<span class="c1">#props[u] = &#39;|&#39;.join([_string(vv) for vv in v]) if hasattr(v,&#39;__iter__&#39;) else v</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">_chunker</span><span class="p">(</span><span class="n">pages</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">chunk</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="n">use</span><span class="p">:</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">_string</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span><span class="p">}</span>
+		<span class="c1">#p = {use:&#39;|&#39;.join([_string(vv) for vv in v]) if hasattr(v,&#39;__iter__&#39;) else v}</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">props</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">))</span>
+		<span class="n">rr</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+		<span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">_merge_jsons</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="wp_q"><a class="viewcode-back" href="../../johnny5.html#johnny5.query.wp_q">[docs]</a><span class="k">def</span> <span class="nf">wp_q</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">continue_override</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Queries the Wikipedia API provided a dictionary of features.</span>
+<span class="sd">	It handles the pages limit and the results limit by doing multiple queries and then merging the resulting json objects.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	d : dict</span>
+<span class="sd">		Dictionary.</span>
+<span class="sd">	lang : str (default = &#39;en&#39;)</span>
+<span class="sd">		Language edition to query.</span>
+<span class="sd">	continue_override : boolean (False)</span>
+<span class="sd">		If True it will not get any of the continuation queries.</span>
+<span class="sd">	show : boolean (False)</span>
+<span class="sd">		If True it will print all the used urls.</span>
+<span class="sd">	</span>
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	r : dict</span>
+<span class="sd">		Dictionary with the result of the query.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+<span class="sd">	&gt;&gt;&gt; wp_q({&#39;pageids&#39;:[306,207]})</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">base_url</span> <span class="o">=</span> <span class="s1">&#39;https://&#39;</span><span class="o">+</span><span class="n">lang</span><span class="o">+</span><span class="s1">&#39;.wikipedia.org/w/api.php?&#39;</span>
+	<span class="n">d</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;query&#39;</span> <span class="k">if</span> <span class="s1">&#39;action&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]</span>
+	<span class="n">d</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;json&#39;</span>  <span class="k">if</span> <span class="s1">&#39;format&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="k">else</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span>
+	<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;titles&#39;</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">&amp;</span><span class="p">(</span><span class="s1">&#39;pageids&#39;</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">())):</span>
+		<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s2">&quot;Cannot use &#39;pageids&#39; at the same time as &#39;titles&#39;&quot;</span><span class="p">)</span>
+	<span class="n">use</span> <span class="o">=</span> <span class="s1">&#39;pageids&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;pageids&#39;</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span> <span class="k">else</span> <span class="s1">&#39;titles&#39;</span>
+	<span class="n">pages</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">use</span><span class="p">]</span>
+	<span class="n">pages</span> <span class="o">=</span> <span class="n">pages</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">pages</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">pages</span><span class="p">]</span>
+	<span class="c1">#pages = pages if hasattr(pages,&#39;__iter__&#39;) else [pages]</span>
+	<span class="c1">#if use == &#39;titles&#39;:</span>
+	<span class="c1">#	pages = [page.encode(&#39;utf-8&#39;) for page in pages if page is not None]  #IS ENCODING TO UTF-8</span>
+	<span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">u</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+		<span class="k">if</span> <span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;titles&#39;</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">]:</span>
+			<span class="n">props</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">_string</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span>
+			<span class="c1">#props[u] = &#39;|&#39;.join([_string(vv) for vv in v]) if hasattr(v,&#39;__iter__&#39;) else v</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">_chunker</span><span class="p">(</span><span class="n">pages</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">chunk</span>
+		<span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="n">use</span><span class="p">:</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">_string</span><span class="p">(</span><span class="n">vv</span><span class="p">)</span> <span class="k">for</span> <span class="n">vv</span> <span class="ow">in</span> <span class="n">v</span><span class="p">])</span> <span class="k">if</span> <span class="n">_isiter</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">else</span> <span class="n">v</span><span class="p">}</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">props</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&amp;&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">))</span>
+		<span class="n">rr</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+		<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+			<span class="n">r</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rr</span><span class="p">)</span>
+			<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;continue&#39;</span> <span class="ow">in</span> <span class="n">rr</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&amp;</span><span class="p">(</span><span class="ow">not</span> <span class="n">continue_override</span><span class="p">):</span>
+				<span class="n">continue_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">rr</span><span class="p">[</span><span class="s1">&#39;continue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span><span class="s1">&#39;continue&#39;</span><span class="p">]</span>
+				<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">continue_keys</span><span class="p">)</span> <span class="o">&gt;</span><span class="mi">1</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: more than one continue parameter found.&#39;</span><span class="p">)</span>
+					<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">))</span>
+				<span class="n">continue_dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">continue_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">rr</span><span class="p">[</span><span class="s1">&#39;continue&#39;</span><span class="p">][</span><span class="n">continue_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]}</span>
+				<span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+					<span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">+</span><span class="s1">&#39;&amp;&#39;</span><span class="o">+</span><span class="n">urlencode</span><span class="p">(</span><span class="n">continue_dict</span><span class="p">))</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+				<span class="n">rr</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="o">+</span><span class="s1">&#39;&amp;&#39;</span><span class="o">+</span><span class="n">urlencode</span><span class="p">(</span><span class="n">continue_dict</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">break</span>
+	<span class="k">return</span> <span class="n">_merge_jsons</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, C. Jara-Figueroa.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
