@@ -393,7 +393,7 @@
 <div class="viewcode-block" id="article.curid_nonen"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.curid_nonen">[docs]</a>	<span class="k">def</span> <span class="nf">curid_nonen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the curid in a non-english language.</span>
-<span class="sd">		The curid has the form: &#39;lang.curid&#39;</span>
+<span class="sd">		The curid is a string and has the form: &#39;lang.curid&#39;</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_curid_nonen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">for</span> <span class="n">lang</span><span class="p">,</span><span class="n">title</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
@@ -405,7 +405,7 @@
 					<span class="k">pass</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_curid_nonen</span></div>
 
-<div class="viewcode-block" id="article.wiki_links"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.wiki_links">[docs]</a>	<span class="k">def</span> <span class="nf">wiki_links</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.wiki_links"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.wiki_links">[docs]</a>	<span class="k">def</span> <span class="nf">wiki_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets all the Wikipedia pages linked from the article.</span>
 <span class="sd">		It only returns Wikipedia pages.</span>
@@ -415,8 +415,13 @@
 <span class="sd">		titles : set</span>
 <span class="sd">			Set of titles for the Wikipedia pages linked from the article.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
-		<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+		<span class="n">remove</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;##&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="n">section_title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_title</span><span class="p">))</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
 		<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">])</span>
+		<span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">titles</span></div>
 
 <div class="viewcode-block" id="article.infobox"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.infobox">[docs]</a>	<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -792,6 +797,7 @@
 <span class="sd">		-------</span>
 <span class="sd">		content : str</span>
 <span class="sd">			Content for the page in the given language.</span>
+<span class="sd">			Content is in WikiMarkup</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="n">lang</span><span class="o">==</span><span class="s1">&#39;en&#39;</span><span class="p">:</span>
 			<span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_wp</span><span class="p">):</span>
@@ -809,6 +815,35 @@
 			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Functionality not supported yet.&#39;</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span></div>
 
+<div class="viewcode-block" id="article.section"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.section">[docs]</a>	<span class="k">def</span> <span class="nf">section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_title</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Returns the content inside the given section of the English Wikipedia page.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		section_title : str</span>
+<span class="sd">			Title of the section.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		content : str</span>
+<span class="sd">			Content of the section in WikiMarkup</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="n">section_title</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">insec</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">insec</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span><span class="o">==</span><span class="n">depth</span><span class="p">:</span>
+					<span class="k">break</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+				<span class="n">insec</span><span class="o">=</span><span class="kc">True</span>
+				<span class="n">depth</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+				<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="article.redirect"><a class="viewcode-back" href="../../rst/johnny5.html#johnny5.article.redirect">[docs]</a>	<span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>

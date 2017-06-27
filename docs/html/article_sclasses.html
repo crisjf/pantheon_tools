@@ -93,7 +93,7 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="johnny5.html">johnny5 package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="johnny5.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About</a></li>
 </ul>
 
@@ -162,7 +162,7 @@
 <h1>Article sub-classes<a class="headerlink" href="#article-sub-classes" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<p>The following sub-classes belong to the <code class="xref py py-class docutils literal"><span class="pre">article</span></code> class.</p>
+<p>The following sub-classes belong to the <a class="reference internal" href="johnny5.html#johnny5.article" title="johnny5.article"><code class="xref py py-class docutils literal"><span class="pre">article</span></code></a> class.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -231,7 +231,8 @@ The output is in Wikipedia markup.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
-<div><p>Content for the page in the given language.</p>
+<div><p>Content for the page in the given language.
+Content is in WikiMarkup</p>
 </div></blockquote>
 </td>
 </tr>
@@ -276,7 +277,7 @@ Will get it if it is not provided.</p>
 <dt id="johnny5.biography.curid_nonen">
 <code class="descname">curid_nonen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.curid_nonen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curid in a non-english language.
-The curid has the form: ‘lang.curid’</p>
+The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
@@ -547,6 +548,30 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.biography.section">
+<code class="descname">section</code><span class="sig-paren">(</span><em>section_title</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content inside the given section of the English Wikipedia page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section_title</strong> : str</p>
+<blockquote>
+<div><p>Title of the section.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
+<blockquote class="last">
+<div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.biography.title">
 <code class="descname">title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the title of the article.
@@ -595,7 +620,7 @@ Will get it if it is not provided.</p>
 
 <dl class="method">
 <dt id="johnny5.biography.wiki_links">
-<code class="descname">wiki_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.wiki_links" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wiki_links</code><span class="sig-paren">(</span><em>section_title=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.wiki_links" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all the Wikipedia pages linked from the article.
 It only returns Wikipedia pages.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -644,7 +669,8 @@ The output is in Wikipedia markup.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
-<div><p>Content for the page in the given language.</p>
+<div><p>Content for the page in the given language.
+Content is in WikiMarkup</p>
 </div></blockquote>
 </td>
 </tr>
@@ -736,7 +762,7 @@ Will get it if it is not provided.</p>
 <dt id="johnny5.place.curid_nonen">
 <code class="descname">curid_nonen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.curid_nonen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curid in a non-english language.
-The curid has the form: ‘lang.curid’</p>
+The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
@@ -909,6 +935,30 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.place.section">
+<code class="descname">section</code><span class="sig-paren">(</span><em>section_title</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content inside the given section of the English Wikipedia page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section_title</strong> : str</p>
+<blockquote>
+<div><p>Title of the section.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
+<blockquote class="last">
+<div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.place.title">
 <code class="descname">title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the title of the article.
@@ -957,7 +1007,7 @@ Will get it if it is not provided.</p>
 
 <dl class="method">
 <dt id="johnny5.place.wiki_links">
-<code class="descname">wiki_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.wiki_links" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wiki_links</code><span class="sig-paren">(</span><em>section_title=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.wiki_links" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all the Wikipedia pages linked from the article.
 It only returns Wikipedia pages.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1014,7 +1064,8 @@ The output is in Wikipedia markup.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
-<div><p>Content for the page in the given language.</p>
+<div><p>Content for the page in the given language.
+Content is in WikiMarkup</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1059,7 +1110,7 @@ Will get it if it is not provided.</p>
 <dt id="johnny5.band.curid_nonen">
 <code class="descname">curid_nonen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.curid_nonen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curid in a non-english language.
-The curid has the form: ‘lang.curid’</p>
+The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
@@ -1296,6 +1347,30 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.band.section">
+<code class="descname">section</code><span class="sig-paren">(</span><em>section_title</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content inside the given section of the English Wikipedia page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section_title</strong> : str</p>
+<blockquote>
+<div><p>Title of the section.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
+<blockquote class="last">
+<div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.band.spotify_id">
 <code class="descname">spotify_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#band.spotify_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.band.spotify_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses Wikidata to get the spotify_id of the band.</p>
@@ -1376,7 +1451,7 @@ Will get it if it is not provided.</p>
 
 <dl class="method">
 <dt id="johnny5.band.wiki_links">
-<code class="descname">wiki_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.wiki_links" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wiki_links</code><span class="sig-paren">(</span><em>section_title=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.wiki_links" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all the Wikipedia pages linked from the article.
 It only returns Wikipedia pages.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1425,7 +1500,8 @@ The output is in Wikipedia markup.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
-<div><p>Content for the page in the given language.</p>
+<div><p>Content for the page in the given language.
+Content is in WikiMarkup</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1470,7 +1546,7 @@ Will get it if it is not provided.</p>
 <dt id="johnny5.song.curid_nonen">
 <code class="descname">curid_nonen</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.curid_nonen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the curid in a non-english language.
-The curid has the form: ‘lang.curid’</p>
+The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
@@ -1671,6 +1747,30 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.song.section">
+<code class="descname">section</code><span class="sig-paren">(</span><em>section_title</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the content inside the given section of the English Wikipedia page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>section_title</strong> : str</p>
+<blockquote>
+<div><p>Title of the section.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
+<blockquote class="last">
+<div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.song.title">
 <code class="descname">title</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.title" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the title of the article.
@@ -1719,7 +1819,7 @@ Will get it if it is not provided.</p>
 
 <dl class="method">
 <dt id="johnny5.song.wiki_links">
-<code class="descname">wiki_links</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.wiki_links" title="Permalink to this definition">¶</a></dt>
+<code class="descname">wiki_links</code><span class="sig-paren">(</span><em>section_title=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.wiki_links" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets all the Wikipedia pages linked from the article.
 It only returns Wikipedia pages.</p>
 <table class="docutils field-list" frame="void" rules="none">

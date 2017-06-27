@@ -191,7 +191,7 @@
 <span class="kn">import</span> <span class="nn">six</span>
 
 
-<div class="viewcode-block" id="article"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article">[docs]</a><span class="k">class</span> <span class="nc">article</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="article"><a class="viewcode-back" href="../../johnny5.html#johnny5.article">[docs]</a><span class="k">class</span> <span class="nc">article</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	This is the main class for this module.</span>
 <span class="sd">	All other classes belong to this class.</span>
@@ -290,7 +290,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="article.data_wp"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.data_wp">[docs]</a>	<span class="k">def</span> <span class="nf">data_wp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.data_wp"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.data_wp">[docs]</a>	<span class="k">def</span> <span class="nf">data_wp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the metadata about the Wikipedia page.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -324,7 +324,7 @@
 					<span class="bp">self</span><span class="o">.</span><span class="n">_missing_wp</span><span class="p">()</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.data_wd"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.data_wd">[docs]</a>	<span class="k">def</span> <span class="nf">data_wd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.data_wd"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.data_wd">[docs]</a>	<span class="k">def</span> <span class="nf">data_wd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the metadata about the Wikidata page.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -340,7 +340,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">wd_q</span><span class="p">({</span><span class="s1">&#39;languages&#39;</span><span class="p">:</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="s1">&#39;ids&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;wdid&#39;</span><span class="p">]})[</span><span class="s1">&#39;entities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.wdid"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.wdid">[docs]</a>	<span class="k">def</span> <span class="nf">wdid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.wdid"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.wdid">[docs]</a>	<span class="k">def</span> <span class="nf">wdid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the wdid of the article.</span>
 <span class="sd">		Will get it if it is not provided.</span>
@@ -358,7 +358,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_missing_wd</span><span class="p">()</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;wdid&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.curid"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.curid">[docs]</a>	<span class="k">def</span> <span class="nf">curid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.curid"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.curid">[docs]</a>	<span class="k">def</span> <span class="nf">curid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the english curid of the article.</span>
 <span class="sd">		Will get it if it is not provided.</span>
@@ -368,7 +368,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;curid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_wp</span><span class="p">()[</span><span class="s1">&#39;pageid&#39;</span><span class="p">]</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;curid&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.title"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.title">[docs]</a>	<span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.title"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.title">[docs]</a>	<span class="k">def</span> <span class="nf">title</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the title of the article.</span>
 <span class="sd">		Will get it if it is not provided.</span>
@@ -379,7 +379,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_wp</span><span class="p">()[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.url"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.url">[docs]</a>	<span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wiki</span><span class="o">=</span><span class="s1">&#39;wp&#39;</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="article.url"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.url">[docs]</a>	<span class="k">def</span> <span class="nf">url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wiki</span><span class="o">=</span><span class="s1">&#39;wp&#39;</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
 		<span class="k">if</span> <span class="n">wiki</span> <span class="o">==</span> <span class="s1">&#39;wp&#39;</span><span class="p">:</span>
 			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 				<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No Wikipedia page corresponding to this article&quot;</span><span class="p">)</span>
@@ -397,10 +397,10 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Wrong wiki&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="article.curid_nonen"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.curid_nonen">[docs]</a>	<span class="k">def</span> <span class="nf">curid_nonen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.curid_nonen"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.curid_nonen">[docs]</a>	<span class="k">def</span> <span class="nf">curid_nonen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the curid in a non-english language.</span>
-<span class="sd">		The curid has the form: &#39;lang.curid&#39;</span>
+<span class="sd">		The curid is a string and has the form: &#39;lang.curid&#39;</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_curid_nonen</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">for</span> <span class="n">lang</span><span class="p">,</span><span class="n">title</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
@@ -412,7 +412,7 @@
 					<span class="k">pass</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_curid_nonen</span></div>
 
-<div class="viewcode-block" id="article.wiki_links"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.wiki_links">[docs]</a>	<span class="k">def</span> <span class="nf">wiki_links</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.wiki_links"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.wiki_links">[docs]</a>	<span class="k">def</span> <span class="nf">wiki_links</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_title</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets all the Wikipedia pages linked from the article.</span>
 <span class="sd">		It only returns Wikipedia pages.</span>
@@ -422,11 +422,16 @@
 <span class="sd">		titles : set</span>
 <span class="sd">			Set of titles for the Wikipedia pages linked from the article.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
-		<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+		<span class="n">remove</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;##&#39;</span><span class="p">])</span>
+		<span class="k">if</span> <span class="n">section_title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_title</span><span class="p">))</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
 		<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">])</span>
+		<span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">titles</span></div>
 
-<div class="viewcode-block" id="article.infobox"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.infobox">[docs]</a>	<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="article.infobox"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.infobox">[docs]</a>	<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returns the infobox of the article.</span>
 
@@ -526,7 +531,7 @@
 					
 		<span class="k">return</span> <span class="n">box</span>
 
-<div class="viewcode-block" id="article.extract"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.extract">[docs]</a>	<span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="article.extract"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.extract">[docs]</a>	<span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the page extract (brief description).</span>
 
@@ -548,7 +553,7 @@
 			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Functionality not supported yet&#39;</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ex</span></div>
 
-<div class="viewcode-block" id="article.langlinks"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.langlinks">[docs]</a>	<span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="article.langlinks"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.langlinks">[docs]</a>	<span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">		Returns the langlinks of the article.</span>
 
@@ -593,7 +598,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span> <span class="k">if</span> <span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.creation_date"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.creation_date">[docs]</a>	<span class="k">def</span> <span class="nf">creation_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="article.creation_date"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.creation_date">[docs]</a>	<span class="k">def</span> <span class="nf">creation_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the creation date of the different Wikipedia language editions.</span>
 <span class="sd">		The Wikipedia API requires this data to be requestes one page at a time, so there is no boost in collecting pages into a list.</span>
@@ -633,13 +638,13 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_creation_date</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestamp</span>
 			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_creation_date</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.L"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.L">[docs]</a>	<span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.L"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.L">[docs]</a>	<span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the number of language editions of the article.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">langlinks</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="article.previous_titles"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.previous_titles">[docs]</a>	<span class="k">def</span> <span class="nf">previous_titles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.previous_titles"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.previous_titles">[docs]</a>	<span class="k">def</span> <span class="nf">previous_titles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets all the previous titles the page had</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -654,7 +659,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_previous_titles</span> <span class="o">=</span> <span class="n">titles</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_titles</span></div>
 
-<div class="viewcode-block" id="article.image_url"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.image_url">[docs]</a>	<span class="k">def</span> <span class="nf">image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.image_url"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.image_url">[docs]</a>	<span class="k">def</span> <span class="nf">image_url</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the url for the image that appears in the infobox.</span>
 <span class="sd">		It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</span>
@@ -737,7 +742,7 @@
 			<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="k">return</span> <span class="n">results</span>
 
-<div class="viewcode-block" id="article.wd_prop"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.wd_prop">[docs]</a>	<span class="k">def</span> <span class="nf">wd_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prop</span><span class="p">):</span>
+<div class="viewcode-block" id="article.wd_prop"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.wd_prop">[docs]</a>	<span class="k">def</span> <span class="nf">wd_prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prop</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the requested Wikidata propery.</span>
 <span class="sd">		</span>
@@ -776,7 +781,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_wd_claims</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="s1">&#39;NA&#39;</span><span class="p">)]</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wd_claims</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.dump"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.dump">[docs]</a>	<span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="article.dump"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.dump">[docs]</a>	<span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Dumps the object to a file.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -785,7 +790,7 @@
 		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
 			<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">outfile</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="article.content"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.content">[docs]</a>	<span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="article.content"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.content">[docs]</a>	<span class="k">def</span> <span class="nf">content</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the content of the Wikipedia page in the selected language.</span>
 <span class="sd">		The output is in Wikipedia markup.</span>
@@ -799,6 +804,7 @@
 <span class="sd">		-------</span>
 <span class="sd">		content : str</span>
 <span class="sd">			Content for the page in the given language.</span>
+<span class="sd">			Content is in WikiMarkup</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="n">lang</span><span class="o">==</span><span class="s1">&#39;en&#39;</span><span class="p">:</span>
 			<span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_content</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_wp</span><span class="p">):</span>
@@ -816,8 +822,37 @@
 			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Functionality not supported yet.&#39;</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content</span></div>
 
+<div class="viewcode-block" id="article.section"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.section">[docs]</a>	<span class="k">def</span> <span class="nf">section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">section_title</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Returns the content inside the given section of the English Wikipedia page.</span>
 
-<div class="viewcode-block" id="article.redirect"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.redirect">[docs]</a>	<span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		section_title : str</span>
+<span class="sd">			Title of the section.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		content : str</span>
+<span class="sd">			Content of the section in WikiMarkup</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">title</span> <span class="o">=</span> <span class="n">section_title</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">insec</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="n">depth</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">insec</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span><span class="o">==</span><span class="n">depth</span><span class="p">:</span>
+					<span class="k">break</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">==</span><span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+				<span class="n">insec</span><span class="o">=</span><span class="kc">True</span>
+				<span class="n">depth</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+				<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="article.redirect"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.redirect">[docs]</a>	<span class="k">def</span> <span class="nf">redirect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Handles redirects if the page has one.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -833,7 +868,7 @@
 				<span class="k">else</span><span class="p">:</span>
 					<span class="bp">self</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">red</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="article.revisions"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.revisions">[docs]</a>	<span class="k">def</span> <span class="nf">revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="article.revisions"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.revisions">[docs]</a>	<span class="k">def</span> <span class="nf">revisions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">user</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the timestamps for the edit history of the Wikipedia article.</span>
 
@@ -850,7 +885,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="p">[</span><span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_revisions</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="article.pageviews"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.pageviews">[docs]</a>	<span class="k">def</span> <span class="nf">pageviews</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">start_date</span><span class="p">,</span><span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">agg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">cdate_override</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">daily</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="article.pageviews"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.pageviews">[docs]</a>	<span class="k">def</span> <span class="nf">pageviews</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">start_date</span><span class="p">,</span><span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">agg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">cdate_override</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">daily</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the pageviews between the provided dates for the given language editions.</span>
 
@@ -1000,7 +1035,7 @@
 			<span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;daily_views&#39;</span><span class="p">]:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_daily_views</span><span class="p">[</span><span class="n">lang</span><span class="p">][</span><span class="n">day</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;daily_views&#39;</span><span class="p">][</span><span class="n">day</span><span class="p">]</span>
 
-<div class="viewcode-block" id="article.find_article"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.article.find_article">[docs]</a>	<span class="k">def</span> <span class="nf">find_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="article.find_article"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.find_article">[docs]</a>	<span class="k">def</span> <span class="nf">find_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Find the article by trying different combinations of the title&#39;s capitalization.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -1060,7 +1095,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_isa_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="place"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.place">[docs]</a><span class="k">class</span> <span class="nc">place</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
+<div class="viewcode-block" id="place"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.place">[docs]</a><span class="k">class</span> <span class="nc">place</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;Places (includes methods to get coordinates).&#39;&#39;&#39;</span>
 	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">place</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -1070,7 +1105,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_country</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="place.coords"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.place.coords">[docs]</a>	<span class="k">def</span> <span class="nf">coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wiki</span><span class="o">=</span><span class="s1">&#39;wp&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="place.coords"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.place.coords">[docs]</a>	<span class="k">def</span> <span class="nf">coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">wiki</span><span class="o">=</span><span class="s1">&#39;wp&#39;</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Get the coordinates either from Wikipedia or Wikidata.</span>
 <span class="sd">		</span>
@@ -1146,7 +1181,7 @@
 					<span class="bp">self</span><span class="o">.</span><span class="n">_coords</span> <span class="o">=</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span><span class="n">lon</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coords</span></div>
 
-<div class="viewcode-block" id="place.country"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.place.country">[docs]</a>	<span class="k">def</span> <span class="nf">country</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GAPI_KEY</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="place.country"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.place.country">[docs]</a>	<span class="k">def</span> <span class="nf">country</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">GAPI_KEY</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Uses google places API to get the country of the given place.</span>
 
@@ -1171,7 +1206,7 @@
 			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_country</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div></div>
 
 
-<div class="viewcode-block" id="song"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.song">[docs]</a><span class="k">class</span> <span class="nc">song</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
+<div class="viewcode-block" id="song"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.song">[docs]</a><span class="k">class</span> <span class="nc">song</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;Class for songs.&#39;&#39;&#39;</span>
 	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">I</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">song</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
@@ -1179,7 +1214,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_wpsong</span>  <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_genre</span>   <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="song.disambiguate"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.song.disambiguate">[docs]</a>	<span class="k">def</span> <span class="nf">disambiguate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">artist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="song.disambiguate"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.song.disambiguate">[docs]</a>	<span class="k">def</span> <span class="nf">disambiguate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">artist</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		If the provided page is a disambiguation page, it returns the song that it was able to find within the links.</span>
 
@@ -1218,7 +1253,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="song.find_article"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.song.find_article">[docs]</a>	<span class="k">def</span> <span class="nf">find_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="song.find_article"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.song.find_article">[docs]</a>	<span class="k">def</span> <span class="nf">find_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Find the article by trying different combinations of the title.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -1241,7 +1276,7 @@
 						<span class="bp">self</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">titles</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">Itype</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
 						<span class="bp">self</span><span class="o">.</span><span class="n">redirect</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="song.is_song"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.song.is_song">[docs]</a>	<span class="k">def</span> <span class="nf">is_song</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="song.is_song"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.song.is_song">[docs]</a>	<span class="k">def</span> <span class="nf">is_song</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_song</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span><span class="o">==</span><span class="s1">&#39;NA&#39;</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_is_song</span><span class="o">=</span><span class="kc">False</span>
@@ -1272,13 +1307,13 @@
 						<span class="k">break</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wpsong</span>
 
-<div class="viewcode-block" id="song.performer"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.song.performer">[docs]</a>	<span class="k">def</span> <span class="nf">performer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="song.performer"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.song.performer">[docs]</a>	<span class="k">def</span> <span class="nf">performer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="n">article</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">wd_prop</span><span class="p">(</span><span class="s1">&#39;P175&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">title</span><span class="p">()</span></div></div>
 
 
 
 
-<div class="viewcode-block" id="biography"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography">[docs]</a><span class="k">class</span> <span class="nc">biography</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
+<div class="viewcode-block" id="biography"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography">[docs]</a><span class="k">class</span> <span class="nc">biography</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Class for biographies of real people.</span>
 <span class="sd">	&#39;&#39;&#39;</span>
@@ -1309,7 +1344,7 @@
 		<span class="n">out</span><span class="o">+=</span> <span class="s1">&#39;L     : &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">())</span> 
 		<span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="biography.name"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.name">[docs]</a>	<span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.name"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.name">[docs]</a>	<span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;\([^\(\)]*\)&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -1327,7 +1362,7 @@
 					<span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;NULL&#39;</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span></div>
 
-<div class="viewcode-block" id="biography.desc"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.desc">[docs]</a>	<span class="k">def</span> <span class="nf">desc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.desc"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.desc">[docs]</a>	<span class="k">def</span> <span class="nf">desc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		One sentence description of the person.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
@@ -1338,7 +1373,7 @@
 		<span class="n">sentence</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39; +&#39;</span><span class="p">,</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">sentence</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">sentence</span></div>
 
-<div class="viewcode-block" id="biography.is_bio"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.is_bio">[docs]</a>	<span class="k">def</span> <span class="nf">is_bio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.is_bio"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.is_bio">[docs]</a>	<span class="k">def</span> <span class="nf">is_bio</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Classifier for biographies</span>
 
@@ -1390,7 +1425,7 @@
 				<span class="k">pass</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wpbio</span>
 
-<div class="viewcode-block" id="biography.alive"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.alive">[docs]</a>	<span class="k">def</span> <span class="nf">alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boolean</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.alive"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.alive">[docs]</a>	<span class="k">def</span> <span class="nf">alive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">boolean</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Retrieves the information whether the biography is about a living or dead person.</span>
 <span class="sd">		It uses the WikiProject Biography template from the Talk page to get this information.</span>
@@ -1428,7 +1463,7 @@
 			<span class="k">return</span> <span class="n">alive</span></div>
 
 
-<div class="viewcode-block" id="biography.death_date"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.death_date">[docs]</a>	<span class="k">def</span> <span class="nf">death_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.death_date"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.death_date">[docs]</a>	<span class="k">def</span> <span class="nf">death_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the death date from the infobox. </span>
 <span class="sd">		If it is not available in the infobox (or it cannot parse it) it uses Wikidata.</span>
@@ -1476,7 +1511,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="n">d</span></div>
 
-<div class="viewcode-block" id="biography.occupation"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.biography.occupation">[docs]</a>	<span class="k">def</span> <span class="nf">occupation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.occupation"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.occupation">[docs]</a>	<span class="k">def</span> <span class="nf">occupation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Uses the occupation classifier Occ to predict the occupation.</span>
 <span class="sd">		This function will run slow when C is not passed, since it will need to load the classifier in each call.</span>
@@ -1516,7 +1551,7 @@
 				<span class="n">prob_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_occ</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_occ</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 				<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_occ</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">prob_ratio</span></div></div>
 
-<div class="viewcode-block" id="band"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band">[docs]</a><span class="k">class</span> <span class="nc">band</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
+<div class="viewcode-block" id="band"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band">[docs]</a><span class="k">class</span> <span class="nc">band</span><span class="p">(</span><span class="n">article</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Class for music bands.</span>
 <span class="sd">	It links to Spotify as well.</span>
@@ -1534,7 +1569,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_spotify_id</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_top_songs</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="band.btypes"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.btypes">[docs]</a>	<span class="k">def</span> <span class="nf">btypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.btypes"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.btypes">[docs]</a>	<span class="k">def</span> <span class="nf">btypes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;Categories this band is an instance of.&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_btypes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="n">tps</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1546,7 +1581,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_btypes</span> <span class="o">=</span> <span class="n">tps</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_btypes</span></div>
 
-<div class="viewcode-block" id="band.genres"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.genres">[docs]</a>	<span class="k">def</span> <span class="nf">genres</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.genres"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.genres">[docs]</a>	<span class="k">def</span> <span class="nf">genres</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Genres according to Wikidata</span>
 
@@ -1565,7 +1600,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_genres</span> <span class="o">=</span> <span class="n">genres</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_genres</span></div>
 
-<div class="viewcode-block" id="band.inception"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.inception">[docs]</a>	<span class="k">def</span> <span class="nf">inception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.inception"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.inception">[docs]</a>	<span class="k">def</span> <span class="nf">inception</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Band&#39;s creation year</span>
 
@@ -1598,7 +1633,7 @@
 				<span class="bp">self</span><span class="o">.</span><span class="n">_inception</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">years</span><span class="p">)</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_inception</span></div>
 
-<div class="viewcode-block" id="band.formation_place"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.formation_place">[docs]</a>	<span class="k">def</span> <span class="nf">formation_place</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.formation_place"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.formation_place">[docs]</a>	<span class="k">def</span> <span class="nf">formation_place</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the formation place for the band.</span>
 <span class="sd">		Uses Wikidata and Wikipedia</span>
@@ -1667,7 +1702,7 @@
 				
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_formation_place</span></div>
 
-<div class="viewcode-block" id="band.spotify_id"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.spotify_id">[docs]</a>	<span class="k">def</span> <span class="nf">spotify_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.spotify_id"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.spotify_id">[docs]</a>	<span class="k">def</span> <span class="nf">spotify_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Uses Wikidata to get the spotify_id of the band.</span>
 
@@ -1684,7 +1719,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_spotify_id</span> <span class="o">=</span> <span class="n">i</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_spotify_id</span></div>
 
-<div class="viewcode-block" id="band.spotify_pop"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.classes.band.spotify_pop">[docs]</a>	<span class="k">def</span> <span class="nf">spotify_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="band.spotify_pop"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.band.spotify_pop">[docs]</a>	<span class="k">def</span> <span class="nf">spotify_pop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Average popularity of the top 10 songs of the band</span>
 
@@ -1709,7 +1744,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="p">(</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="s1">&#39;NULL&#39;</span><span class="p">)</span></div></div>
 
-<div class="viewcode-block" id="CTY"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.CTY">[docs]</a><span class="k">class</span> <span class="nc">CTY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="CTY"><a class="viewcode-back" href="../../johnny5.html#johnny5.CTY">[docs]</a><span class="k">class</span> <span class="nc">CTY</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	City classifier.</span>
 <span class="sd">	Used to classify coordinates into cities.</span>
@@ -1731,7 +1766,7 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">c_coords</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cities</span><span class="p">[[</span><span class="s1">&#39;ch_id&#39;</span><span class="p">,</span><span class="s1">&#39;Latitude&#39;</span><span class="p">,</span><span class="s1">&#39;Longitude&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_out</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="CTY.city"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.CTY.city">[docs]</a>	<span class="k">def</span> <span class="nf">city</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
+<div class="viewcode-block" id="CTY.city"><a class="viewcode-back" href="../../johnny5.html#johnny5.CTY.city">[docs]</a>	<span class="k">def</span> <span class="nf">city</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">coords</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;Returns the city&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)):</span>
 		<span class="c1">#if (len(coords) == 2)&amp;(not hasattr(coords[0], &#39;__iter__&#39;)):</span>
@@ -1768,7 +1803,7 @@
 		
 
 
-<div class="viewcode-block" id="Occ"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.Occ">[docs]</a><span class="k">class</span> <span class="nc">Occ</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Occ"><a class="viewcode-back" href="../../johnny5.html#johnny5.Occ">[docs]</a><span class="k">class</span> <span class="nc">Occ</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Occupation classifier based on Wikipedia and Wikidata information.</span>
 <span class="sd">	</span>
@@ -1797,7 +1832,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s2">&quot;train.tsv&quot;</span><span class="p">)])</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">train_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-<div class="viewcode-block" id="Occ.classify"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.Occ.classify">[docs]</a>	<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Occ.classify"><a class="viewcode-back" href="../../johnny5.html#johnny5.Occ.classify">[docs]</a>	<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Classifier function</span>
 
@@ -1902,7 +1937,7 @@
 				<span class="n">words</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">word</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">words</span>
 
-<div class="viewcode-block" id="Occ.feats"><a class="viewcode-back" href="../../johnny5.html#johnny5.classes.Occ.feats">[docs]</a>	<span class="k">def</span> <span class="nf">feats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">):</span>
+<div class="viewcode-block" id="Occ.feats"><a class="viewcode-back" href="../../johnny5.html#johnny5.Occ.feats">[docs]</a>	<span class="k">def</span> <span class="nf">feats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the features of the article that feed into the classifier.</span>
 
