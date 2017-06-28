@@ -117,7 +117,8 @@ def wd_q(d,show=False):
 
 	Examples
 	--------
-	>>> XXX
+	>>> r = j5.wp_q({'prop':'extracts','exintro':'','explaintext':'','pageids':736})
+	>>> print list(r['query']['pages'].values())[0]['extract']
 	"""
 	base_url = 'https://www.wikidata.org/w/api.php?'
 	d['action'] = 'wbgetentities' if 'action' not in set(d.keys()) else d['action']
@@ -188,6 +189,8 @@ def wp_q(d,lang='en',continue_override=False,show=False):
 	for chunk in _chunker(pages,50):
 		v = chunk
 		p = {use:str.join('|', [_string(vv) for vv in v]) if _isiter(v) else v}
+		for key,value in p.items():
+			p[key]=value.encode('utf-8')
 		url = base_url + urlencode(props) + '&' + urlencode(p)
 		if show:
 			print(url.replace(' ','_'))

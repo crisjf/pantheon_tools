@@ -54,7 +54,7 @@ class article(object):
 
 		self._slow_connection = slow_connection
 
-		self._ex = None
+		self._extracts = {'en':None}
 
 		self._langlinks_dat = None 
 		self._langlinks = None
@@ -238,7 +238,7 @@ class article(object):
 	def curid_nonen(self):
 		'''
 		Gets the curid in a non-english language.
-		The curid has the form: 'lang.curid'
+		The curid is a string and has the form: 'lang.curid'
 		'''
 		if self._curid_nonen is None:
 			for lang,title in list(self.langlinks().items()):
@@ -250,7 +250,7 @@ class article(object):
 					pass
 		return self._curid_nonen
 
-	def wiki_links(self):
+	def wiki_links(self,section_title=None):
 		'''
 		Gets all the Wikipedia pages linked from the article.
 		It only returns Wikipedia pages.
@@ -260,8 +260,13 @@ class article(object):
 		titles : set
 			Set of titles for the Wikipedia pages linked from the article.
 		'''
-		links = mwparserfromhell.parse(self.content()).filter_wikilinks()
+		remove = set(['##'])
+		if section_title is None:
+			links = mwparserfromhell.parse(self.content()).filter_wikilinks()
+		else:
+			links = mwparserfromhell.parse(self.section(section_title)).filter_wikilinks()
 		titles = set([link.encode('utf-8').split('|')[0].replace('[[','').replace(']]','').strip() for link in links])
+		titles = titles.difference(remove)
 		return titles
 
 	def infobox(self,lang='en',force=False):
@@ -379,12 +384,19 @@ class article(object):
 			Wikipedia page extract.
 		'''
 		if lang=='en':
-			if self._ex is None:
+			if self._extracts['en'] is None:
 				r = wp_q({'prop':'extracts','exintro':'','explaintext':'','pageids':self.curid()})
-				self._ex = list(r['query']['pages'].values())[0]['extract']
+				self._extracts['en'] = list(r['query']['pages'].values())[0]['extract']
+			return self._extracts['en']
 		else:
-			raise NameError('Functionality not supported yet')
-		return self._ex
+			if lang not in self._extracts.keys():
+				title = self.langlinks(lang)
+				if title !='NULL':
+					r = wp_q({'prop':'extracts','exintro':'','explaintext':'','titles':title},lang=lang)
+					self._extracts[lang] = list(r['query']['pages'].values())[0]['extract']
+				else:
+					self._extracts[lang] = 'NULL'
+			return self._extracts[lang]
 
 	def langlinks(self,lang=None):
 		"""
@@ -429,7 +441,8 @@ class article(object):
 			self._langlinks = {val['lang']:val['*'] for val in self._langlinks_dat}
 			if ('en' not in list(self._langlinks.keys()))&(self.title() is not None):
 				self._langlinks['en'] = self.title()
-		return self._langlinks if lang is None else self._langlinks[lang]
+		l = defaultdict(lambda:'NULL',self._langlinks)
+		return self._langlinks if lang is None else l[lang]
 
 	def creation_date(self,lang=None):
 		'''
@@ -474,12 +487,22 @@ class article(object):
 	def L(self):
 		'''
 		Returns the number of language editions of the article.
+
+		Returns
+		-------
+		L : int
+			Number of Wikipedia language editions this article exists in.
 		'''
 		return len(self.langlinks())
 
 	def previous_titles(self):
 		'''
-		Gets all the previous titles the page had
+		Gets all the previous titles the page had.
+
+		Returns
+		-------
+		titles : set? list?
+			Collection of previous titles
 		'''
 		if self._previous_titles is None:
 			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user','comment'],'rvlimit':'500'})
@@ -496,6 +519,11 @@ class article(object):
 		'''
 		Gets the url for the image that appears in the infobox.
 		It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.
+
+		Returns
+		-------
+		img_url : str
+			Ful url for the image.
 		'''
 		self.data_wp()
 		if self._image_url is None:
@@ -637,6 +665,7 @@ class article(object):
 		-------
 		content : str
 			Content for the page in the given language.
+			Content is in WikiMarkup
 		'''
 		if lang=='en':
 			if (self._content is None)&(not self.no_wp):
@@ -654,6 +683,35 @@ class article(object):
 			raise NameError('Functionality not supported yet.')
 		return self._content
 
+	def section(self,section_title):
+		'''
+		Returns the content inside the given section of the English Wikipedia page.
+
+		Parameters
+		----------
+		section_title : str
+			Title of the section.
+
+		Returns
+		-------
+		content : str
+			Content of the section in WikiMarkup
+		'''
+		title = section_title.strip()
+		out = []
+		insec = False
+		depth = 0
+		for line in self.content().split('\n'):
+			if insec:
+				if line.count('=')==depth:
+					break
+				else:
+					out.append(line)
+			if line.replace('=','').strip().lower()==title.lower():
+				insec=True
+				depth = line.count('=')
+				out.append(line)
+		return '\n'.join(out)
 
 	def redirect(self):
 		'''
@@ -1314,7 +1372,7 @@ class biography(article):
 		else:
 			return d
 
-	def occupation(self,C=None,return_all=False):
+	def occupation(self,C=None,return_all=False,override_train=False):
 		'''
 		Uses the occupation classifier Occ to predict the occupation.
 		This function will run slow when C is not passed, since it will need to load the classifier in each call.
@@ -1329,6 +1387,8 @@ class biography(article):
 			Occupation classifier included in johnny5. If not provided, this function will be slow.
 		return_all : Boolean (False)
 			If True it will return the probabilities for all occupations in as list of 2-tuples.
+		override_train : boolean (False)
+			If True it will run the classifier even if the given biography belongs to the training set.
 
 		Returns
 		-------
@@ -1338,13 +1398,13 @@ class biography(article):
 			Ratio between the most likely occupation, and the second most likely occupation.
 			If the biography belongs to the training set, it will return prob_ratio=0.
 		'''
-		if self._occ is None:
+		if (self._occ is None)|override_train:
 			if C is None:
 				print('Warning: This function will run slow because it needs to load the classifier in each call.')
 			C = Occ() if C is None else C
 			article = copy.deepcopy(self)
 			self._feats = C.feats(article)
-			self._occ = C.classify(article,return_all=True)
+			self._occ = C.classify(article,return_all=True,override_train=override_train)
 		if return_all:
 			return self._occ
 		else:
@@ -1635,7 +1695,7 @@ class Occ(object):
 		self.train = dict([tuple(line[:-1].split('\t')) for line in open(path+"train.tsv")])
 		self.train_keys = set(self.train.keys())
 
-	def classify(self,article,return_all=False):
+	def classify(self,article,return_all=False,override_train=False):
 		'''
 		Classifier function
 
@@ -1645,6 +1705,8 @@ class Occ(object):
 			Biography to classify.
 		return_all : boolean (False)
 			If True it will return the probabilities for all occupations in as list of 2-tuples.
+		override_train : boolean (False)
+			If True it will run the classifier even if the given biography belongs to the training set.
 
 		Returns
 		-------
@@ -1654,13 +1716,12 @@ class Occ(object):
 			Ratio between the most likely occupation, and the second most likely occupation.
 			If the biography belongs to the training set, it will return prob_ratio=0.
 		'''	
-		if str(article.curid()) in self.train_keys:
-			return self.train[str(article.curid())],0
+		if (str(article.curid()) in self.train_keys)&(not override_train):
+			return (self.train[str(article.curid())],0)
 		else:
 			probs = self._classifier.prob_classify(self.feats(article))
 			probs = sorted([(c,probs.prob(c)) for c in probs.samples()],key=operator.itemgetter(1),reverse=True)
 			prob_ratio = probs[0][1]/probs[1][1]
-			#article._occ = (probs[0][0],prob_ratio)
 			article._occ = probs
 			if return_all:
 				return probs
@@ -1793,7 +1854,6 @@ def _id_type(I):
 #			break
 #	out.I = data_json['I']
 #	out._data = data_json['_data']
-#	out._ex = data_json['_ex']
 #	out._langlinks_dat = data_json['_langlinks_dat']
 #	out._langlinks = data_json['_langlinks']
 #	out._infobox = data_json['_infobox']
