@@ -22,7 +22,7 @@ except:
 	print('Warning: spotipy module not found')
 from multiprocessing import cpu_count
 from joblib import Parallel, delayed
-from .query import wd_q,wp_q,_string,_isnum,_rget
+from .query import wd_q,wp_q,_string,_isnum,_rget,get_soup
 from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints,parse_p
 from collections import defaultdict
 from numpy import mean
@@ -82,6 +82,7 @@ class article(object):
 		self._previous_titles = None
 
 		self._isa_values = None
+		self._tables = None
 
 		if not self._slow_connection:
 			self.find_article()
@@ -260,14 +261,61 @@ class article(object):
 		titles : set
 			Set of titles for the Wikipedia pages linked from the article.
 		'''
-		remove = set(['##'])
-		if section_title is None:
-			links = mwparserfromhell.parse(self.content()).filter_wikilinks()
+		if 'category:' not in self.title().lower():
+			remove = set(['##'])
+			if section_title is None:
+				links = mwparserfromhell.parse(self.content()).filter_wikilinks()
+			else:
+				links = mwparserfromhell.parse(self.section(section_title)).filter_wikilinks()
+			titles = set([link.encode('utf-8').split('|')[0].replace('[[','').replace(']]','').strip() for link in links])
+			titles = titles.difference(remove)
 		else:
-			links = mwparserfromhell.parse(self.section(section_title)).filter_wikilinks()
-		titles = set([link.encode('utf-8').split('|')[0].replace('[[','').replace(']]','').strip() for link in links])
-		titles = titles.difference(remove)
+			titles = set([])
+			soup = get_soup(self.title())
+			lists = soup.find_all(name='div',attrs={'id':'mw-pages'})
+			for l in lists:
+				for link in l.find_all(name='a'):
+					if link.contents[0] != 'learn more':
+						titles.add(link['href'].replace('/wiki/',''))
 		return titles
+
+	def html_soup(self):
+		'''
+		Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.
+		'''
+		soup = get_soup(self.title())
+		return soup
+
+	def tables(self,i=None):
+		'''
+		Gets tables in the page.
+
+		Parameters
+		----------
+		i : int (optional)
+			Position of the table to get.
+			If not provided it will return a list of tables
+
+		Returns
+		-------
+		tables : list or pandas.DataFrame
+			The parsed tables found in the page.
+		'''
+		if self._tables is None:
+			self._tables = []
+			soup = get_soup(self.title())
+			for table in soup.find_all(name='table'):
+				head = [h.contents[0] for h in table.find_all(name='th')]
+				out = []
+				for line in table.find_all(name='tr'):
+					line = line.find_all(name='td')
+					if len(line)!=0:
+						out.append(tuple(line))
+				self._tables.append(DataFrame(out,columns=head))
+		if i is not None:
+			return self._tables[i]
+		else:
+			return self._tables
 
 	def infobox(self,lang='en',force=False):
 		"""

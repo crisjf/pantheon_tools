@@ -209,6 +209,18 @@ Type of I.</p>
 <dt id="johnny5.article.L">
 <code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#article.L"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of language editions of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of Wikipedia language editions this article exists in.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -326,10 +338,28 @@ The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.article.html_soup">
+<code class="descname">html_soup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#article.html_soup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.html_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.article.image_url">
 <code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#article.image_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.image_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the url for the image that appears in the infobox.
 It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>img_url</strong> : str</p>
+<blockquote class="last">
+<div><p>Ful url for the image.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -419,7 +449,19 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.article.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#article.previous_titles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had</p>
+<dd><p>Gets all the previous titles the page had.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<blockquote class="last">
+<div><p>Collection of previous titles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -463,6 +505,31 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
 <div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.article.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#article.tables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.article.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets tables in the page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int (optional)</p>
+<blockquote>
+<div><p>Position of the table to get.
+If not provided it will return a list of tables</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tables</strong> : list or pandas.DataFrame</p>
+<blockquote class="last">
+<div><p>The parsed tables found in the page.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -590,7 +657,7 @@ THIS FUNCTION NEEDS TO BE UPDATED!</p>
 </div>
 <dl class="method">
 <dt id="johnny5.Occ.classify">
-<code class="descname">classify</code><span class="sig-paren">(</span><em>article</em>, <em>return_all=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#Occ.classify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.Occ.classify" title="Permalink to this definition">¶</a></dt>
+<code class="descname">classify</code><span class="sig-paren">(</span><em>article</em>, <em>return_all=False</em>, <em>override_train=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/johnny5/classes.html#Occ.classify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.Occ.classify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classifier function</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -603,6 +670,10 @@ THIS FUNCTION NEEDS TO BE UPDATED!</p>
 <p><strong>return_all</strong> : boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the probabilities for all occupations in as list of 2-tuples.</p>
+</div></blockquote>
+<p><strong>override_train</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will run the classifier even if the given biography belongs to the training set.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -855,7 +926,8 @@ It handles the pages limit and the results limit by doing multiple queries and t
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">XXX</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">j5</span><span class="o">.</span><span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;extracts&#39;</span><span class="p">,</span><span class="s1">&#39;exintro&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;explaintext&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="mi">736</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>

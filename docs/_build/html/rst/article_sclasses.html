@@ -195,6 +195,18 @@
 <dt id="johnny5.biography.L">
 <code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of language editions of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of Wikipedia language editions this article exists in.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -367,10 +379,28 @@ If it is not available in the infobox (or it cannot parse it) it uses Wikidata.<
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.biography.html_soup">
+<code class="descname">html_soup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.html_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.biography.image_url">
 <code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.image_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the url for the image that appears in the infobox.
 It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>img_url</strong> : str</p>
+<blockquote class="last">
+<div><p>Ful url for the image.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -446,7 +476,7 @@ If no language is provided, it will resturn a dictionary with the languages as k
 
 <dl class="method">
 <dt id="johnny5.biography.occupation">
-<code class="descname">occupation</code><span class="sig-paren">(</span><em>C=None</em>, <em>return_all=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#biography.occupation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.biography.occupation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">occupation</code><span class="sig-paren">(</span><em>C=None</em>, <em>return_all=False</em>, <em>override_train=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/johnny5/classes.html#biography.occupation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#johnny5.biography.occupation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses the occupation classifier Occ to predict the occupation.
 This function will run slow when C is not passed, since it will need to load the classifier in each call.
 Instead use:</p>
@@ -465,6 +495,10 @@ Instead use:</p>
 <p><strong>return_all</strong> : Boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the probabilities for all occupations in as list of 2-tuples.</p>
+</div></blockquote>
+<p><strong>override_train</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will run the classifier even if the given biography belongs to the training set.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -522,7 +556,19 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.biography.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had</p>
+<dd><p>Gets all the previous titles the page had.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<blockquote class="last">
+<div><p>Collection of previous titles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -566,6 +612,31 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
 <div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.biography.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets tables in the page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int (optional)</p>
+<blockquote>
+<div><p>Position of the table to get.
+If not provided it will return a list of tables</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tables</strong> : list or pandas.DataFrame</p>
+<blockquote class="last">
+<div><p>The parsed tables found in the page.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -652,6 +723,18 @@ It only returns Wikipedia pages.</p>
 <dt id="johnny5.place.L">
 <code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of language editions of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of Wikipedia language editions this article exists in.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -816,10 +899,28 @@ The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.place.html_soup">
+<code class="descname">html_soup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.html_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.place.image_url">
 <code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.image_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the url for the image that appears in the infobox.
 It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>img_url</strong> : str</p>
+<blockquote class="last">
+<div><p>Ful url for the image.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -909,7 +1010,19 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.place.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had</p>
+<dd><p>Gets all the previous titles the page had.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<blockquote class="last">
+<div><p>Collection of previous titles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -953,6 +1066,31 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
 <div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.place.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets tables in the page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int (optional)</p>
+<blockquote>
+<div><p>Position of the table to get.
+If not provided it will return a list of tables</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tables</strong> : list or pandas.DataFrame</p>
+<blockquote class="last">
+<div><p>The parsed tables found in the page.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1041,6 +1179,18 @@ IT SHOULD ALSO LINK TO GENIUS</p>
 <dt id="johnny5.band.L">
 <code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of language editions of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of Wikipedia language editions this article exists in.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1210,10 +1360,28 @@ Typically the title of the Wikipedia page corresponding to the place.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.band.html_soup">
+<code class="descname">html_soup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.html_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.band.image_url">
 <code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.image_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the url for the image that appears in the infobox.
 It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>img_url</strong> : str</p>
+<blockquote class="last">
+<div><p>Ful url for the image.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1321,7 +1489,19 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.band.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had</p>
+<dd><p>Gets all the previous titles the page had.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<blockquote class="last">
+<div><p>Collection of previous titles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1399,6 +1579,31 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">mean(pop),max(pop),len(pop)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.band.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets tables in the page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int (optional)</p>
+<blockquote>
+<div><p>Position of the table to get.
+If not provided it will return a list of tables</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tables</strong> : list or pandas.DataFrame</p>
+<blockquote class="last">
+<div><p>The parsed tables found in the page.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1483,6 +1688,18 @@ It only returns Wikipedia pages.</p>
 <dt id="johnny5.song.L">
 <code class="descname">L</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.L" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the number of language editions of the article.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>L</strong> : int</p>
+<blockquote class="last">
+<div><p>Number of Wikipedia language editions this article exists in.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1618,10 +1835,28 @@ The curid is a string and has the form: ‘lang.curid’</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="johnny5.song.html_soup">
+<code class="descname">html_soup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.html_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="johnny5.song.image_url">
 <code class="descname">image_url</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.image_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the url for the image that appears in the infobox.
 It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>img_url</strong> : str</p>
+<blockquote class="last">
+<div><p>Ful url for the image.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1721,7 +1956,19 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.song.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had</p>
+<dd><p>Gets all the previous titles the page had.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<blockquote class="last">
+<div><p>Collection of previous titles</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -1765,6 +2012,31 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>content</strong> : str</p>
 <blockquote class="last">
 <div><p>Content of the section in WikiMarkup</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="johnny5.song.tables">
+<code class="descname">tables</code><span class="sig-paren">(</span><em>i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.tables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets tables in the page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int (optional)</p>
+<blockquote>
+<div><p>Position of the table to get.
+If not provided it will return a list of tables</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>tables</strong> : list or pandas.DataFrame</p>
+<blockquote class="last">
+<div><p>The parsed tables found in the page.</p>
 </div></blockquote>
 </td>
 </tr>

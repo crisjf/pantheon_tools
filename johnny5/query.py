@@ -7,6 +7,7 @@ try:
 except:
 	pass
 import requests
+from bs4 import BeautifulSoup
 from collections import defaultdict
 from itertools import chain
 import urllib
@@ -97,6 +98,14 @@ def _merge_jsons(r):
 
 def _chunker(seq, size):
 	return (seq[pos:pos + size] for pos in xrange(0, len(seq), size))
+
+def get_soup(title):
+	'''
+	Returns a BeautifulSoup object for the given title of the english Wikipedia page.
+	'''
+	r = requests.get('https://en.wikipedia.org/wiki/'+title)
+	soup = BeautifulSoup(r.text, 'html.parser')
+	return soup
 
 def wd_q(d,show=False):
 	"""

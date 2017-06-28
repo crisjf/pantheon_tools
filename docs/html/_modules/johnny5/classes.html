@@ -184,7 +184,7 @@
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: spotipy module not found&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="k">import</span> <span class="n">cpu_count</span>
 <span class="kn">from</span> <span class="nn">joblib</span> <span class="k">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">wd_q</span><span class="p">,</span><span class="n">wp_q</span><span class="p">,</span><span class="n">_string</span><span class="p">,</span><span class="n">_isnum</span><span class="p">,</span><span class="n">_rget</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">wd_q</span><span class="p">,</span><span class="n">wp_q</span><span class="p">,</span><span class="n">_string</span><span class="p">,</span><span class="n">_isnum</span><span class="p">,</span><span class="n">_rget</span><span class="p">,</span><span class="n">get_soup</span>
 <span class="kn">from</span> <span class="nn">.parse_functions</span> <span class="k">import</span> <span class="n">drop_comments</span><span class="p">,</span><span class="n">find_nth</span><span class="p">,</span><span class="n">parse_date</span><span class="p">,</span><span class="n">get_links</span><span class="p">,</span><span class="n">correct_titles</span><span class="p">,</span><span class="n">parse_ints</span><span class="p">,</span><span class="n">parse_p</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">mean</span>
@@ -216,7 +216,7 @@
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">_slow_connection</span> <span class="o">=</span> <span class="n">slow_connection</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">_ex</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;en&#39;</span><span class="p">:</span><span class="kc">None</span><span class="p">}</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="o">=</span> <span class="kc">None</span> 
 		<span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span> <span class="o">=</span> <span class="kc">None</span>
@@ -244,6 +244,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_previous_titles</span> <span class="o">=</span> <span class="kc">None</span>
 
 		<span class="bp">self</span><span class="o">.</span><span class="n">_isa_values</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="o">=</span> <span class="kc">None</span>
 
 		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_slow_connection</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">find_article</span><span class="p">()</span>
@@ -422,14 +423,61 @@
 <span class="sd">		titles : set</span>
 <span class="sd">			Set of titles for the Wikipedia pages linked from the article.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
-		<span class="n">remove</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;##&#39;</span><span class="p">])</span>
-		<span class="k">if</span> <span class="n">section_title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+		<span class="k">if</span> <span class="s1">&#39;category:&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+			<span class="n">remove</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;##&#39;</span><span class="p">])</span>
+			<span class="k">if</span> <span class="n">section_title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">())</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_title</span><span class="p">))</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
+			<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">])</span>
+			<span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="n">links</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">(</span><span class="n">section_title</span><span class="p">))</span><span class="o">.</span><span class="n">filter_wikilinks</span><span class="p">()</span>
-		<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">])</span>
-		<span class="n">titles</span> <span class="o">=</span> <span class="n">titles</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span>
+			<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+			<span class="n">soup</span> <span class="o">=</span> <span class="n">get_soup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+			<span class="n">lists</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;div&#39;</span><span class="p">,</span><span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;id&#39;</span><span class="p">:</span><span class="s1">&#39;mw-pages&#39;</span><span class="p">})</span>
+			<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lists</span><span class="p">:</span>
+				<span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">l</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;learn more&#39;</span><span class="p">:</span>
+						<span class="n">titles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">link</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/wiki/&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
 		<span class="k">return</span> <span class="n">titles</span></div>
+
+<div class="viewcode-block" id="article.html_soup"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.html_soup">[docs]</a>	<span class="k">def</span> <span class="nf">html_soup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Gets the html for the English Wikipedia page parsed as a BeautifulSoup object.</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">soup</span> <span class="o">=</span> <span class="n">get_soup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+		<span class="k">return</span> <span class="n">soup</span></div>
+
+<div class="viewcode-block" id="article.tables"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.tables">[docs]</a>	<span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Gets tables in the page.</span>
+
+<span class="sd">		Parameters</span>
+<span class="sd">		----------</span>
+<span class="sd">		i : int (optional)</span>
+<span class="sd">			Position of the table to get.</span>
+<span class="sd">			If not provided it will return a list of tables</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		tables : list or pandas.DataFrame</span>
+<span class="sd">			The parsed tables found in the page.</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="n">soup</span> <span class="o">=</span> <span class="n">get_soup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+			<span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;table&#39;</span><span class="p">):</span>
+				<span class="n">head</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;th&#39;</span><span class="p">)]</span>
+				<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">table</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;tr&#39;</span><span class="p">):</span>
+					<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;td&#39;</span><span class="p">)</span>
+					<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+						<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="n">head</span><span class="p">))</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span></div>
 
 <div class="viewcode-block" id="article.infobox"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.infobox">[docs]</a>	<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -546,12 +594,19 @@
 <span class="sd">			Wikipedia page extract.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="n">lang</span><span class="o">==</span><span class="s1">&#39;en&#39;</span><span class="p">:</span>
-			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 				<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;extracts&#39;</span><span class="p">,</span><span class="s1">&#39;exintro&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;explaintext&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">curid</span><span class="p">()})</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">_ex</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Functionality not supported yet&#39;</span><span class="p">)</span>
-		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ex</span></div>
+			<span class="k">if</span> <span class="n">lang</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+				<span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">langlinks</span><span class="p">(</span><span class="n">lang</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">title</span> <span class="o">!=</span><span class="s1">&#39;NULL&#39;</span><span class="p">:</span>
+					<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;extracts&#39;</span><span class="p">,</span><span class="s1">&#39;exintro&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;explaintext&#39;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;titles&#39;</span><span class="p">:</span><span class="n">title</span><span class="p">},</span><span class="n">lang</span><span class="o">=</span><span class="n">lang</span><span class="p">)</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;NULL&#39;</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extracts</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="article.langlinks"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.langlinks">[docs]</a>	<span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&quot;&quot;&quot;</span>
@@ -596,7 +651,8 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;lang&#39;</span><span class="p">]:</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;*&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks_dat</span><span class="p">}</span>
 			<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;en&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span><span class="o">&amp;</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
-		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span> <span class="k">if</span> <span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span></div>
+		<span class="n">l</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_langlinks</span> <span class="k">if</span> <span class="n">lang</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">l</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span></div>
 
 <div class="viewcode-block" id="article.creation_date"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.creation_date">[docs]</a>	<span class="k">def</span> <span class="nf">creation_date</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">lang</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
@@ -641,12 +697,22 @@
 <div class="viewcode-block" id="article.L"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.L">[docs]</a>	<span class="k">def</span> <span class="nf">L</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Returns the number of language editions of the article.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		L : int</span>
+<span class="sd">			Number of Wikipedia language editions this article exists in.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">langlinks</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="article.previous_titles"><a class="viewcode-back" href="../../johnny5.html#johnny5.article.previous_titles">[docs]</a>	<span class="k">def</span> <span class="nf">previous_titles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">		Gets all the previous titles the page had</span>
+<span class="sd">		Gets all the previous titles the page had.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		titles : set? list?</span>
+<span class="sd">			Collection of previous titles</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_previous_titles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;revisions&#39;</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">curid</span><span class="p">(),</span><span class="s1">&#39;rvprop&#39;</span><span class="p">:[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">,</span><span class="s1">&#39;user&#39;</span><span class="p">,</span><span class="s1">&#39;comment&#39;</span><span class="p">],</span><span class="s1">&#39;rvlimit&#39;</span><span class="p">:</span><span class="s1">&#39;500&#39;</span><span class="p">})</span>
@@ -663,6 +729,11 @@
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Gets the url for the image that appears in the infobox.</span>
 <span class="sd">		It iterates over a list of languages, ordered according to their wikipedia size, until it finds one.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		img_url : str</span>
+<span class="sd">			Ful url for the image.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">data_wp</span><span class="p">()</span>
 		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1511,7 +1582,7 @@
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">return</span> <span class="n">d</span></div>
 
-<div class="viewcode-block" id="biography.occupation"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.occupation">[docs]</a>	<span class="k">def</span> <span class="nf">occupation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="biography.occupation"><a class="viewcode-back" href="../../article_sclasses.html#johnny5.biography.occupation">[docs]</a>	<span class="k">def</span> <span class="nf">occupation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">C</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">override_train</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Uses the occupation classifier Occ to predict the occupation.</span>
 <span class="sd">		This function will run slow when C is not passed, since it will need to load the classifier in each call.</span>
@@ -1526,6 +1597,8 @@
 <span class="sd">			Occupation classifier included in johnny5. If not provided, this function will be slow.</span>
 <span class="sd">		return_all : Boolean (False)</span>
 <span class="sd">			If True it will return the probabilities for all occupations in as list of 2-tuples.</span>
+<span class="sd">		override_train : boolean (False)</span>
+<span class="sd">			If True it will run the classifier even if the given biography belongs to the training set.</span>
 
 <span class="sd">		Returns</span>
 <span class="sd">		-------</span>
@@ -1535,13 +1608,13 @@
 <span class="sd">			Ratio between the most likely occupation, and the second most likely occupation.</span>
 <span class="sd">			If the biography belongs to the training set, it will return prob_ratio=0.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_occ</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_occ</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">|</span><span class="n">override_train</span><span class="p">:</span>
 			<span class="k">if</span> <span class="n">C</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: This function will run slow because it needs to load the classifier in each call.&#39;</span><span class="p">)</span>
 			<span class="n">C</span> <span class="o">=</span> <span class="n">Occ</span><span class="p">()</span> <span class="k">if</span> <span class="n">C</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">C</span>
 			<span class="n">article</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_feats</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">feats</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">_occ</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_occ</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">override_train</span><span class="o">=</span><span class="n">override_train</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
 			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_occ</span>
 		<span class="k">else</span><span class="p">:</span>
@@ -1832,7 +1905,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">train</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([</span><span class="nb">tuple</span><span class="p">(</span><span class="n">line</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s2">&quot;train.tsv&quot;</span><span class="p">)])</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">train_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-<div class="viewcode-block" id="Occ.classify"><a class="viewcode-back" href="../../johnny5.html#johnny5.Occ.classify">[docs]</a>	<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Occ.classify"><a class="viewcode-back" href="../../johnny5.html#johnny5.Occ.classify">[docs]</a>	<span class="k">def</span> <span class="nf">classify</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">article</span><span class="p">,</span><span class="n">return_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">override_train</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		Classifier function</span>
 
@@ -1842,6 +1915,8 @@
 <span class="sd">			Biography to classify.</span>
 <span class="sd">		return_all : boolean (False)</span>
 <span class="sd">			If True it will return the probabilities for all occupations in as list of 2-tuples.</span>
+<span class="sd">		override_train : boolean (False)</span>
+<span class="sd">			If True it will run the classifier even if the given biography belongs to the training set.</span>
 
 <span class="sd">		Returns</span>
 <span class="sd">		-------</span>
@@ -1851,13 +1926,12 @@
 <span class="sd">			Ratio between the most likely occupation, and the second most likely occupation.</span>
 <span class="sd">			If the biography belongs to the training set, it will return prob_ratio=0.</span>
 <span class="sd">		&#39;&#39;&#39;</span>	
-		<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">curid</span><span class="p">())</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_keys</span><span class="p">:</span>
-			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">curid</span><span class="p">())],</span><span class="mi">0</span>
+		<span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">curid</span><span class="p">())</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_keys</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="ow">not</span> <span class="n">override_train</span><span class="p">):</span>
+			<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">article</span><span class="o">.</span><span class="n">curid</span><span class="p">())],</span><span class="mi">0</span><span class="p">)</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="n">probs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classifier</span><span class="o">.</span><span class="n">prob_classify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">feats</span><span class="p">(</span><span class="n">article</span><span class="p">))</span>
 			<span class="n">probs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span><span class="n">c</span><span class="p">,</span><span class="n">probs</span><span class="o">.</span><span class="n">prob</span><span class="p">(</span><span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">probs</span><span class="o">.</span><span class="n">samples</span><span class="p">()],</span><span class="n">key</span><span class="o">=</span><span class="n">operator</span><span class="o">.</span><span class="n">itemgetter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 			<span class="n">prob_ratio</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">probs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-			<span class="c1">#article._occ = (probs[0][0],prob_ratio)</span>
 			<span class="n">article</span><span class="o">.</span><span class="n">_occ</span> <span class="o">=</span> <span class="n">probs</span>
 			<span class="k">if</span> <span class="n">return_all</span><span class="p">:</span>
 				<span class="k">return</span> <span class="n">probs</span>
@@ -1990,7 +2064,6 @@
 <span class="c1">#			break</span>
 <span class="c1">#	out.I = data_json[&#39;I&#39;]</span>
 <span class="c1">#	out._data = data_json[&#39;_data&#39;]</span>
-<span class="c1">#	out._ex = data_json[&#39;_ex&#39;]</span>
 <span class="c1">#	out._langlinks_dat = data_json[&#39;_langlinks_dat&#39;]</span>
 <span class="c1">#	out._langlinks = data_json[&#39;_langlinks&#39;]</span>
 <span class="c1">#	out._infobox = data_json[&#39;_infobox&#39;]</span>
