@@ -7,7 +7,7 @@ try:
 except:
 	pass
 import six
-import os,time,codecs
+import os,time,codecs,datetime as dt
 from .parse_functions import drop_comments
 from pandas import DataFrame
 from .query import wd_q,wp_q,_rget
@@ -22,6 +22,20 @@ from bs4 import BeautifulSoup
 
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
 wikidata_API = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json'
+
+
+def _dt2str(d):
+	'''Transforms a datetime object into a string of the form yyyymmdd'''
+	return str(d.year)+('00'+str(d.month))[-2:]+('00'+str(d.day))[-2:]
+
+def _all_dates(d1,d2):
+	'''gets all the dates between the given dates'''
+	delta = d2 - d1
+	out = []
+	for i in range(delta.days + 1):
+		d = (d1 + dt.timedelta(days=i))
+		out.append([int(d.year),int(d.month),int(d.day)])
+	return DataFrame(out,columns=['year','month','day'])
 
 def _wd_id(trigger):
     trigger = unicode(trigger).strip()

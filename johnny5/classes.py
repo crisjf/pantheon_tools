@@ -6,11 +6,12 @@ try:
 	import future
 except:
 	pass
-import json,os,operator,copy,mwparserfromhell,datetime,codecs,re
+import json,os,operator,copy,mwparserfromhell,datetime as dt,codecs,re
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
-from pandas import DataFrame,read_csv
-from .functions import country,_dms2dd
+from dateutil.relativedelta import relativedelta
+from pandas import DataFrame,read_csv,concat,merge
+from .functions import country,_dms2dd,_dt2str,_all_dates
 from geopy.distance import vincenty
 try:
     import cPickle as pickle
@@ -77,12 +78,13 @@ class article(object):
 		self.no_wd = False
 
 		self._revisions = None
-		self._views = {}
 		self._daily_views = {}
 		self._previous_titles = None
 
 		self._isa_values = None
 		self._tables = None
+
+		self._views = {'en':DataFrame([],columns=['year','month','day','views'])}
 
 		if not self._slow_connection:
 			self.find_article()
@@ -461,6 +463,9 @@ class article(object):
 			If a language is provided, it will return the name of the page in that language.
 			If no language is provided, it will resturn a dictionary with the languages as keys and the titles as values.
 		"""
+		if lang is not None:
+			if lang =='en':
+				return self.title()
 		if self._langlinks is None:
 			if self._langlinks_dat is None:
 				for Itype in ['curid','title','wdid']:
@@ -794,7 +799,7 @@ class article(object):
 		else:
 			return [val[0] for val in self._revisions]
 
-	def pageviews(self,start_date,end_date=None,agg=False,lang='en',cdate_override=False,daily=False):
+	def pageviews(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False,previous_titles=False):
 		'''
 		Gets the pageviews between the provided dates for the given language editions.
 
@@ -808,10 +813,90 @@ class article(object):
 		lang : str ('en')
 			Language edition to get the pageviews for. 
 			If lang=None is passed, it will get the pageviews for all language editions.
+		cdate_override : boolean (False)
+			If True it will get the pageviews before the creation date
 		daily : boolean (False)
 			If True it will return the daily pageviews.
-		agg : boolean (False)
-			If True it will sum all the pageviews.
+		previous_titles : boolean (False)
+			If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+		'''
+		#Checks start and end dates
+		if previous_titles:
+			if len(self.previous_titles())==0:
+				previous_titles=False
+		if lang not in self._views.keys():
+			self._views[lang] = DataFrame([],columns=['year','month','day','views'])
+		oldest = dt.date(2007,12,1)
+		rest_split = dt.date(2015,7,1) #starting from this date, it goes to rest
+		if start_date is None:
+			if cdate_override:
+				start_date=oldest
+			else:
+				y,m,d=self.creation_date(lang=lang).split('T')[0].split('-')
+				cdate = dt.date(int(y),int(m),int(d))
+				start_date = max([cdate,oldest])
+		else:
+			y = int(start_date.split('-')[0])
+			m = int(start_date.split('-')[1])
+			start_date = dt.date(y,m,1)
+
+		if end_date is None:
+			end_date = dt.date.today()
+		else:
+			y = int(end_date.split('-')[0])
+			m = int(end_date.split('-')[1])
+			end_date = dt.date(y,m,1)+relativedelta(months=1)-dt.timedelta(days=1)
+
+		if start_date>=end_date:
+			raise NameError('Start date must come before the end date.')
+
+		#Finds the missing dates
+		if len(self._views[lang]) == 0:
+			_start_date,_end_date = start_date,end_date
+		else:
+			cp = merge(_all_dates(start_date,end_date),self._views[lang],how='left')
+			missing_dates = [dt.date(y,m,d) for y,m,d in cp[cp['views'].isnull()][['year','month','day']].values]
+			if len(missing_dates)!=0:
+				_start_date,_end_date = min(missing_dates),max(missing_dates)
+			else:
+				_start_date,_end_date = start_date,start_date
+
+		#Gets data for missing dates
+		if _end_date>_start_date:
+			if _start_date>=rest_split:
+				self._pv_rest(_start_date,_end_date,lang=lang)
+			elif _end_date<rest_split:
+				self._pv_grok(_start_date,_end_date,lang=lang)
+			else:
+				self._pv_rest(rest_split,_end_date,lang=lang)
+				self._pv_grok(_start_date,rest_split-dt.timedelta(days=1),lang=lang)
+
+		#Selects the specified dates
+		_views = self._views[lang]
+		out = _views[((_views['year']>start_date.year)|((_views['year']==start_date.year)&(_views['month']>=start_date.month)))&((_views['year']<end_date.year)|((_views['year']==end_date.year)&(_views['month']<=end_date.month)))]
+		if daily:
+			return out.sort_values(by=['year','month','day'])
+		else:
+			return out.groupby(['year','month']).sum()[['views']].reset_index().sort_values(by=['year','month'])
+
+	def _pv_rest(self,start_date,end_date,lang='en'):
+		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang=lang)+'/daily/'+_dt2str(start_date)+'/'+_dt2str(end_date)
+		r = _rget(url).json()
+		new_views = DataFrame([(int(val['timestamp'][:4]),int(val['timestamp'][4:6]),int(val['timestamp'][6:8]),val['views']) for val in r['items']],columns=['year','month','day','views'])
+		self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
+
+	def _pv_grok(self,start_date,end_date,lang='en'):
+		days = _all_dates(start_date,end_date)
+		for y,m in days[['year','month']].drop_duplicates().values:
+			url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+self.langlinks(lang=lang)).replace(' ','_')
+			r = _rget(url).json()
+			self._views[lang] = self._views[lang][(self._views[lang]['year']!=y)|(self._views[lang]['month']!=m)]
+			new_views = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views']))
+			self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
+
+	def pageviews_old(self,start_date,end_date=None,agg=False,lang='en',cdate_override=False,daily=False):
+		'''
+		This will be deprecated soon.
 		'''
 		if lang is None:
 			out = {}
@@ -837,8 +922,8 @@ class article(object):
 			m0,y0 = None,None
 
 		if end_date is None:
-			yf = datetime.date.today().year
-			mf = datetime.date.today().month
+			yf = dt.date.today().year
+			mf = dt.date.today().month
 			if mf == 1:
 				yf = yf-1
 				mf = 12
