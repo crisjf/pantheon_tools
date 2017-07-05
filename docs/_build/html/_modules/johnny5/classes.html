@@ -979,6 +979,11 @@
 <span class="sd">		get_previous : boolean (True)</span>
 <span class="sd">			If True it will search for all the previous titles of the pages and get the pageviews for them as well.</span>
 <span class="sd">			Only works for English.</span>
+
+<span class="sd">		Returns</span>
+<span class="sd">		-------</span>
+<span class="sd">		views : pandas.DataFrame</span>
+<span class="sd">			Table with columns year,month,(day),views.</span>
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="n">get_previous</span><span class="o">=</span><span class="kc">False</span> <span class="k">if</span> <span class="n">lang</span><span class="o">!=</span><span class="s1">&#39;en&#39;</span> <span class="k">else</span> <span class="n">get_previous</span>
 		<span class="k">if</span> <span class="n">get_previous</span><span class="p">:</span>
