@@ -32,7 +32,7 @@ def _isiter(obj):
 
 def _rget(url):
 	'''Function used to track the requests that are performed.'''
-	print url
+	#print url
 	return requests.get(url)
 
 def _isnum(n):

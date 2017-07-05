@@ -84,6 +84,8 @@ class article(object):
 		self._isa_values = None
 		self._tables = None
 
+		self._get_previous = True
+
 		self._views = {'en':DataFrame([],columns=['year','month','day','views'])}
 
 		if not self._slow_connection:
@@ -551,10 +553,11 @@ class article(object):
 	def previous_titles(self):
 		'''
 		Gets all the previous titles the page had.
+		ONLY WORKS FOR ENGLISH FOR NOW 
 
 		Returns
 		-------
-		titles : set? list?
+		titles : set
 			Collection of previous titles
 		'''
 		if self._previous_titles is None:
@@ -799,7 +802,7 @@ class article(object):
 		else:
 			return [val[0] for val in self._revisions]
 
-	def pageviews(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False,previous_titles=False):
+	def pageviews(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False,get_previous=True):
 		'''
 		Gets the pageviews between the provided dates for the given language editions.
 
@@ -817,15 +820,19 @@ class article(object):
 			If True it will get the pageviews before the creation date
 		daily : boolean (False)
 			If True it will return the daily pageviews.
-		previous_titles : boolean (False)
+		get_previous : boolean (True)
 			If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+			Only works for English.
 		'''
-		#Checks start and end dates
-		if previous_titles:
-			if len(self.previous_titles())==0:
-				previous_titles=False
-		if lang not in self._views.keys():
+		get_previous=False if lang!='en' else get_previous
+		if get_previous:
+			if (len(self.previous_titles())==0):
+				get_previous=False
+		if (lang not in self._views.keys())|(self._get_previous!=get_previous):
 			self._views[lang] = DataFrame([],columns=['year','month','day','views'])
+		self._get_previous=get_previous
+
+		#Checks start and end dates
 		oldest = dt.date(2007,12,1)
 		rest_split = dt.date(2015,7,1) #starting from this date, it goes to rest
 		if start_date is None:
@@ -864,12 +871,12 @@ class article(object):
 		#Gets data for missing dates
 		if _end_date>_start_date:
 			if _start_date>=rest_split:
-				self._pv_rest(_start_date,_end_date,lang=lang)
+				self._pv_rest(_start_date,_end_date,get_previous=get_previous,lang=lang)
 			elif _end_date<rest_split:
-				self._pv_grok(_start_date,_end_date,lang=lang)
+				self._pv_grok(_start_date,_end_date,get_previous=get_previous,lang=lang)
 			else:
-				self._pv_rest(rest_split,_end_date,lang=lang)
-				self._pv_grok(_start_date,rest_split-dt.timedelta(days=1),lang=lang)
+				self._pv_rest(rest_split,_end_date,get_previous=get_previous,lang=lang)
+				self._pv_grok(_start_date,rest_split-dt.timedelta(days=1),get_previous=get_previous,lang=lang)
 
 		#Selects the specified dates
 		_views = self._views[lang]
@@ -879,155 +886,38 @@ class article(object):
 		else:
 			return out.groupby(['year','month']).sum()[['views']].reset_index().sort_values(by=['year','month'])
 
-	def _pv_rest(self,start_date,end_date,lang='en'):
+	def _pv_rest(self,start_date,end_date,get_previous=False,lang='en'):
 		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang=lang)+'/daily/'+_dt2str(start_date)+'/'+_dt2str(end_date)
 		r = _rget(url).json()
+		days = _all_dates(start_date,end_date)
 		new_views = DataFrame([(int(val['timestamp'][:4]),int(val['timestamp'][4:6]),int(val['timestamp'][6:8]),val['views']) for val in r['items']],columns=['year','month','day','views'])
+		new_views = merge(days,new_views,how='left').fillna(0)
+		if get_previous:
+			for title in self.previous_titles():
+				url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+title+'/daily/'+_dt2str(start_date)+'/'+_dt2str(end_date)
+				r = _rget(url).json()
+				new_views_t = DataFrame([(int(val['timestamp'][:4]),int(val['timestamp'][4:6]),int(val['timestamp'][6:8]),val['views']) for val in r['items']],columns=['year','month','day','views_t'])
+				new_views = merge(new_views,new_views_t,how='outer').fillna(0)
+				new_views['views'] = new_views['views']+new_views['views_t']
+				new_views = new_views.drop('views_t',1)
 		self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
 
-	def _pv_grok(self,start_date,end_date,lang='en'):
+	def _pv_grok(self,start_date,end_date,get_previous=False,lang='en'):
 		days = _all_dates(start_date,end_date)
 		for y,m in days[['year','month']].drop_duplicates().values:
+			self._views[lang] = self._views[lang][(self._views[lang]['year']!=y)|(self._views[lang]['month']!=m)]
 			url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+self.langlinks(lang=lang)).replace(' ','_')
 			r = _rget(url).json()
-			self._views[lang] = self._views[lang][(self._views[lang]['year']!=y)|(self._views[lang]['month']!=m)]
-			new_views = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views']))
+			new_views = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views']),how='left').fillna(0)
+			if get_previous:
+				for title in self.previous_titles():
+					url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+title).replace(' ','_')
+					r = _rget(url).json()
+					new_views_t = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views_t']),how='left').fillna(0)
+					new_views = merge(new_views,new_views_t,how='outer').fillna(0)
+					new_views['views'] = new_views['views']+new_views['views_t']
+					new_views = new_views.drop('views_t',1)
 			self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
-
-	def pageviews_old(self,start_date,end_date=None,agg=False,lang='en',cdate_override=False,daily=False):
-		'''
-		This will be deprecated soon.
-		'''
-		if lang is None:
-			out = {}
-			for lang in list(self.langlinks().keys()):
-				if agg:
-					out[lang] = sum(list(self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily).values()))
-				else:
-					out[lang] = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
-			return out
-		else:
-			if agg:
-				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override)
-				return sum(list(out.values()))
-			else:
-				out = self._pageviews_lang(start_date,end_date=end_date,lang=lang,cdate_override=cdate_override,daily=daily)
-				return out
-
-	def _pageviews_lang(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False):
-		if start_date is not None:
-			y0,m0 = start_date.split('-')
-			m0,y0 = int(m0),int(y0)
-		else:
-			m0,y0 = None,None
-
-		if end_date is None:
-			yf = dt.date.today().year
-			mf = dt.date.today().month
-			if mf == 1:
-				yf = yf-1
-				mf = 12
-			else:
-				mf = mf-1
-		else:
-			yf,mf = end_date.split('-')
-			mf,yf = int(mf),int(yf)
-
-		if lang not in list(self._views.keys()):
-			self._views[lang] = {}
-
-		if not cdate_override:
-			timestamp = self.creation_date(lang)
-			yy,mm = timestamp.split('-')[:2]
-			yy,mm = int(yy),int(mm)
-
-			if (y0 is not None):
-				if (((yy==y0)&(mm>m0))|(yy>y0)):
-					mi = 1 if (mm == 12) else mm 
-				else:
-					mi = m0
-				if (yy>y0):
-					yi = yy+1 if (mm == 12) else yy
-				else:
-					yi = y0
-			else:
-				yi,mi = yy,mm
-		else:
-			yi,mi = y0,m0
-		mi = 12 if yi <= 2007 else mi
-		yi = 2007 if yi < 2007 else yi
-
-		dates = []
-		if yf == yi:
-			dates = [(str(yi),('00'+str(mm))[-2:]) for mm in xrange(mi,mf+1)]
-		else:
-			dates += [(str(yi),('00'+str(mm))[-2:]) for mm in xrange(mi,13)]
-			for yy in xrange(yi+1,yf):
-				dates += [(str(yy),('00'+str(mm))[-2:]) for mm in xrange(1,13)]
-			dates += [(str(yf),('00'+str(mm))[-2:]) for mm in xrange(1,mf+1)]
-
-		rest_start = None
-		rest_end   = None
-		for y,m in dates:
-			if y+'-'+m not in list(self._views[lang].keys()):
-				if ((y=='2015')&(int(m)>=7))|(int(y)>=2016):#Here is the cutoff to go to rest
-					rest_start = (y,m) if (rest_start is None) else rest_start
-					rest_end   = (y,m)
-				else:
-					self._pageviews_grok(y,m,lang=lang,daily=daily)
-		if (rest_start is not None):
-			self._pageviews_rest(rest_start,rest_end,lang=lang,daily=daily)
-
-		if daily:
-			dates = set([y+'-'+m for y,m in dates])
-			days = [day for day in list(self._daily_views[lang].keys()) if day[:find_nth(day,'-',2)] in dates]
-			out = {day:self._daily_views[lang][day] for day in days}
-		else:	
-			_out = defaultdict(lambda:0,self._views[lang])
-			out = {y+'-'+m:_out[y+'-'+m] for y,m in dates}
-			#out = {y+'-'+m:self._views[lang][y+'-'+m] for y,m in dates}
-		return out
-
-	def _pageviews_rest(self,rest_start,rest_end,lang='en',daily=False):
-		if not lang in list(self._views.keys()):
-			self._views[lang] = {}
-		if (not lang in list(self._daily_views.keys()))&daily:
-			self._daily_views[lang] = {}
-
-		sd = rest_start[0]+rest_start[1]+'01'
-		if rest_end[1] == '12':
-			fd = str(int(rest_end[0])+1)+'0101'
-		else:
-			fd = str(rest_end[0])+('00'+str(int(rest_end[1])+1))[-2:]+'01'
-
-		url = 'https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/'+lang+'.wikipedia/all-access/user/'+self.langlinks(lang)+'/daily/'+sd+'/'+fd
-		r = _rget(url).json()
-		if ('title' not in list(r.keys())):
-			monthly = [(val['timestamp'][:4]+'-'+val['timestamp'][4:6],val['views']) for val in r['items'][:-1]]
-			monthly = [tuple(val) for val in DataFrame(monthly).groupby(0).sum()[[1]].reset_index().values]
-			out = dict(monthly)
-		else:
-			out = defaultdict(lambda: 0)
-
-		for date in list(out.keys()):
-			self._views[lang][date] = out[date]
-		if daily:
-			out = dict([(val['timestamp'][:4]+'-'+val['timestamp'][4:6]+'-'+val['timestamp'][6:8],val['views']) for val in r['items'][:-1]])
-			for day in out:
-				self._daily_views[lang][day] = out[day]
-	
-	def _pageviews_grok(self,y,m,lang='en',daily=False):
-		if not lang in list(self._views.keys()):
-			self._views[lang] = {}
-		if (not lang in list(self._daily_views.keys()))&daily:
-			self._daily_views[lang] = {}
-		title = self.langlinks(lang)
-		url = ('http://stats.grok.se/json/'+lang+'/'+y+m+'/'+title).replace(' ','_')
-		r = _rget(url).json()
-		self._views[lang][y+'-'+m] = sum(list(r['daily_views'].values()))
-		if daily:
-			for day in r['daily_views']:
-				self._daily_views[lang][day] = r['daily_views'][day]
 
 	def find_article(self):
 		'''
