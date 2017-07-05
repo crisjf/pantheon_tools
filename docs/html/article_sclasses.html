@@ -517,8 +517,9 @@ If the biography belongs to the training set, it will return prob_ratio=0.</p>
 
 <dl class="method">
 <dt id="johnny5.biography.pageviews">
-<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>agg=False</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.pageviews" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the pageviews between the provided dates for the given language editions.</p>
+<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em>, <em>get_previous=True</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.pageviews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pageviews between the provided dates for the given language editions.
+Unless specified, this function checks whether the english page had any other title, and gets the pageviews accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -537,13 +538,18 @@ If start_date=None is passed, it will get all the pageviews for that edition.</p
 <div><p>Language edition to get the pageviews for. 
 If lang=None is passed, it will get the pageviews for all language editions.</p>
 </div></blockquote>
+<p><strong>cdate_override</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will get the pageviews before the creation date</p>
+</div></blockquote>
 <p><strong>daily</strong> : boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the daily pageviews.</p>
 </div></blockquote>
-<p><strong>agg</strong> : boolean (False)</p>
+<p><strong>get_previous</strong> : boolean (True)</p>
 <blockquote class="last">
-<div><p>If True it will sum all the pageviews.</p>
+<div><p>If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+Only works for English.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -554,12 +560,13 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.biography.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.biography.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had.</p>
+<dd><p>Gets all the previous titles the page had.
+ONLY WORKS FOR ENGLISH FOR NOW</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set</p>
 <blockquote class="last">
 <div><p>Collection of previous titles</p>
 </div></blockquote>
@@ -971,8 +978,9 @@ If no language is provided, it will resturn a dictionary with the languages as k
 
 <dl class="method">
 <dt id="johnny5.place.pageviews">
-<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>agg=False</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.pageviews" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the pageviews between the provided dates for the given language editions.</p>
+<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em>, <em>get_previous=True</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.pageviews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pageviews between the provided dates for the given language editions.
+Unless specified, this function checks whether the english page had any other title, and gets the pageviews accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -991,13 +999,18 @@ If start_date=None is passed, it will get all the pageviews for that edition.</p
 <div><p>Language edition to get the pageviews for. 
 If lang=None is passed, it will get the pageviews for all language editions.</p>
 </div></blockquote>
+<p><strong>cdate_override</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will get the pageviews before the creation date</p>
+</div></blockquote>
 <p><strong>daily</strong> : boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the daily pageviews.</p>
 </div></blockquote>
-<p><strong>agg</strong> : boolean (False)</p>
+<p><strong>get_previous</strong> : boolean (True)</p>
 <blockquote class="last">
-<div><p>If True it will sum all the pageviews.</p>
+<div><p>If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+Only works for English.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1008,12 +1021,13 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.place.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.place.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had.</p>
+<dd><p>Gets all the previous titles the page had.
+ONLY WORKS FOR ENGLISH FOR NOW</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set</p>
 <blockquote class="last">
 <div><p>Collection of previous titles</p>
 </div></blockquote>
@@ -1450,8 +1464,9 @@ If no language is provided, it will resturn a dictionary with the languages as k
 
 <dl class="method">
 <dt id="johnny5.band.pageviews">
-<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>agg=False</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.pageviews" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the pageviews between the provided dates for the given language editions.</p>
+<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em>, <em>get_previous=True</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.pageviews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pageviews between the provided dates for the given language editions.
+Unless specified, this function checks whether the english page had any other title, and gets the pageviews accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1470,13 +1485,18 @@ If start_date=None is passed, it will get all the pageviews for that edition.</p
 <div><p>Language edition to get the pageviews for. 
 If lang=None is passed, it will get the pageviews for all language editions.</p>
 </div></blockquote>
+<p><strong>cdate_override</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will get the pageviews before the creation date</p>
+</div></blockquote>
 <p><strong>daily</strong> : boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the daily pageviews.</p>
 </div></blockquote>
-<p><strong>agg</strong> : boolean (False)</p>
+<p><strong>get_previous</strong> : boolean (True)</p>
 <blockquote class="last">
-<div><p>If True it will sum all the pageviews.</p>
+<div><p>If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+Only works for English.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1487,12 +1507,13 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.band.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.band.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had.</p>
+<dd><p>Gets all the previous titles the page had.
+ONLY WORKS FOR ENGLISH FOR NOW</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set</p>
 <blockquote class="last">
 <div><p>Collection of previous titles</p>
 </div></blockquote>
@@ -1912,8 +1933,9 @@ If no language is provided, it will resturn a dictionary with the languages as k
 
 <dl class="method">
 <dt id="johnny5.song.pageviews">
-<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>agg=False</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.pageviews" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the pageviews between the provided dates for the given language editions.</p>
+<code class="descname">pageviews</code><span class="sig-paren">(</span><em>start_date</em>, <em>end_date=None</em>, <em>lang=’en’</em>, <em>cdate_override=False</em>, <em>daily=False</em>, <em>get_previous=True</em><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.pageviews" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the pageviews between the provided dates for the given language editions.
+Unless specified, this function checks whether the english page had any other title, and gets the pageviews accordingly.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1932,13 +1954,18 @@ If start_date=None is passed, it will get all the pageviews for that edition.</p
 <div><p>Language edition to get the pageviews for. 
 If lang=None is passed, it will get the pageviews for all language editions.</p>
 </div></blockquote>
+<p><strong>cdate_override</strong> : boolean (False)</p>
+<blockquote>
+<div><p>If True it will get the pageviews before the creation date</p>
+</div></blockquote>
 <p><strong>daily</strong> : boolean (False)</p>
 <blockquote>
 <div><p>If True it will return the daily pageviews.</p>
 </div></blockquote>
-<p><strong>agg</strong> : boolean (False)</p>
+<p><strong>get_previous</strong> : boolean (True)</p>
 <blockquote class="last">
-<div><p>If True it will sum all the pageviews.</p>
+<div><p>If True it will search for all the previous titles of the pages and get the pageviews for them as well.
+Only works for English.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -1954,12 +1981,13 @@ If lang=None is passed, it will get the pageviews for all language editions.</p>
 <dl class="method">
 <dt id="johnny5.song.previous_titles">
 <code class="descname">previous_titles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#johnny5.song.previous_titles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets all the previous titles the page had.</p>
+<dd><p>Gets all the previous titles the page had.
+ONLY WORKS FOR ENGLISH FOR NOW</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set? list?</p>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>titles</strong> : set</p>
 <blockquote class="last">
 <div><p>Collection of previous titles</p>
 </div></blockquote>

@@ -169,7 +169,7 @@
 <span class="k">except</span><span class="p">:</span>
 	<span class="k">pass</span>
 <span class="kn">import</span> <span class="nn">six</span>
-<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">time</span><span class="o">,</span><span class="nn">codecs</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">time</span><span class="o">,</span><span class="nn">codecs</span><span class="o">,</span><span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
 <span class="kn">from</span> <span class="nn">.parse_functions</span> <span class="k">import</span> <span class="n">drop_comments</span>
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">DataFrame</span>
 <span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">wd_q</span><span class="p">,</span><span class="n">wp_q</span><span class="p">,</span><span class="n">_rget</span>
@@ -185,13 +185,27 @@
 <span class="n">wiki_API</span> <span class="o">=</span> <span class="s1">&#39;https://en.wikipedia.org/w/api.php?action=query&amp;format=json&#39;</span>
 <span class="n">wikidata_API</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&#39;</span>
 
+
+<span class="k">def</span> <span class="nf">_dt2str</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Transforms a datetime object into a string of the form yyyymmdd&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">month</span><span class="p">))[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">day</span><span class="p">))[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="k">def</span> <span class="nf">_all_dates</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;gets all the dates between the given dates&#39;&#39;&#39;</span>
+	<span class="n">delta</span> <span class="o">=</span> <span class="n">d2</span> <span class="o">-</span> <span class="n">d1</span>
+	<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+		<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">month</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">day</span><span class="p">)])</span>
+	<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span><span class="s1">&#39;month&#39;</span><span class="p">,</span><span class="s1">&#39;day&#39;</span><span class="p">])</span>
+
 <span class="k">def</span> <span class="nf">_wd_id</span><span class="p">(</span><span class="n">trigger</span><span class="p">):</span>
     <span class="n">trigger</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">trigger</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;Q&#39;</span><span class="p">:</span>
         <span class="n">trigger</span> <span class="o">=</span> <span class="s1">&#39;Q&#39;</span><span class="o">+</span><span class="n">trigger</span>
     <span class="k">return</span> <span class="n">trigger</span>
 
-<div class="viewcode-block" id="get_wd_name"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.get_wd_name">[docs]</a><span class="k">def</span> <span class="nf">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
 	<span class="c1">#it = hasattr(prop,&#39;__iter__&#39;)</span>
 	<span class="k">if</span> <span class="n">it</span><span class="p">:</span>
@@ -206,9 +220,9 @@
 	<span class="k">else</span><span class="p">:</span>
 		<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&amp;languages=en&amp;ids=&#39;</span><span class="o">+</span><span class="n">prop</span>
 		<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-		<span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">][</span><span class="n">prop</span><span class="p">][</span><span class="s1">&#39;labels&#39;</span><span class="p">][</span><span class="s1">&#39;en&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span></div>
+		<span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">][</span><span class="n">prop</span><span class="p">][</span><span class="s1">&#39;labels&#39;</span><span class="p">][</span><span class="s1">&#39;en&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
 
-<div class="viewcode-block" id="get_wd_coords"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.get_wd_coords">[docs]</a><span class="k">def</span> <span class="nf">get_wd_coords</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span> <span class="o">=</span> <span class="s1">&#39;P625&#39;</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_wd_coords</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span> <span class="o">=</span> <span class="s1">&#39;P625&#39;</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
 	<span class="c1">#it = hasattr(wdids, &#39;__iter__&#39;)</span>
 	<span class="n">wdids</span> <span class="o">=</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">wdids</span><span class="p">)]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">it</span> <span class="k">else</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">wdid</span><span class="p">)</span> <span class="k">for</span> <span class="n">wdid</span> <span class="ow">in</span> <span class="n">wdids</span><span class="p">]</span>
@@ -231,11 +245,11 @@
 	<span class="k">if</span> <span class="ow">not</span> <span class="n">it</span><span class="p">:</span>
 		<span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
 	<span class="k">else</span><span class="p">:</span>
-		<span class="k">return</span> <span class="n">DataFrame</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span>  <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span></div>
+		<span class="k">return</span> <span class="n">DataFrame</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span>  <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
 
 
 
-<div class="viewcode-block" id="get_wdprop"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.get_wdprop">[docs]</a><span class="k">def</span> <span class="nf">get_wdprop</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_wdprop</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Queries Wikidata for the property passed as prop for all the provided Wikidata Ids.</span>
 <span class="sd">	</span>
@@ -312,10 +326,10 @@
 		<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
 			<span class="k">return</span> <span class="n">DataFrame</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span>  <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s1">&#39;calendarmodel&#39;</span><span class="p">,</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="n">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">)])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span></div>
+			<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="n">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">)])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
 
 
-<div class="viewcode-block" id="langlinks"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.langlinks">[docs]</a><span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">use</span><span class="o">=</span><span class="s1">&#39;curid&#39;</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">use</span><span class="o">=</span><span class="s1">&#39;curid&#39;</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the langlinks for the provided set of articles.</span>
 
@@ -351,9 +365,9 @@
 			<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;en&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">_langlinks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
 				<span class="n">a</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
 	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span></div>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
 
-<div class="viewcode-block" id="extract"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.extract">[docs]</a><span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the extracts of a set of articles.</span>
 <span class="sd">	It only queries the extracts for the articles without extracts.</span>
@@ -377,10 +391,10 @@
 			<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 				<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_ex</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
 	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span></div>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="infobox"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.infobox">[docs]</a><span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the infobox of the provided article or list of articles.</span>
 <span class="sd">	It only queries the infoboxes for the articles without infobox.</span>
@@ -421,10 +435,10 @@
 					<span class="n">rb</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())][</span><span class="s1">&#39;revisions&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;*&#39;</span><span class="p">]</span>
 					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">raw_box</span> <span class="o">=</span> <span class="n">rb</span>
 	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">infobox</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span></div>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">infobox</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="image_url"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.image_url">[docs]</a><span class="k">def</span> <span class="nf">image_url</span><span class="p">(</span><span class="n">article</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">image_url</span><span class="p">(</span><span class="n">article</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the list of urls for the infobox images for the given article or set of articles.</span>
 <span class="sd">	It start by getting the infobox of the missing articles.</span>
@@ -477,9 +491,9 @@
 					<span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pages</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
 				<span class="n">article</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_image_url</span> <span class="o">=</span> <span class="n">results</span>
 		<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-			<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_image_url</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">article</span><span class="p">}</span></div>
+			<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_image_url</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">article</span><span class="p">}</span>
 
-<div class="viewcode-block" id="wp_data"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.wp_data">[docs]</a><span class="k">def</span> <span class="nf">wp_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">wp_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets all Wikipedia information about the provided list of articles.</span>
 <span class="sd">	It gets title, curid and wdid, as well as the extract and the infobox.</span>
@@ -507,9 +521,9 @@
 		<span class="n">infobox</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
 		<span class="n">extract</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span></div>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
 
-<div class="viewcode-block" id="wd_data"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.wd_data">[docs]</a><span class="k">def</span> <span class="nf">wd_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">wd_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the Wikidata Data for the provided articles.</span>
 <span class="sd">	If the article does not have a wdid it will get it using the wp_data() function.</span>
@@ -531,11 +545,11 @@
 			<span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span><span class="o">!=</span><span class="s1">&#39;NA&#39;</span><span class="p">):</span>
 				<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">][</span><span class="n">a</span><span class="o">.</span><span class="n">wdid</span><span class="p">()]</span>
 	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
-		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span></div>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
 
 
 
-<div class="viewcode-block" id="get_multiple_image"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.get_multiple_image">[docs]</a><span class="k">def</span> <span class="nf">get_multiple_image</span><span class="p">(</span><span class="n">curid</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_multiple_image</span><span class="p">(</span><span class="n">curid</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets the first image that appears in the site (it is often the character&#39;s image).</span>
 
@@ -557,10 +571,10 @@
 				<span class="n">box_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 			<span class="n">box</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">box_</span>
 			<span class="k">break</span> <span class="c1">#Grab only the first one</span>
-	<span class="k">return</span> <span class="n">box</span></div>
+	<span class="k">return</span> <span class="n">box</span>
 
 
-<div class="viewcode-block" id="country"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.country">[docs]</a><span class="k">def</span> <span class="nf">country</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">GAPI_KEY</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="country"><a class="viewcode-back" href="../../johnny5.html#johnny5.country">[docs]</a><span class="k">def</span> <span class="nf">country</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">GAPI_KEY</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Uses the Google geocode API to get the country of a given geographical point.</span>
 
@@ -620,7 +634,7 @@
 	<span class="k">return</span> <span class="n">country</span></div>
 
 
-<div class="viewcode-block" id="chunker"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.chunker">[docs]</a><span class="k">def</span> <span class="nf">chunker</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+<div class="viewcode-block" id="chunker"><a class="viewcode-back" href="../../johnny5.html#johnny5.chunker">[docs]</a><span class="k">def</span> <span class="nf">chunker</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Used to iterate a list by chunks.</span>
 <span class="sd">	</span>
@@ -647,7 +661,7 @@
     <span class="k">return</span> <span class="n">dd</span>
 
 
-<div class="viewcode-block" id="latest_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.latest_wddump">[docs]</a><span class="k">def</span> <span class="nf">latest_wddump</span><span class="p">():</span>
+<div class="viewcode-block" id="latest_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.latest_wddump">[docs]</a><span class="k">def</span> <span class="nf">latest_wddump</span><span class="p">():</span>
 	<span class="sd">&#39;&#39;&#39;Gets the latest Wikidata RDF dump.&#39;&#39;&#39;</span>
 	<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://tools.wmflabs.org/wikidata-exports/rdf/exports.html&#39;</span>
 	<span class="n">conn</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
@@ -671,7 +685,7 @@
 		<span class="n">path</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;dumps.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 	<span class="k">return</span> <span class="n">path</span>
 
-<div class="viewcode-block" id="check_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.check_wddump">[docs]</a><span class="k">def</span> <span class="nf">check_wddump</span><span class="p">():</span>
+<div class="viewcode-block" id="check_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.check_wddump">[docs]</a><span class="k">def</span> <span class="nf">check_wddump</span><span class="p">():</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Used to check whether the Wikidata dump found on file is up to date.</span>
 <span class="sd">	</span>
@@ -703,7 +717,7 @@
 		<span class="n">path_os</span> <span class="o">=</span> <span class="n">path_os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">path_os</span>
 
-<div class="viewcode-block" id="download_latest"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.download_latest">[docs]</a><span class="k">def</span> <span class="nf">download_latest</span><span class="p">():</span>
+<div class="viewcode-block" id="download_latest"><a class="viewcode-back" href="../../johnny5.html#johnny5.download_latest">[docs]</a><span class="k">def</span> <span class="nf">download_latest</span><span class="p">():</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Downloads the latest Wikidata RDF dump.</span>
 <span class="sd">	</span>
@@ -738,7 +752,7 @@
 		<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">remove</span><span class="p">:</span>
 			<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="o">+</span><span class="n">f</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="wd_instances"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.wd_instances">[docs]</a><span class="k">def</span> <span class="nf">wd_instances</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
+<div class="viewcode-block" id="wd_instances"><a class="viewcode-back" href="../../johnny5.html#johnny5.wd_instances">[docs]</a><span class="k">def</span> <span class="nf">wd_instances</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets all the instances of the given class.</span>
 
@@ -772,7 +786,7 @@
 	<span class="k">return</span> <span class="n">instances</span></div>
 
 
-<div class="viewcode-block" id="wd_subclasses"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.wd_subclasses">[docs]</a><span class="k">def</span> <span class="nf">wd_subclasses</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
+<div class="viewcode-block" id="wd_subclasses"><a class="viewcode-back" href="../../johnny5.html#johnny5.wd_subclasses">[docs]</a><span class="k">def</span> <span class="nf">wd_subclasses</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Gets all the subclasses of the given class.</span>
 
@@ -803,7 +817,7 @@
 	<span class="n">subclasses</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
 	<span class="k">return</span> <span class="n">subclasses</span></div>
 
-<div class="viewcode-block" id="all_wikipages"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.all_wikipages">[docs]</a><span class="k">def</span> <span class="nf">all_wikipages</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="all_wikipages"><a class="viewcode-back" href="../../johnny5.html#johnny5.all_wikipages">[docs]</a><span class="k">def</span> <span class="nf">all_wikipages</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;Downloads all the names of the Wikipedia articles&#39;&#39;&#39;</span>
 	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
 	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -830,7 +844,7 @@
 	<span class="n">titles</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">titles</span></div>
 
-<div class="viewcode-block" id="check_wpdump"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.check_wpdump">[docs]</a><span class="k">def</span> <span class="nf">check_wpdump</span><span class="p">():</span>
+<div class="viewcode-block" id="check_wpdump"><a class="viewcode-back" href="../../johnny5.html#johnny5.check_wpdump">[docs]</a><span class="k">def</span> <span class="nf">check_wpdump</span><span class="p">():</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Used to check the current status of the WikiData Dump.</span>
 <span class="sd">	It returns None, but prints the information.</span>
@@ -843,7 +857,7 @@
 
 
 
-<div class="viewcode-block" id="dumps_path"><a class="viewcode-back" href="../../johnny5.html#johnny5.functions.dumps_path">[docs]</a><span class="k">def</span> <span class="nf">dumps_path</span><span class="p">(</span><span class="n">new_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="dumps_path"><a class="viewcode-back" href="../../johnny5.html#johnny5.dumps_path">[docs]</a><span class="k">def</span> <span class="nf">dumps_path</span><span class="p">(</span><span class="n">new_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Handle the path to the Wikipedia and Wikidata dumps.</span>
 <span class="sd">    If new_path is provided, it will set the new path.</span>

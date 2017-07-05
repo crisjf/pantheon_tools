@@ -805,6 +805,7 @@ class article(object):
 	def pageviews(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False,get_previous=True):
 		'''
 		Gets the pageviews between the provided dates for the given language editions.
+		Unless specified, this function checks whether the english page had any other title, and gets the pageviews accordingly.
 
 		Parameters
 		----------
