@@ -42,7 +42,7 @@ def get_links(text):
         link = text[text.find('[[')+2:].split(']]')[0]
         text = text.replace('[['+link+']]','')
         if '|' in link:
-            link = link.split('|')[-1].strip()
+            link = link.split('|')[0].strip()
         links.append(link.strip())
     return links
 
@@ -153,7 +153,6 @@ def parse_date(t):
                 except:
                     if ii>len(template.params):
                         break
-
         elif tag in set(['death_year_and_age']):
             yy = template.params[0]
             if len(template.params)>2:
@@ -162,7 +161,7 @@ def parse_date(t):
             yy = int(template.params[1].value.strip())
             dd = parse_ints(template.params[0].value.strip())[0]
             mm = first_month(template.params[0].value.strip(),as_num=True)
-        elif tag in set(['birth-date','death-date_and_age','death-date']):
+        elif tag in set(['birth-date','death-date_and_age','death-date','d-da']):
             ii = 0
             while True:
                 try:
@@ -208,6 +207,7 @@ def parse_date(t):
         else:
             raise NameError('Unrecognized tag '+tag)
     return str(yy),str(mm),str(dd)
+
 
 def permute(title):
     '''Creates all combinations of upper and lower cases in the title'''

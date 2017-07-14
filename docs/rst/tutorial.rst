@@ -74,6 +74,14 @@ Using the dumps
 
 Here we will talk about how to use the Wikidata and the Wikipedia dumps to download bulks of data.
 
+>>> j5.download_latest()
+
+>>> j5.all_wikipages()
+
+
+
+
+
 Examples
 ========
 
@@ -114,6 +122,12 @@ Finally, if we are only interested in the number of language editions we can use
 
 Pageviews
 ---------
+
+
+
+
+
+
 
 Occupation classifier
 ---------------------
@@ -180,6 +194,4 @@ List all the universities
 -------------------------
 
 johnny5 allows users to get a full list of articles that belong to a certain Wikidata category.
-
-
 

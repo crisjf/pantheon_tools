@@ -499,29 +499,6 @@ def _dms2dd(lat):
     return dd
 
 
-def latest_wddump():
-	'''Gets the latest Wikidata RDF dump.'''
-	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports.html'
-	conn = urllib2.urlopen(url)
-	html = conn.read()
-	soup = BeautifulSoup(html, "html.parser")
-	for tag in soup.find_all('a'):
-		link = tag.get('href',None)
-		if link is not None:
-			if link.split('/')[0] == 'exports':
-				top_date = link.split('/')[1]
-				break
-	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
-	return url,top_date
-
-
-def dumps_path():
-	'''Returns the path where to store the dumps.'''
-	path = os.path.split(__file__)[0]+'/data/'
-	files = os.listdir(path)
-	if 'dumps.txt' in files:
-		path = open(path+'dumps.txt').read().split('\n')[0]
-	return path
 
 def check_wddump():
 	'''
@@ -533,7 +510,7 @@ def check_wddump():
 		True if it is necessary to update
 	'''
 	url,top_date = latest_wddump()
-	path = dumps_path()
+	path = _dumps_path()
 	files = os.listdir(path)
 	filename = [f for f in files if 'wikidata-statements' in f]
 	if len(filename) == 0:
@@ -555,6 +532,21 @@ def _path(path):
 		path_os = path_os.replace(c,'\\'+c)
 	return path_os
 
+def latest_wddump():
+	'''Gets the name latest Wikidata RDF dump.'''
+	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports.html'
+	conn = urllib2.urlopen(url)
+	html = conn.read()
+	soup = BeautifulSoup(html, "html.parser")
+	for tag in soup.find_all('a'):
+		link = tag.get('href',None)
+		if link is not None:
+			if link.split('/')[0] == 'exports':
+				top_date = link.split('/')[1]
+				break
+	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
+	return url,top_date
+
 def download_latest():
 	'''
 	Downloads the latest Wikidata RDF dump.
@@ -565,7 +557,7 @@ def download_latest():
 	print("Downloading file from:",url)
 	filename = url.split('/')[-1]
 	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
-	path = dumps_path()
+	path = _dumps_path()
 
 	drop_instances=False
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
@@ -590,23 +582,98 @@ def download_latest():
 		for f in remove:
 			os.remove(path+'instances/'+f)
 
-def wd_instances(cl):
+def wd_instances(cl,include_subclasses=False,return_subclasses=False):
 	'''
 	Gets all the instances of the given class.
+
+	Parameters
+	----------
+	cl : str
+		Wikidata code of the class
+	include_subclasses : boolean (False)
+		If True it will get all the instances in the given class and all its subclases.
+	return_subclasses : boolean (False)
+		If True not only it will get the inscances for all subclasses, but will return the set of subclasses.
+
+	Returns
+	-------
+	instances : set
+		wd_id for every instance of the given class.
+	subclasses : set
+		wd_id for every subclass for cl, and their subclasses
+		(only when return_subclasses if True)
 
 	Examples
 	--------
 	To get all universities:
 	>>> wd_instances('Q3918')
 	To get all humans:
-	>>> wd_instances('Q5')
+	>>> wd_instances('Q5',include_subclasses=False)
+	'''
+	if include_subclasses:
+		queried = set([])
+		toquery = set([cl])
+		print("Retrieving subclasses.")
+	else:
+		queried = set([cl])
+		toquery = set([])
+
+	while len(toquery) != 0:
+		for c in toquery:
+			query = _wd_subclasses(c)
+			toquery.discard(c)
+			queried.add(c)
+			toquery = toquery|query.difference(queried)
+			break
+	instances = set([])
+	if include_subclasses:
+		print("Found a total of "+str(len(queried))+" subclasses.")
+	for c in queried:
+		instances = instances|_wd_instances(c)
+	if return_subclasses&include_subclasses:
+		return instances,queried
+	else:
+		return instances
+
+def wd_subclasses(cl,include_subclasses=False):
+	'''
+	Gets all the subclasses of the given class.
+
+	Parameters
+	----------
+	cl : str
+		Wikidata code of the class
+	include_subclasses : boolean (False)
+		If True it will get all the subclasses of the given class and all its subclases.
 
 	Returns
 	-------
-	instances : set
-		wd_id for every instance of the given class.
+	subclasses : set
+		wd_id for every subclass of the given class.
+
+	Examples
+	--------
+	To get all subclasses of musical ensemble:
+	>>> wd_subclasses('Q2088357',include_subclasses=True)
 	'''
-	path = dumps_path()
+	if include_subclasses:
+		queried = set([])
+		toquery = set([cl])
+		while len(toquery) != 0:
+			for c in toquery:
+				query = _wd_subclasses(c)
+				toquery.discard(c)
+				queried.add(c)
+				toquery = toquery|query.difference(queried)
+				break
+	else:
+		queried = _wd_subclasses(cl)
+	queried.discard(cl)
+	return queried
+
+def _wd_instances(cl):
+	'''Gets all the instances of the given class, without worrying about subclasses.'''
+	path = _dumps_path()
 	path_os = _path(path)
 	files = os.listdir(path)
 	instances = os.listdir(path+'instances/')
@@ -617,14 +684,12 @@ def wd_instances(cl):
 		else:
 			filename=filename[0]
 		print('Parsing the dump ',filename)
-		os.system("grep 'P31[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
-
+		os.system("grep 'P31[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
 	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return instances
 
-
-def wd_subclasses(cl):
+def _wd_subclasses(cl):
 	'''
 	Gets all the subclasses of the given class.
 
@@ -638,7 +703,7 @@ def wd_subclasses(cl):
 	subclasses : set
 		wd_id for every subclass of the given class.
 	'''
-	path = dumps_path()
+	path = _dumps_path()
 	path_os = _path(path)
 	files = os.listdir(path)
 	subclasses = os.listdir(path+'subclasses/')
@@ -649,7 +714,7 @@ def wd_subclasses(cl):
 		else:
 			filename=filename[0]
 		print('Parsing the dump ',filename)
-		os.system("grep 'P279[^\.]>.*"+cl+"' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+".nt")
+		os.system("grep 'P279[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+".nt")
 
 	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
 	subclasses = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
@@ -657,7 +722,7 @@ def wd_subclasses(cl):
 
 def all_wikipages(update=False):
 	'''Downloads all the names of the Wikipedia articles'''
-	path = dumps_path()
+	path = _dumps_path()
 	files = os.listdir(path)
 	if ('enwiki-allarticles.txt' not in files)|update:
 		if ('enwiki-latest-abstract.xml' not in files)|update:
@@ -687,18 +752,18 @@ def check_wpdump():
 	Used to check the current status of the WikiData Dump.
 	It returns None, but prints the information.
 	'''
-	path = dumps_path()
+	path = _dumps_path()
 	dt = time.ctime(os.path.getmtime(path+'enwiki-latest-abstract.xml'))
 	print('Dump downloaded on:')
 	print('\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1])
 	print('To update run:\n\t>>> all_wikipages(update=True)')
 
 
-
 def dumps_path(new_path=None):
     '''
     Handle the path to the Wikipedia and Wikidata dumps.
     If new_path is provided, it will set the new path.
+    (Does not return the path to the dumps)
 
     Parameters
     ----------
@@ -708,7 +773,8 @@ def dumps_path(new_path=None):
     	(Must be full path)
     '''
     data_path = os.path.split(__file__)[0]+'/data/'
-    new_path = new_path if new_path[-1]=='/' else new_path + '/'
+    if new_path is not None:
+	    new_path = new_path if new_path[-1]=='/' else new_path + '/'
     if 'dumps.txt' in os.listdir(data_path):
         f = open(data_path+'dumps.txt')
         current_path = f.read().split('\n')[0]
@@ -725,3 +791,11 @@ def dumps_path(new_path=None):
             print('New dumps path set to '+data_path)
         except:
             raise NameError('Directory not found: '+new_path)
+
+def _dumps_path():
+	'''Returns the path where to store the dumps.'''
+	path = os.path.split(__file__)[0]+'/data/'
+	files = os.listdir(path)
+	if 'dumps.txt' in files:
+		path = open(path+'dumps.txt').read().split('\n')[0]
+	return path

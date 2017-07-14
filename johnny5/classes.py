@@ -113,7 +113,7 @@ class article(object):
 		else:
 			out+= 'wdid  : None\n'
 		out+= 'L     : '+str(self.L()) 
-		return out#.encode('utf-8')
+		return out.encode('utf-8')
 
 	def _missing_wd(self):
 		'''
@@ -824,6 +824,11 @@ class article(object):
 		get_previous : boolean (True)
 			If True it will search for all the previous titles of the pages and get the pageviews for them as well.
 			Only works for English.
+
+		Returns
+		-------
+		views : pandas.DataFrame
+			Table with columns year,month,(day),views.
 		'''
 		get_previous=False if lang!='en' else get_previous
 		if get_previous:
@@ -989,6 +994,11 @@ class place(article):
 		self._wpcities = None
 		self._country = None
 
+	def __str__(self):
+		out = super(place, self).__str__()
+		out+= '\n'
+		out+= 'coords: ('+str(self.coords()[0])+','+str(self.coords()[1])+')'
+		return out
 
 	def coords(self,wiki='wp'):
 		'''
@@ -1206,8 +1216,10 @@ class biography(article):
 		super(biography, self).__init__(I,Itype=None)
 		self._is_bio = None
 		self._wpbio = None
-		self._death_date = None
 		self._birth_date = None
+		self._death_date = None
+		self._birth_place = None #j5.place()
+		self._death_place = None #j5.place()
 		self._name = None
 		#if not self.is_bio():
 		#	print 'Warning: Not a biography ('+str(self.curid())+')'
@@ -1347,6 +1359,49 @@ class biography(article):
 		else:
 			return alive
 
+	def birth_date(self,raw=False):
+		'''
+		Gets the birth date from the infobox. 
+		If it is not available in the infobox (or it cannot parse it) it uses Wikidata.
+		
+		Parameters
+		----------
+		raw : boolean (False)
+			If True it also returns the raw text from the infobox.
+		
+		Returns
+		-------
+		d : tuple
+			(yyyy,mm,dd)
+		t : string (if raw)
+			Raw text from the infobox.
+		'''
+		if self._birth_date is None:
+			d = ['NA']
+			t = 'NA'
+			if len(self.infobox()) !=0:
+				for box in list(self.infobox().values()):
+					if 'birth_date' in list(box.keys()):
+						t = box['birth_date']
+						break
+				if t != 'NA':
+					d = parse_date(t)
+			else:
+				t = 'wd'
+				d = self.wd_prop('P569')[0]['time']
+				if d != 'NA':
+					d = d.split('T')[0][1:].split('-')
+			if d[0] == 'NA':
+				t = 'wd' if t =='NA' else t
+				d = self.wd_prop('P569')[0]['time']
+				if d != 'NA':
+					d = d.split('T')[0][1:].split('-')
+			self._birth_date = (d,t)
+		d,t = self._birth_date
+		if raw:
+			return (d,t)
+		else:
+			return d
 
 	def death_date(self,raw=False):
 		'''
@@ -1364,8 +1419,6 @@ class biography(article):
 			(yyyy,mm,dd)
 		t : string (if raw)
 			Raw text from the infobox.
-
-		MISSING TAG: d-da (490286)
 		'''
 		if self._death_date is None:
 			if self.alive() =='yes':
@@ -1395,6 +1448,52 @@ class biography(article):
 			return (d,t)
 		else:
 			return d
+
+	def birth_place(self):
+		if self._birth_place is None:
+			for box in self.infobox().values():
+				if 'birth_place' in box.keys():
+					for name in get_links(box[u'birth_place']):
+						pl = place(name)
+						if pl.coords()[0] != 'NA':
+							self._birth_place = pl
+							break
+					if self._birth_place is not None:
+						break
+		if self._birth_place is None:
+			for val in self.wd_prop('P19'):
+				if 'id' in val.keys():
+					pl = place(val['id'])
+					if pl.coords()[0] != 'NA':
+						self._birth_place = pl
+						break
+		return self._birth_place
+
+	def death_place(self):
+		if (self._death_place is None)&(self.alive() == 'yes'):
+			self._death_place = 'alive'
+		if self._death_place is None:
+			for box in self.infobox().values():
+				if 'death_place' in box.keys():
+					for name in get_links(box[u'death_place']):
+						pl = place( name)
+						if pl.coords()[0] != 'NA':
+							self._death_place = pl
+							break
+					if self._birth_place is not None:
+						break
+		if self._death_place is None:
+			for val in self.wd_prop('P20'):
+				if 'id' in val.keys():
+					pl = place(val['id'])
+					if pl.coords()[0] != 'NA':
+						self._birth_place = pl
+						break
+		return self._birth_place
+
+
+
+
 
 	def occupation(self,C=None,return_all=False,override_train=False):
 		'''
@@ -1426,7 +1525,7 @@ class biography(article):
 			if C is None:
 				print('Warning: This function will run slow because it needs to load the classifier in each call.')
 			C = Occ() if C is None else C
-			article = copy.deepcopy(self)
+			article = self #copy.deepcopy(self)
 			self._feats = C.feats(article)
 			self._occ = C.classify(article,return_all=True,override_train=override_train)
 		if return_all:
@@ -1437,6 +1536,8 @@ class biography(article):
 			else:
 				prob_ratio = self._occ[0][1]/self._occ[1][1]
 				return self._occ[0][0],prob_ratio
+
+
 
 class band(article):
 	'''
