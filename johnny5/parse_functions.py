@@ -130,7 +130,7 @@ def parse_date(t):
     if len(template)!=0:
         template = template[0]
         tag = re.sub(r'_+','_',template.name.lower().strip().replace(' ','_'))
-        if tag in set(['birth_date','death_date_and_age','death_date','dda','age_in_years_and_days','death_date_and_given_age']):
+        if tag in set(['birth_date','death_date_and_age','birth_date_and_age','death_date','dda','age_in_years_and_days','death_date_and_given_age']):
             ii = -1
             while yy == 'NA':
                 ii+=1

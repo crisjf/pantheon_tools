@@ -132,6 +132,14 @@ class article(object):
 		self.I['curid'] = None
 		self._data['wp'] = None
 
+	def wd_label(self):
+		'''
+		Returns the 'label' of the Wikidata entity (the label referes to the title).
+		'''
+		try:
+			return self._data['wd']['labels']['en']['value']
+		except:
+			return None
 
 	def data_wp(self):
 		'''
@@ -240,10 +248,15 @@ class article(object):
 		else:
 			raise NameError('Wrong wiki')
 
-	def curid_nonen(self):
+	def curid_nonen(self,nonen=True):
 		'''
 		Gets the curid in a non-english language.
 		The curid is a string and has the form: 'lang.curid'
+
+		Parameters
+		----------
+		nonen : boolean (True)
+			If False, and if the page exists in english, it will return the english curid.
 		'''
 		if self._curid_nonen is None:
 			for lang,title in list(self.langlinks().items()):
@@ -253,7 +266,10 @@ class article(object):
 					break
 				except:
 					pass
-		return self._curid_nonen
+		if nonen|(self.curid() is None):
+			return self._curid_nonen
+		else:
+			return self.curid()
 
 	def wiki_links(self,section_title=None):
 		'''
@@ -1480,16 +1496,16 @@ class biography(article):
 						if pl.coords()[0] != 'NA':
 							self._death_place = pl
 							break
-					if self._birth_place is not None:
+					if self._death_place is not None:
 						break
 		if self._death_place is None:
 			for val in self.wd_prop('P20'):
 				if 'id' in val.keys():
 					pl = place(val['id'])
 					if pl.coords()[0] != 'NA':
-						self._birth_place = pl
+						self._death_place = pl
 						break
-		return self._birth_place
+		return self._death_place
 
 
 

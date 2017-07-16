@@ -671,6 +671,22 @@ def wd_subclasses(cl,include_subclasses=False):
 	queried.discard(cl)
 	return queried
 
+def _wd_clear():
+	'''
+	Deletes the temp files with the subclasses and classes.
+	'''
+	path = _dumps_path()
+	path_os = _path(path)
+	files = os.listdir(path)
+	subclasses = os.listdir(path+'subclasses/')
+	instances = os.listdir(path+'instances/')
+	for c in instances:
+		if '_temp' in c:
+			os.system("rm "+path_os+'instances/'+cl)
+	for c in subclasses:
+		if '_temp' in c:
+			os.system("rm "+path_os+'subclasses/'+cl)
+
 def _wd_instances(cl):
 	'''Gets all the instances of the given class, without worrying about subclasses.'''
 	path = _dumps_path()
@@ -683,26 +699,16 @@ def _wd_instances(cl):
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
 			filename=filename[0]
+		_wd_clear()
 		print('Parsing the dump ',filename)
-		os.system("grep 'P31[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'instances/'+cl+".nt")
+		os.system("grep 'P31[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'instances/'+cl+"_temp.nt")
+		os.system("mv "+path_os+'instances/'+cl+"_temp.nt "+path_os+'instances/'+cl+".nt")
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
 	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return instances
 
 def _wd_subclasses(cl):
-	'''
-	Gets all the subclasses of the given class.
-
-	Examples
-	--------
-	To get all subclasses of musical ensemble:
-	>>> wd_subclasses('Q2088357')
-
-	Returns
-	-------
-	subclasses : set
-		wd_id for every subclass of the given class.
-	'''
+	'''Gets all the subclasses of the given class.'''
 	path = _dumps_path()
 	path_os = _path(path)
 	files = os.listdir(path)
@@ -713,9 +719,10 @@ def _wd_subclasses(cl):
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
 			filename=filename[0]
+		_wd_clear()
 		print('Parsing the dump ',filename)
-		os.system("grep 'P279[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+".nt")
-
+		os.system("grep 'P279[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+"_temp.nt")
+		os.system("mv "+path_os+'subclasses/'+cl+"_temp.nt "+path_os+'subclasses/'+cl+".nt")
 	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
 	subclasses = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
 	return subclasses
