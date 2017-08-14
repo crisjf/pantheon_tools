@@ -1919,6 +1919,8 @@ class Occ(object):
 		'''
 		Gets the type of the first infobox of the provided Wikipedia page using the controlled vocabulary provided in box_controlled.tsv
 		'''
+		if article.infobox() is None:
+			return 'NA'
 		types = [self.bmap[val.replace('_',' ').strip().replace(' ','_')] for val in list(article.infobox().keys())]
 		try:
 			types.remove('NA')
