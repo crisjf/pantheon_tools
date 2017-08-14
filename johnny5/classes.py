@@ -49,7 +49,10 @@ class article(object):
 		if Itype not in ['title','curid','wdid']:
 			raise NameError("Unrecognized Itype, please choose between title, curid, or wdid")
 		self.I = {'title':None,'curid':None,'wdid':None}
-		self.I[Itype] = I
+		if (Itype == 'title')|(Itype == 'wdid'):
+			self.I[Itype] = I.strip()
+		else:
+			self.I[Itype] = I
 		self._data = {'wp':None,'wd':None}
 		self._curid_nonen = None
 
