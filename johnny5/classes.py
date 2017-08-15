@@ -1141,7 +1141,10 @@ class song(article):
 		artist : str (optional)
 			If provided it will get the song associated with the given artist.
 		'''
-		titles = self._disambiguate(artist=artist)
+		if self.is_song():
+			titles = [self.title()]
+		else:
+			titles = self._disambiguate(artist=artist)
 		if (len(titles)==0):
 			self.__init__(self.title()+'_(song)',Itype='title')
 			self.redirect()
