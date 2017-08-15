@@ -35,6 +35,7 @@ class article(object):
 	This is the main class for this module.
 	All other classes belong to this class.
 	The class can be initialized by a en_curid, a title, or a wikidata_id.
+	If you want to initialize an empty object, pass it ' '.
 
 	Parameters
 	----------
@@ -46,6 +47,8 @@ class article(object):
 	"""
 	def __init__(self,I,Itype=None,slow_connection=False):
 		Itype = _id_type(I) if Itype is None else Itype
+		if Itype == 'title':
+			I = 'NA' if I.strip() =='' else I
 		if Itype not in ['title','curid','wdid']:
 			raise NameError("Unrecognized Itype, please choose between title, curid, or wdid")
 		self.I = {'title':None,'curid':None,'wdid':None}
@@ -1123,20 +1126,36 @@ class place(article):
 class song(article):
 	'''Class for songs.'''
 	def __init__(self,I,Itype=None):
-		super(song, self).__init__(I,Itype=None)
+		super(song, self).__init__(I,Itype=None,slow_connection=True)
+		self.slow_connection = False
 		self._is_song = None
 		self._wpsong  = None
 		self._genre   = None
-
+		
 	def disambiguate(self,artist=None):
 		'''
-		If the provided page is a disambiguation page, it returns the song that it was able to find within the links.
+		It returns the song that it was able to find within the links of a disambiguation page.
 
 		Parameters
 		----------
 		artist : str (optional)
 			If provided it will get the song associated with the given artist.
 		'''
+		titles = self._disambiguate(artist=artist)
+		if (len(titles)==0):
+			self.__init__(self.title()+'_(song)',Itype='title')
+			self.redirect()
+			if self.is_song():
+				titles = [self.title()]
+			else:
+				titles = self._disambiguate(artist=artist)
+		self.redirect()
+		self.find_article()
+		return titles
+
+	def _disambiguate(self,artist=None):
+		title = self.title()
+		dis = []
 		song_titles = []
 		if "(disambiguation)" not in self.title().lower():
 			self.__init__(self.title()+' (disambiguation)',Itype='title')
@@ -1145,27 +1164,26 @@ class song(article):
 			for link in get_links(self.content()):
 				if song(link).is_song():
 					song_titles.append(link)
-			if len(song_titles) == 0:
-				return []
-			if artist is None:
-				return song_titles
-			else:
-				a = article(artist)
-				a.find_article()
-				if a.curid() == "NA":
-					for sep in ['and','&']:
-						if sep in artist.lower():
-							a = article(artist[:artist.lower().find(sep)].strip())
-							a.find_article()
-							break
-				if a.curid() != 'NA':
-					for t in song_titles:
-						perf = song(t).performer()
-						if perf == a.title():
-							return [t]
-				return []
-		else:
-			return []
+			if len(song_titles) != 0:
+				if artist is None:
+					dis = song_titles
+				else:
+					a = article(artist)
+					a.find_article()
+					if a.curid() == "NA":
+						for sep in ['and','&']:
+							if sep in artist.lower():
+								a = article(artist[:artist.lower().find(sep)].strip())
+								a.find_article()
+								break
+					if a.curid() != 'NA':
+						for t in song_titles:
+							perf = song(t).performer()
+							if perf == a.title():
+								dis = [t]
+		if len(dis) == 0:
+			self.__init__(title,Itype='title')
+		return dis
 
 	def find_article(self):
 		'''
