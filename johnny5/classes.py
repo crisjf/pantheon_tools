@@ -1132,7 +1132,7 @@ class song(article):
 		self._wpsong  = None
 		self._genre   = None
 		
-	def disambiguate(self,artist=None):
+	def disambiguate(self,artist=None,in_place=False):
 		'''
 		It returns the song that it was able to find within the links of a disambiguation page.
 
@@ -1140,6 +1140,8 @@ class song(article):
 		----------
 		artist : str (optional)
 			If provided it will get the song associated with the given artist.
+		in_place : boolean (True)
+			If True, it will not return a list, but rather modify the object to point at the first song of the obtained list. 
 		'''
 		if self.is_song():
 			titles = [self.title()]
@@ -1154,7 +1156,10 @@ class song(article):
 				titles = self._disambiguate(artist=artist)
 		self.redirect()
 		self.find_article()
-		return titles
+		if in_place&(len(titles)!=0):
+			self.__init__(titles[0],Itype='title')
+		else:
+			return titles
 
 	def _disambiguate(self,artist=None):
 		title = self.title()
