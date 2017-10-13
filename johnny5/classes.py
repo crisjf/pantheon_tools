@@ -2014,24 +2014,21 @@ def _id_type(I):
 		return 'title'
 
 
-#def read_article(file_name):
-#	'''
-#	Reads an article from a json file created with article.dump().
-#	'''
-#	with open(file_name) as data_file:
-#		data_json = json.load(data_file)
-#	for i in ['curid','title','wdid']:
-#		if data_json['I'][i] is not None:
-#			out = article(data_json['I'][i],Itype=i)
-#			break
-#	out.I = data_json['I']
-#	out._data = data_json['_data']
-#	out._langlinks_dat = data_json['_langlinks_dat']
-#	out._langlinks = data_json['_langlinks']
-#	out._infobox = data_json['_infobox']
-#	out.raw_box  = data_json['raw_box']
-#	out._image_url = data_json['_image_url']
-#	out._wd_claims      = data_json['_wd_claims']
-#	out._wd_claims_data = data_json['_wd_claims_data']
-#	out._creation_date = data_json['_creation_date']
-#	return out
+def search(s):
+	'''
+	Searches Wikipedia and returns the first hit.
+
+	Parameters
+	----------
+	s : string
+		Search parameter
+
+	Returns
+	-------
+	a : j5.article
+		First hit of the search
+	'''
+	search = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch='+s+'&utf8='
+	r = _rget(search).json()
+	p = r['query']['search'][0]
+	return article(p['pageid'])

@@ -23,7 +23,6 @@ from bs4 import BeautifulSoup
 wiki_API = 'https://en.wikipedia.org/w/api.php?action=query&format=json'
 wikidata_API = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json'
 
-
 def _dt2str(d):
 	'''Transforms a datetime object into a string of the form yyyymmdd'''
 	return str(d.year)+('00'+str(d.month))[-2:]+('00'+str(d.day))[-2:]
