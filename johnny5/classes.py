@@ -2030,5 +2030,9 @@ def search(s):
 	'''
 	search = 'https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch='+s+'&utf8='
 	r = _rget(search).json()
-	p = r['query']['search'][0]
-	return article(p['pageid'])
+	if len(r['query']['search']) !=0:
+		p = r['query']['search'][0]
+		return article(p['pageid'])
+	else:
+		return None
+	
