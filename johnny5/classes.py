@@ -1699,7 +1699,7 @@ class band(article):
 					ctr.append(place(c['id']).wd_prop('P298')[0]['value'])
 				except:
 					pass
-			keep = (len(formation)!=0)
+			keep = (len(formation)!=p0)
 			if keep:
 				keep = keep&(formation[0]!='NA')&(formation[0] is not None)
 			if keep:
@@ -1710,7 +1710,10 @@ class band(article):
 					try:
 						o = self.infobox()['musical artist']['origin']
 					except:
-						o = self.infobox()['orchestra']['origin']
+						try:
+							o = self.infobox()['orchestra']['origin']
+						except:
+							o = self.infobox()['musician']['origin']
 					if '[[' in o:
 						o = o[:o.find(']]')].replace('[[','').strip()
 					if '|' in o:
