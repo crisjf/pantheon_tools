@@ -5,13 +5,12 @@ here = os.path.abspath(os.path.dirname(__file__))
 install_requires = [
     'requests',
     'mwparserfromhell',
-    'pandas'
+    'pandas',
+    'joblib',
+    'beautifulsoup4',
+    'json',
+    'geopy'
     ]
-
-tests_require = [
-	'json',
-	'geopy'
-	]
 
 setup(
 	name='johnny5',
