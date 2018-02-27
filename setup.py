@@ -8,7 +8,6 @@ install_requires = [
     'pandas',
     'joblib',
     'beautifulsoup4',
-    'json',
     'geopy'
     ]
 
@@ -19,7 +18,6 @@ setup(
     author_email = "crisjf@mit.edu",
     description = ("Tools for getting data on historical characters from Wikipedia and Wikidata."),
     install_requires=install_requires,
-    tests_require=tests_require,
     test_suite="nose.collector"
 )
 #python setup.py develop
