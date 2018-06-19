@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>johnny5.parse_functions &mdash; johnny5 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="johnny5 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> johnny5
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../johnny5.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">johnny5</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>johnny5.parse_functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for johnny5.parse_functions</h1><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">xrange</span>
+<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+    <span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">future</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="kn">import</span> <span class="nn">mwparserfromhell</span><span class="o">,</span><span class="nn">re</span>
+
+<div class="viewcode-block" id="drop_comments"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.drop_comments">[docs]</a><span class="k">def</span> <span class="nf">drop_comments</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Drops wikimarkup comments from the provided string.&#39;&#39;&#39;</span>
+	<span class="k">while</span> <span class="s1">&#39;&lt;!--&#39;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+		<span class="n">comment</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">value</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;&lt;!--&#39;</span><span class="p">):]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;--&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;--&gt;&#39;</span>
+		<span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">comment</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="drop_nowrap"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.drop_nowrap">[docs]</a><span class="k">def</span> <span class="nf">drop_nowrap</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Drops nowrap&#39;&#39;&#39;</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;\{\{[^\|]*[Nn]owrap[^\|]*\|&#39;</span><span class="p">,</span><span class="s1">&#39;{{nowrap|&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+    <span class="n">nowrap</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">p_count</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="s1">&#39;{{nowrap|&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;{{nowrap|&#39;</span><span class="p">):]:</span>
+            <span class="n">nowrap</span> <span class="o">+=</span> <span class="n">c</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;{&#39;</span><span class="p">:</span>
+                <span class="n">p_count</span> <span class="o">+=</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="s1">&#39;}&#39;</span><span class="p">:</span>
+                <span class="n">p_count</span> <span class="o">+=-</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="n">p_count</span> <span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">nowrap</span><span class="p">,</span><span class="n">nowrap</span><span class="p">[</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">text</span></div>
+
+<div class="viewcode-block" id="get_links"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.get_links">[docs]</a><span class="k">def</span> <span class="nf">get_links</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Gets the links from the provided in Wiki Markup.</span>
+<span class="sd">    Links are between square brackets [[]].</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">links</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="s1">&#39;[[&#39;</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="n">link</span> <span class="o">=</span> <span class="n">text</span><span class="p">[</span><span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="o">+</span><span class="n">link</span><span class="o">+</span><span class="s1">&#39;]]&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;|&#39;</span> <span class="ow">in</span> <span class="n">link</span><span class="p">:</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">links</span></div>
+
+<div class="viewcode-block" id="find_nth"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.find_nth">[docs]</a><span class="k">def</span> <span class="nf">find_nth</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Returns the index of the nth occurrence of needle in haystack.</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	haystack : str</span>
+<span class="sd">		String to search.</span>
+<span class="sd">	needle : str</span>
+<span class="sd">		Pattern to find.</span>
+<span class="sd">	n : int</span>
+<span class="sd">		Occurrence to return.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">start</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span>
+	<span class="k">while</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+		<span class="n">start</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">needle</span><span class="p">,</span> <span class="n">start</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">needle</span><span class="p">))</span>
+		<span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+	<span class="k">return</span> <span class="n">start</span></div>
+
+<div class="viewcode-block" id="first_month"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.first_month">[docs]</a><span class="k">def</span> <span class="nf">first_month</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span><span class="n">as_num</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Returns the first month in the string. Returns &#39;NA&#39; when there is no month. &#39;&#39;&#39;</span>
+    <span class="n">pt_</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;january&#39;</span><span class="p">,</span><span class="s1">&#39;february&#39;</span><span class="p">,</span><span class="s1">&#39;march&#39;</span><span class="p">,</span><span class="s1">&#39;april&#39;</span><span class="p">,</span><span class="s1">&#39;may&#39;</span><span class="p">,</span><span class="s1">&#39;june&#39;</span><span class="p">,</span><span class="s1">&#39;july&#39;</span><span class="p">,</span><span class="s1">&#39;august&#39;</span><span class="p">,</span><span class="s1">&#39;september&#39;</span><span class="p">,</span><span class="s1">&#39;october&#39;</span><span class="p">,</span><span class="s1">&#39;november&#39;</span><span class="p">,</span><span class="s1">&#39;december&#39;</span><span class="p">]</span>
+    <span class="n">mm</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="mi">10000</span>
+    <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">pt_</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pt_</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">month</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">pt_</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+                <span class="n">mm</span> <span class="o">=</span> <span class="n">month</span>
+    <span class="k">if</span> <span class="n">mm</span> <span class="o">==</span><span class="s2">&quot;NA&quot;</span><span class="p">:</span>
+        <span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;jan&#39;</span><span class="p">,</span><span class="s1">&#39;feb&#39;</span><span class="p">,</span><span class="s1">&#39;mar&#39;</span><span class="p">,</span><span class="s1">&#39;apr&#39;</span><span class="p">,</span><span class="s1">&#39;may&#39;</span><span class="p">,</span><span class="s1">&#39;jun&#39;</span><span class="p">,</span><span class="s1">&#39;jul&#39;</span><span class="p">,</span><span class="s1">&#39;aug&#39;</span><span class="p">,</span><span class="s1">&#39;sep&#39;</span><span class="p">,</span><span class="s1">&#39;oct&#39;</span><span class="p">,</span><span class="s1">&#39;nov&#39;</span><span class="p">,</span><span class="s1">&#39;dec&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">months</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">month</span> <span class="ow">in</span> <span class="n">pt_</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">pt_</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">month</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">:</span>
+                    <span class="n">i</span> <span class="o">=</span> <span class="n">pt_</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">month</span><span class="p">)</span>
+                    <span class="n">mm</span> <span class="o">=</span> <span class="n">month</span>
+    <span class="k">if</span> <span class="n">as_num</span><span class="p">:</span>
+        <span class="n">mp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">months</span><span class="p">,</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">13</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">mp</span><span class="p">[</span><span class="n">mm</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mm</span></div>
+
+<div class="viewcode-block" id="parse_ints"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.parse_ints">[docs]</a><span class="k">def</span> <span class="nf">parse_ints</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Parses a list of integers from s&#39;&#39;&#39;</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+            <span class="n">item</span> <span class="o">+=</span> <span class="n">c</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+                <span class="n">item</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="c1">#if len(items) == 0:</span>
+        <span class="c1">#items.append(&#39;NA&#39;)</span>
+    <span class="k">return</span> <span class="n">items</span></div>
+
+<div class="viewcode-block" id="has_num"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.has_num">[docs]</a><span class="k">def</span> <span class="nf">has_num</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Returns True if there is a number in the text.&#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Parses a date from the given string.</span>
+<span class="sd">    This function is constantly under development since new date formats are added to wikipedia every day.</span>
+<span class="sd">    The current version is optimized for parsing death dates.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">drop_nowrap</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;\{\{[^\|]*[Cc]irca[^\}]*\}\}&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">filter_templates</span><span class="p">()</span>
+    <span class="n">yy</span><span class="p">,</span><span class="n">mm</span><span class="p">,</span><span class="n">dd</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">template</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">tag</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">r&#39;_+&#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;birth_date&#39;</span><span class="p">,</span><span class="s1">&#39;death_date_and_age&#39;</span><span class="p">,</span><span class="s1">&#39;death_date&#39;</span><span class="p">,</span><span class="s1">&#39;dda&#39;</span><span class="p">,</span><span class="s1">&#39;age_in_years_and_days&#39;</span><span class="p">,</span><span class="s1">&#39;death_date_and_given_age&#39;</span><span class="p">]):</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">while</span> <span class="n">yy</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+                        <span class="k">break</span>
+            <span class="k">while</span> <span class="n">mm</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">mm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+                        <span class="k">break</span>
+            <span class="k">while</span> <span class="n">dd</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+                        <span class="k">break</span>
+
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;death_year_and_age&#39;</span><span class="p">]):</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">mm</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>            
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;oldstyledate&#39;</span><span class="p">]):</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+            <span class="n">dd</span> <span class="o">=</span> <span class="n">parse_ints</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mm</span> <span class="o">=</span> <span class="n">first_month</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span><span class="n">as_num</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;birth-date&#39;</span><span class="p">,</span><span class="s1">&#39;death-date_and_age&#39;</span><span class="p">,</span><span class="s1">&#39;death-date&#39;</span><span class="p">]):</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="n">nums</span> <span class="o">=</span> <span class="n">parse_ints</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">ii</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">):</span>
+                    <span class="k">break</span>                
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">dd</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">yy</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">mm</span> <span class="o">=</span> <span class="n">first_month</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="n">as_num</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;birthdeathage&#39;</span><span class="p">]):</span>
+            <span class="n">ii</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">dd</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">-=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">dd</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="k">while</span> <span class="n">mm</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">-=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">mm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="k">break</span>
+            <span class="k">while</span> <span class="n">yy</span> <span class="o">==</span> <span class="s1">&#39;NA&#39;</span><span class="p">:</span>
+                <span class="n">ii</span><span class="o">-=</span><span class="mi">1</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">yy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ii</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                        <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;cite_news&#39;</span><span class="p">,</span><span class="s1">&#39;cite_web&#39;</span><span class="p">,</span><span class="s1">&#39;refn&#39;</span><span class="p">]):</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Unrecognized tag &#39;</span><span class="o">+</span><span class="n">tag</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">yy</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">mm</span><span class="p">),</span><span class="nb">str</span><span class="p">(</span><span class="n">dd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="permute"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.permute">[docs]</a><span class="k">def</span> <span class="nf">permute</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Creates all combinations of upper and lower cases in the title&#39;&#39;&#39;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">title</span><span class="p">)</span> <span class="k">if</span> <span class="n">char</span> <span class="o">==</span> <span class="s1">&#39; &#39;</span><span class="p">]</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="p">[]</span> 
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="nb">len</span><span class="p">(</span><span class="n">start</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="n">combinations</span><span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;0&#39;</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">start</span><span class="p">)</span><span class="o">+</span><span class="nb">bin</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">start</span><span class="p">):]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">:</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">val</span> <span class="o">==</span><span class="s1">&#39;0&#39;</span><span class="p">:</span>
+                    <span class="n">tt</span> <span class="o">+=</span> <span class="n">title</span><span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">+</span><span class="n">title</span><span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+                <span class="k">elif</span> <span class="n">val</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="n">tt</span> <span class="o">+=</span> <span class="n">title</span><span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="n">title</span><span class="p">[</span><span class="n">start</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span>
+            <span class="n">titles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">titles</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="correct_titles"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.correct_titles">[docs]</a><span class="k">def</span> <span class="nf">correct_titles</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Checks the capitalization of the given title and returns a set of possible uses&#39;&#39;&#39;</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">title</span><span class="p">])</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">bag</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;an&#39;</span><span class="p">,</span><span class="s1">&#39;the&#39;</span><span class="p">,</span><span class="s1">&#39;for&#39;</span><span class="p">,</span><span class="s1">&#39;and&#39;</span><span class="p">,</span><span class="s1">&#39;nor&#39;</span><span class="p">,</span><span class="s1">&#39;but&#39;</span><span class="p">,</span><span class="s1">&#39;or&#39;</span><span class="p">,</span><span class="s1">&#39;yet&#39;</span><span class="p">,</span><span class="s1">&#39;so&#39;</span><span class="p">,</span><span class="s1">&#39;at&#39;</span><span class="p">,</span><span class="s1">&#39;around&#39;</span><span class="p">,</span><span class="s1">&#39;by&#39;</span><span class="p">,</span><span class="s1">&#39;after&#39;</span><span class="p">,</span><span class="s1">&#39;along&#39;</span><span class="p">,</span><span class="s1">&#39;for&#39;</span><span class="p">,</span><span class="s1">&#39;from&#39;</span><span class="p">,</span><span class="s1">&#39;of&#39;</span><span class="p">,</span><span class="s1">&#39;on&#39;</span><span class="p">,</span><span class="s1">&#39;to&#39;</span><span class="p">,</span><span class="s1">&#39;with&#39;</span><span class="p">,</span><span class="s1">&#39;without&#39;</span><span class="p">])</span>
+    <span class="n">words</span> <span class="o">=</span> <span class="n">title</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">titles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">words</span><span class="p">))</span>
+    <span class="c1">#titles.add(&#39; &#39;.join(words))</span>
+    <span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">titles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">words</span><span class="p">))</span>
+    <span class="c1">#titles.add(&#39; &#39;.join(words))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">word</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">words</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">word</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bag</span><span class="p">:</span>
+                <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">titles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">words</span><span class="p">))</span>
+    <span class="c1">#titles.add(&#39; &#39;.join(words))</span>
+    <span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">+</span><span class="n">words</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+    <span class="n">titles</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">words</span><span class="p">))</span>
+    <span class="c1">#titles.add(&#39; &#39;.join(words))</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">titles</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="parse_p"><a class="viewcode-back" href="../../johnny5.html#johnny5.parse_functions.parse_p">[docs]</a><span class="k">def</span> <span class="nf">parse_p</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;()&#39;</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Parses parenthesis from a string.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	ps : list</span>
+<span class="sd">		List of parenthesis</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">sep0</span><span class="p">,</span><span class="n">sep1</span> <span class="o">=</span> <span class="n">sep</span>
+	<span class="n">ps</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">p</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+	<span class="n">stack</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">sep0</span><span class="p">:</span>
+			<span class="n">stack</span><span class="o">+=</span><span class="mi">1</span>
+		<span class="k">if</span> <span class="n">stack</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+			<span class="n">p</span><span class="o">+=</span><span class="n">i</span>
+		<span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">sep1</span><span class="p">:</span>
+			<span class="n">stack</span><span class="o">-=</span><span class="mi">1</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">stack</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">p</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+			<span class="n">ps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+			<span class="n">p</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+	<span class="k">return</span> <span class="n">ps</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, C. Jara-Figueroa.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

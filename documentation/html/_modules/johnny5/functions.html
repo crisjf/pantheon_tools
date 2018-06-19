@@ -1,0 +1,954 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>johnny5.functions &mdash; johnny5 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="author" title="About these documents"
+              href="../../about.html"/>
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="johnny5 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> johnny5
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../johnny5.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../about.html">About</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">johnny5</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>johnny5.functions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for johnny5.functions</h1><div class="highlight"><pre>
+<span></span><span class="k">try</span><span class="p">:</span>
+	<span class="n">xrange</span>
+<span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+	<span class="n">xrange</span> <span class="o">=</span> <span class="nb">range</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="kn">import</span> <span class="nn">future</span>
+<span class="k">except</span><span class="p">:</span>
+	<span class="k">pass</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">time</span><span class="o">,</span><span class="nn">codecs</span><span class="o">,</span><span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+<span class="kn">from</span> <span class="nn">.parse_functions</span> <span class="k">import</span> <span class="n">drop_comments</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="k">import</span> <span class="n">DataFrame</span>
+<span class="kn">from</span> <span class="nn">.query</span> <span class="k">import</span> <span class="n">wd_q</span><span class="p">,</span><span class="n">wp_q</span><span class="p">,</span><span class="n">_rget</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">chain</span>
+<span class="k">try</span><span class="p">:</span>
+	<span class="kn">import</span> <span class="nn">urllib2</span>
+	<span class="kn">from</span> <span class="nn">urllib</span> <span class="k">import</span> <span class="n">urlretrieve</span>
+<span class="k">except</span><span class="p">:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Warning: No module urllib2&#39;</span><span class="p">)</span>
+	<span class="k">pass</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="k">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">wiki_API</span> <span class="o">=</span> <span class="s1">&#39;https://en.wikipedia.org/w/api.php?action=query&amp;format=json&#39;</span>
+<span class="n">wikidata_API</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">_dt2str</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Transforms a datetime object into a string of the form yyyymmdd&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">)</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">month</span><span class="p">))[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span><span class="o">+</span><span class="p">(</span><span class="s1">&#39;00&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">day</span><span class="p">))[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+
+<span class="k">def</span> <span class="nf">_all_dates</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;gets all the dates between the given dates&#39;&#39;&#39;</span>
+	<span class="n">delta</span> <span class="o">=</span> <span class="n">d2</span> <span class="o">-</span> <span class="n">d1</span>
+	<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">days</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">dt</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+		<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">year</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">month</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">day</span><span class="p">)])</span>
+	<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">,</span><span class="s1">&#39;month&#39;</span><span class="p">,</span><span class="s1">&#39;day&#39;</span><span class="p">])</span>
+
+<span class="k">def</span> <span class="nf">_wd_id</span><span class="p">(</span><span class="n">trigger</span><span class="p">):</span>
+    <span class="n">trigger</span> <span class="o">=</span> <span class="n">unicode</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">trigger</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;Q&#39;</span><span class="p">:</span>
+        <span class="n">trigger</span> <span class="o">=</span> <span class="s1">&#39;Q&#39;</span><span class="o">+</span><span class="n">trigger</span>
+    <span class="k">return</span> <span class="n">trigger</span>
+
+<span class="k">def</span> <span class="nf">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
+	<span class="c1">#it = hasattr(prop,&#39;__iter__&#39;)</span>
+	<span class="k">if</span> <span class="n">it</span><span class="p">:</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">prop</span><span class="p">,[</span><span class="s1">&#39;NA&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">prop</span><span class="p">)))</span>
+		<span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunker</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+			<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&amp;languages=en&amp;ids=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+			<span class="c1">#url = &#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&amp;languages=en&amp;ids=&#39;+&#39;|&#39;.join(prop)</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+			<span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+				<span class="n">out</span><span class="p">[</span><span class="n">page</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">page</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">][</span><span class="s1">&#39;en&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;name&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">out</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://www.wikidata.org/w/api.php?action=wbgetentities&amp;format=json&amp;languages=en&amp;ids=&#39;</span><span class="o">+</span><span class="n">prop</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">][</span><span class="n">prop</span><span class="p">][</span><span class="s1">&#39;labels&#39;</span><span class="p">][</span><span class="s1">&#39;en&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">get_wd_coords</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span> <span class="o">=</span> <span class="s1">&#39;P625&#39;</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
+	<span class="c1">#it = hasattr(wdids, &#39;__iter__&#39;)</span>
+	<span class="n">wdids</span> <span class="o">=</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">wdids</span><span class="p">)]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">it</span> <span class="k">else</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">wdid</span><span class="p">)</span> <span class="k">for</span> <span class="n">wdid</span> <span class="ow">in</span> <span class="n">wdids</span><span class="p">]</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">wd_ids</span> <span class="ow">in</span> <span class="n">chunker</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">wikidata_API</span><span class="o">+</span><span class="s1">&#39;&amp;languages=en&amp;ids=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">wd_ids</span><span class="p">)</span>
+		<span class="c1">#url = wikidata_API+&#39;&amp;languages=en&amp;ids=&#39;+&#39;|&#39;.join(wd_ids)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">wdid</span> <span class="ow">in</span> <span class="n">wd_ids</span><span class="p">:</span>
+			<span class="n">wdid_data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">u&#39;entities&#39;</span><span class="p">][</span><span class="n">wdid</span><span class="p">][</span><span class="s1">u&#39;claims&#39;</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">wdid_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+				<span class="n">mainsnak</span> <span class="o">=</span> <span class="n">wdid_data</span><span class="p">[</span><span class="n">prop</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">u&#39;mainsnak&#39;</span><span class="p">]</span>
+				<span class="k">if</span> <span class="s1">&#39;datavalue&#39;</span> <span class="ow">in</span> <span class="n">mainsnak</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">u&#39;latitude&#39;</span><span class="p">],</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">&#39;longitude&#39;</span><span class="p">],</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">u&#39;precision&#39;</span><span class="p">])</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+			<span class="n">results</span><span class="p">[</span><span class="n">wdid</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_wdid</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">it</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">DataFrame</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span>  <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span><span class="s1">&#39;lon&#39;</span><span class="p">,</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
+
+
+
+<span class="k">def</span> <span class="nf">get_wdprop</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="n">prop</span><span class="p">,</span><span class="n">as_df</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">date</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Queries Wikidata for the property passed as prop for all the provided Wikidata Ids.</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	wdids : list, str or int</span>
+<span class="sd">		Wikidata Ids of pages to get the property for.</span>
+<span class="sd">	prop : str or int</span>
+<span class="sd">		Property code.</span>
+<span class="sd">		Examples: &#39;P106&#39; (occupation), &#39;P569&#39; (birth date), &#39;P21&#39; (gender)</span>
+<span class="sd">	as_df : boolean (False)</span>
+<span class="sd">		If True, returns the properties as a pandas DataFrame.</span>
+<span class="sd">	names : boolean (False)</span>
+<span class="sd">		If True, returns the name of the property vakye rather than the code of the property value.</span>
+<span class="sd">		For example, it will return &#39;male&#39; instead of &#39;Q6581097&#39;</span>
+<span class="sd">	date : boolean (False)</span>
+<span class="sd">		Must be passed as True if the required property is a date.</span>
+<span class="sd">		For example, P569 must be requested using date=True.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	results : str, tuple, dictionary, or DataFrame</span>
+<span class="sd">		Values for the requested property.</span>
+<span class="sd">		If wdids is not a list, it will return a string when date=False and a tuple with (time,calendarmodel,precision) when date=True.</span>
+<span class="sd">		If as_df=True and wdids is a list, then it will return a pandas DataFrame.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
+	<span class="c1">#it = hasattr(wdids, &#39;__iter__&#39;)</span>
+	<span class="n">wdids</span> <span class="o">=</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">wdids</span><span class="p">)]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">it</span> <span class="k">else</span> <span class="p">[</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">wdids</span><span class="p">]</span>
+	<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="n">values</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([])</span>
+	<span class="k">for</span> <span class="n">wd_ids</span> <span class="ow">in</span> <span class="n">chunker</span><span class="p">(</span><span class="n">wdids</span><span class="p">,</span><span class="mi">50</span><span class="p">):</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">wikidata_API</span><span class="o">+</span><span class="s1">&#39;&amp;languages=en&amp;ids=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">wd_ids</span><span class="p">)</span>
+		<span class="c1">#url = wikidata_API+&#39;&amp;languages=en&amp;ids=&#39;+&#39;|&#39;.join(wd_ids)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">wdid</span> <span class="ow">in</span> <span class="n">wd_ids</span><span class="p">:</span>
+			<span class="n">wdid_data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">u&#39;entities&#39;</span><span class="p">][</span><span class="n">wdid</span><span class="p">][</span><span class="s1">u&#39;claims&#39;</span><span class="p">]</span>
+			<span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">wdid_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+				<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+					<span class="n">mainsnak</span> <span class="o">=</span> <span class="n">wdid_data</span><span class="p">[</span><span class="n">prop</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">u&#39;mainsnak&#39;</span><span class="p">]</span>
+					<span class="k">if</span> <span class="s1">&#39;datavalue&#39;</span> <span class="ow">in</span> <span class="n">mainsnak</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+						<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">u&#39;time&#39;</span><span class="p">],</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">&#39;calendarmodel&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">u&#39;precision&#39;</span><span class="p">])</span>
+					<span class="k">else</span><span class="p">:</span>
+						<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">[]</span>
+					<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">u&#39;entities&#39;</span><span class="p">][</span><span class="n">wdid</span><span class="p">][</span><span class="s1">u&#39;claims&#39;</span><span class="p">][</span><span class="n">prop</span><span class="p">]:</span>
+						<span class="n">mainsnak</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="s1">u&#39;mainsnak&#39;</span><span class="p">]</span>
+						<span class="k">if</span> <span class="s1">&#39;datavalue&#39;</span> <span class="ow">in</span> <span class="n">mainsnak</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+							<span class="n">prop_wdid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_wd_id</span><span class="p">(</span><span class="n">mainsnak</span><span class="p">[</span><span class="s1">u&#39;datavalue&#39;</span><span class="p">][</span><span class="s1">u&#39;value&#39;</span><span class="p">][</span><span class="s1">u&#39;id&#39;</span><span class="p">]))</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">prop_wdid</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prop_wdid</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;NA&#39;</span>
+					<span class="c1">#prop_wdid = &#39;|&#39;.join(prop_wdid) if len(prop_wdid) != 0 else &#39;NA&#39;</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">,</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">prop_wdid</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span>
+			<span class="n">results</span><span class="p">[</span><span class="n">wdid</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_wdid</span>
+			<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+				<span class="n">values</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prop_wdid</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">values</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">prop_wdid</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">names</span><span class="p">:</span>
+		<span class="n">values</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;NA&#39;</span><span class="p">)</span>
+		<span class="n">val_names</span> <span class="o">=</span> <span class="n">get_wd_name</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+		<span class="n">val_names</span><span class="p">[</span><span class="s1">&#39;NA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;NA&#39;</span>
+		<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+			<span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:(</span><span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">val_names</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]],</span><span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">results</span><span class="p">}</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span><span class="n">val_names</span><span class="p">[</span><span class="n">results</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">results</span><span class="p">}</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">it</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">date</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">DataFrame</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span>  <span class="n">k</span><span class="p">,</span><span class="n">i</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()],</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="s1">&#39;time&#39;</span><span class="p">,</span><span class="s1">&#39;calendarmodel&#39;</span><span class="p">,</span><span class="s1">&#39;precision&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;wd_id&#39;</span><span class="p">,</span><span class="n">get_wd_name</span><span class="p">(</span><span class="n">prop</span><span class="p">)])</span> <span class="k">if</span> <span class="n">as_df</span> <span class="k">else</span> <span class="n">results</span>
+
+
+<span class="k">def</span> <span class="nf">langlinks</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">use</span><span class="o">=</span><span class="s1">&#39;curid&#39;</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the langlinks for the provided set of articles.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	articles : list </span>
+<span class="sd">		List of wiki_tool article objects to query.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and langlinks as values.</span>
+<span class="sd">	use : str (default=&#39;curid&#39;)</span>
+<span class="sd">		What identifier to use: &#39;curid&#39; or &#39;title&#39;</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	langlinks : dict</span>
+<span class="sd">		Dictionary with curids as keys and langlinks as values.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">if</span> <span class="n">use</span><span class="o">==</span><span class="s1">&#39;curid&#39;</span><span class="p">:</span>
+		<span class="n">pages</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+	<span class="k">elif</span> <span class="n">use</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span>
+		<span class="n">pages</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pageids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">use</span><span class="o">==</span><span class="s1">&#39;curid&#39;</span><span class="p">:</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;langlinks&#39;</span><span class="p">,</span><span class="s1">&#39;lllimit&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="n">pages</span><span class="p">})</span>
+		<span class="k">elif</span> <span class="n">use</span> <span class="o">==</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;langlinks&#39;</span><span class="p">,</span><span class="s1">&#39;lllimit&#39;</span><span class="p">:</span><span class="mi">500</span><span class="p">,</span><span class="s1">&#39;titles&#39;</span><span class="p">:</span><span class="n">pages</span><span class="p">})</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="k">if</span> <span class="s1">&#39;langlinks&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())][</span><span class="s1">&#39;langlinks&#39;</span><span class="p">]</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_langlinks_dat</span> <span class="o">=</span> <span class="p">[]</span>
+			<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;en&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">a</span><span class="o">.</span><span class="n">_langlinks</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">title</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+				<span class="n">a</span><span class="o">.</span><span class="n">_langlinks</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">langlinks</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">extract</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the extracts of a set of articles.</span>
+<span class="sd">	It only queries the extracts for the articles without extracts.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	articles : list </span>
+<span class="sd">		List of wiki_tool article objects to query.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and extracts as values.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	exs : dict</span>
+<span class="sd">		If ret=True it returns a dictionary with curids as keys and extracts as values.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">pageids</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pageids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;extracts&#39;</span><span class="p">,</span><span class="s2">&quot;exintro&quot;</span><span class="p">:</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s2">&quot;explaintext&quot;</span><span class="p">:</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s1">&#39;exlimit&#39;</span><span class="p">:</span><span class="mi">20</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="n">pageids</span><span class="p">})</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_ex</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())][</span><span class="s1">&#39;extract&#39;</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_ex</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">infobox</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the infobox of the provided article or list of articles.</span>
+<span class="sd">	It only queries the infoboxes for the articles without infobox.</span>
+<span class="sd">	It handles redirects by resetting the article to point to the correct page.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	article : wiki_tool article or list of wiki_tool article</span>
+<span class="sd">		Article or articles to get the extracts for.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and infoboxes as json objects as values.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	iboxs : dict</span>
+<span class="sd">		If ret=True it returns a dictionary with curids as keys and infoboxes as json objects as values.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">pageids</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">raw_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+	<span class="n">redirect_list</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pageids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s2">&quot;revisions&quot;</span><span class="p">,</span><span class="s1">&#39;rvprop&#39;</span><span class="p">:</span><span class="s1">&#39;content&#39;</span><span class="p">,</span><span class="s1">&#39;rvsection&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="n">pageids</span><span class="p">})</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+			<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">raw_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+				<span class="n">rp</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())]</span>
+				<span class="n">rb</span> <span class="o">=</span> <span class="n">rp</span><span class="p">[</span><span class="s1">&#39;revisions&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;*&#39;</span><span class="p">]</span>
+				<span class="k">if</span> <span class="s1">&#39;#redirect&#39;</span> <span class="ow">in</span> <span class="n">rb</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> 
+					<span class="n">title</span> <span class="o">=</span> <span class="n">rb</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[[&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;]]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">title</span><span class="p">,</span><span class="n">Itype</span><span class="o">=</span><span class="s1">&#39;title&#39;</span><span class="p">)</span>
+					<span class="n">redirect_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">raw_box</span> <span class="o">=</span> <span class="n">rb</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">redirect_list</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">pageids</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">raw_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pageids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s2">&quot;revisions&quot;</span><span class="p">,</span><span class="s1">&#39;rvprop&#39;</span><span class="p">:</span><span class="s1">&#39;content&#39;</span><span class="p">,</span><span class="s1">&#39;rvsection&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="n">pageids</span><span class="p">})</span>
+			<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+				<span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">raw_box</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+					<span class="n">rb</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())][</span><span class="s1">&#39;revisions&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;*&#39;</span><span class="p">]</span>
+					<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">raw_box</span> <span class="o">=</span> <span class="n">rb</span>
+	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">infobox</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
+
+
+<span class="k">def</span> <span class="nf">image_url</span><span class="p">(</span><span class="n">article</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the list of urls for the infobox images for the given article or set of articles.</span>
+<span class="sd">	It start by getting the infobox of the missing articles.</span>
+<span class="sd">	It only queries the articles without the image url.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	article : wiki_tool article or list of wiki_tool article</span>
+<span class="sd">		Article or articles to query.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and the urls as a list as values.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	urls : dict</span>
+<span class="sd">		If ret=True it returns a dictionary with curids as keys and list of urls as values.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">it</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">article</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">)</span>
+	<span class="c1">#it = hasattr(article,&#39;__iter__&#39;)</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">it</span><span class="p">:</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">image_url</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">{</span><span class="n">article</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">url</span><span class="p">}</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">infobox</span><span class="p">(</span><span class="n">article</span><span class="p">)</span>
+		<span class="n">I</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">article</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_image_url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">img</span> <span class="o">=</span> <span class="p">{}</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">I</span><span class="p">:</span>
+				<span class="n">images</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="n">ibox</span> <span class="o">=</span> <span class="n">article</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">infobox</span><span class="p">()</span>
+				<span class="k">for</span> <span class="n">btype</span> <span class="ow">in</span> <span class="n">ibox</span><span class="p">:</span>
+					<span class="n">box</span> <span class="o">=</span> <span class="n">ibox</span><span class="p">[</span><span class="n">btype</span><span class="p">]</span>
+					<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">,</span><span class="s1">&#39;image_name&#39;</span><span class="p">,</span><span class="s1">&#39;img&#39;</span><span class="p">,</span><span class="s1">&#39;smallimage&#39;</span><span class="p">]:</span>
+						<span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">box</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+							<span class="n">images</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box</span><span class="p">[</span><span class="n">tag</span><span class="p">])</span>
+				<span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Image:&#39;</span><span class="o">+</span><span class="n">image</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">]</span>
+				<span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">images</span>
+			<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;titles&#39;</span><span class="p">:</span><span class="nb">list</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">values</span><span class="p">()))),</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;imageinfo&#39;</span><span class="p">,</span><span class="s1">&#39;iiprop&#39;</span><span class="p">:</span><span class="s1">&#39;url&#39;</span><span class="p">,</span><span class="s1">&#39;iilimit&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span><span class="n">continue_override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+			<span class="n">norm</span> <span class="o">=</span> <span class="p">{}</span>
+			<span class="k">if</span> <span class="s1">&#39;normalized&#39;</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> <span class="c1">#This is to keep the order</span>
+				<span class="n">norm</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]:</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;normalized&#39;</span><span class="p">]}</span>
+			<span class="n">pages</span> <span class="o">=</span> <span class="p">{</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]:</span><span class="n">val</span><span class="p">[</span><span class="s1">&#39;imageinfo&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">())}</span>
+			<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">I</span><span class="p">:</span>
+				<span class="n">images</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+				<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+				<span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+					<span class="k">if</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">norm</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+						<span class="n">image</span> <span class="o">=</span> <span class="n">norm</span><span class="p">[</span><span class="n">image</span><span class="p">]</span>
+					<span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pages</span><span class="p">[</span><span class="n">image</span><span class="p">])</span>
+				<span class="n">article</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_image_url</span> <span class="o">=</span> <span class="n">results</span>
+		<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_image_url</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">article</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">wp_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">full</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets all Wikipedia information about the provided list of articles.</span>
+<span class="sd">	It gets title, curid and wdid, as well as the extract and the infobox.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	articles : list </span>
+<span class="sd">		List of wiki_tool article objects to query.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and the data as values.</span>
+<span class="sd">	full : boolean (True)</span>
+<span class="sd">		If True it gets the infobox an extract, if False it only gets the page metadata.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;curid&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">]</span>
+	<span class="c1">#Get the curids for the provided titles (and normalize the title if necessary)</span>
+
+	<span class="n">pageids</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span><span class="o">!=</span><span class="s1">&#39;NA&#39;</span><span class="p">)]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pageids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">wp_q</span><span class="p">({</span><span class="s1">&#39;prop&#39;</span><span class="p">:</span><span class="s1">&#39;pageprops&#39;</span><span class="p">,</span><span class="s1">&#39;ppprop&#39;</span><span class="p">:</span><span class="s1">&#39;wikibase_item&#39;</span><span class="p">,</span><span class="s1">&#39;pageids&#39;</span><span class="p">:</span><span class="n">pageids</span><span class="p">})</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span><span class="o">!=</span><span class="s1">&#39;NA&#39;</span><span class="p">):</span>
+				<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">][</span><span class="s1">&#39;pages&#39;</span><span class="p">][</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">())]</span>
+	<span class="k">if</span> <span class="n">full</span><span class="p">:</span>
+		<span class="n">infobox</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+		<span class="n">extract</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wp&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">wd_data</span><span class="p">(</span><span class="n">articles</span><span class="p">,</span><span class="n">ret</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the Wikidata Data for the provided articles.</span>
+<span class="sd">	If the article does not have a wdid it will get it using the wp_data() function.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	article : wiki_tool article or list of wiki_tool article</span>
+<span class="sd">		Article or articles to query.</span>
+<span class="sd">	ret : boolean (False)</span>
+<span class="sd">		If True it will return a dictionary with curids as keys and the data objects as values.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">if</span> <span class="nb">any</span><span class="p">([(</span><span class="n">a</span><span class="o">.</span><span class="n">I</span><span class="p">[</span><span class="s1">&#39;wdid&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">]):</span>
+		<span class="n">wp_data</span><span class="p">(</span><span class="n">articles</span><span class="p">)</span>
+	<span class="n">wdids</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">wdid</span><span class="p">()</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">wdid</span><span class="p">()</span><span class="o">!=</span><span class="s1">&#39;NA&#39;</span><span class="p">)]</span>
+
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wdids</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">wd_q</span><span class="p">({</span><span class="s1">&#39;languages&#39;</span><span class="p">:</span><span class="s1">&#39;en&#39;</span><span class="p">,</span><span class="s1">&#39;ids&#39;</span><span class="p">:</span><span class="n">wdids</span><span class="p">})</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">articles</span><span class="p">):</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">()</span><span class="o">!=</span><span class="s1">&#39;NA&#39;</span><span class="p">):</span>
+				<span class="n">articles</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;entities&#39;</span><span class="p">][</span><span class="n">a</span><span class="o">.</span><span class="n">wdid</span><span class="p">()]</span>
+	<span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">curid</span><span class="p">():</span><span class="n">a</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="s1">&#39;wd&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">}</span>
+
+
+
+<span class="k">def</span> <span class="nf">get_multiple_image</span><span class="p">(</span><span class="n">curid</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets the first image that appears in the site (it is often the character&#39;s image).</span>
+
+<span class="sd">	NEEDS TO BE UPDATED</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">API_url</span>  <span class="o">=</span> <span class="s1">&#39;https://en.wikipedia.org/w/api.php?action=query&amp;prop=revisions&amp;rvprop=content&amp;format=json&amp;pageids=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">curid</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;&amp;rvsection=0&#39;</span>
+	<span class="n">result</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">API_url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">u&#39;query&#39;</span><span class="p">][</span><span class="s1">u&#39;pages&#39;</span><span class="p">]</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">unicode</span><span class="p">(</span><span class="n">curid</span><span class="p">)][</span><span class="s1">u&#39;revisions&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">u&#39;*&#39;</span><span class="p">]</span>
+	<span class="n">wikicode</span> <span class="o">=</span> <span class="n">mwparserfromhell</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+	<span class="n">templates</span> <span class="o">=</span> <span class="n">wikicode</span><span class="o">.</span><span class="n">filter_templates</span><span class="p">()</span>
+	<span class="n">box</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
+		<span class="n">name</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+		<span class="k">if</span> <span class="s1">&#39;image&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+			<span class="n">box_</span> <span class="o">=</span> <span class="p">{}</span>
+			<span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">params</span><span class="p">:</span>
+				<span class="n">key</span> <span class="o">=</span> <span class="n">drop_comments</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+				<span class="n">value</span> <span class="o">=</span> <span class="n">drop_comments</span><span class="p">(</span><span class="n">param</span><span class="o">.</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+				<span class="n">box_</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+			<span class="n">box</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">box_</span>
+			<span class="k">break</span> <span class="c1">#Grab only the first one</span>
+	<span class="k">return</span> <span class="n">box</span>
+
+
+<div class="viewcode-block" id="country"><a class="viewcode-back" href="../../johnny5.html#johnny5.country">[docs]</a><span class="k">def</span> <span class="nf">country</span><span class="p">(</span><span class="n">coords</span><span class="p">,</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">GAPI_KEY</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Uses the Google geocode API to get the country of a given geographical point.</span>
+
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	coords : (lat,lon) tuple</span>
+<span class="sd">		Coordinates to query.</span>
+<span class="sd">	path : string</span>
+<span class="sd">		Path to save the json file containing the query result.</span>
+<span class="sd">	save : boolean (True)</span>
+<span class="sd">		If True it will save the result of the query as &#39;lat,lon.json&#39;</span>
+<span class="sd">	GAPI_KEY : string (None)</span>
+<span class="sd">		Name of the environment variable holding the Google API key.</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	country : (name,code) tuple</span>
+<span class="sd">		Country name and 2-digit country code.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="n">key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="n">GAPI_KEY</span><span class="p">]</span>
+	<span class="k">except</span><span class="p">:</span>
+		<span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+	<span class="n">latlng</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;,&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">coords</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+	<span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/geocode/json?latlng=&#39;</span><span class="o">+</span><span class="n">latlng</span><span class="o">+</span><span class="s1">&#39;&amp;project=Pantheon&amp;key=&#39;</span><span class="o">+</span><span class="n">key</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://maps.googleapis.com/maps/api/geocode/json?latlng=&#39;</span><span class="o">+</span><span class="n">latlng</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+	<span class="n">ZERO_RESULTS</span> <span class="o">=</span> <span class="kc">False</span>
+	<span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;OVER_QUERY_LIMIT&#39;</span><span class="p">:</span>
+		<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">_rget</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;OK&#39;</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;OVER_QUERY_LIMIT&#39;</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Query limit reached&#39;</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ZERO_RESULTS&#39;</span><span class="p">:</span>
+			<span class="n">ZERO_RESULTS</span> <span class="o">=</span> <span class="kc">True</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Unrecognized error&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">save</span><span class="p">:</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">latlng</span><span class="o">+</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+		<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="n">country</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="s1">&#39;NULL&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="ow">not</span> <span class="n">ZERO_RESULTS</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]:</span>
+			<span class="k">for</span> <span class="n">rr</span> <span class="ow">in</span>  <span class="n">res</span><span class="p">[</span><span class="s1">u&#39;address_components&#39;</span><span class="p">]:</span>
+				<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;country&#39;</span> <span class="ow">in</span>  <span class="n">rr</span><span class="p">[</span><span class="s1">&#39;types&#39;</span><span class="p">]):</span>
+					<span class="n">country</span> <span class="o">=</span> <span class="p">(</span><span class="n">rr</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">],</span><span class="n">rr</span><span class="p">[</span><span class="s1">&#39;short_name&#39;</span><span class="p">])</span>
+				<span class="k">if</span> <span class="n">country</span> <span class="o">!=</span> <span class="p">(</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="s1">&#39;NULL&#39;</span><span class="p">):</span>
+					<span class="k">break</span>
+			<span class="k">if</span> <span class="n">country</span> <span class="o">!=</span> <span class="p">(</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span><span class="s1">&#39;NULL&#39;</span><span class="p">):</span>
+				<span class="k">break</span>
+	<span class="k">return</span> <span class="n">country</span></div>
+
+
+<div class="viewcode-block" id="chunker"><a class="viewcode-back" href="../../johnny5.html#johnny5.chunker">[docs]</a><span class="k">def</span> <span class="nf">chunker</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Used to iterate a list by chunks.</span>
+<span class="sd">	</span>
+<span class="sd">	Parameters</span>
+<span class="sd">	----------</span>
+<span class="sd">	seq : list (or iterable)</span>
+<span class="sd">		List or iterable to iterate over.</span>
+<span class="sd">	size : int</span>
+<span class="sd">		Size of each chunk</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	chunks : list</span>
+<span class="sd">		List of lists (chunks)</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="p">(</span><span class="n">seq</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="n">size</span><span class="p">]</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">),</span> <span class="n">size</span><span class="p">))</span></div>
+
+<span class="k">def</span> <span class="nf">_dms2dd</span><span class="p">(</span><span class="n">lat</span><span class="p">):</span>
+    <span class="n">direc</span> <span class="o">=</span> <span class="n">lat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">degs</span><span class="p">,</span><span class="n">mins</span><span class="p">,</span><span class="n">secs</span> <span class="o">=</span> <span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="n">lat</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">+</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="n">degs</span><span class="o">+</span><span class="n">mins</span><span class="o">/</span><span class="mf">60.</span><span class="o">+</span><span class="n">secs</span><span class="o">/</span><span class="p">(</span><span class="mf">3600.</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">direc</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span><span class="o">|</span><span class="p">(</span><span class="n">direc</span> <span class="o">==</span> <span class="s1">&#39;w&#39;</span><span class="p">):</span>
+        <span class="n">dd</span> <span class="o">*=-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">dd</span>
+
+
+<div class="viewcode-block" id="latest_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.latest_wddump">[docs]</a><span class="k">def</span> <span class="nf">latest_wddump</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;Gets the latest Wikidata RDF dump.&#39;&#39;&#39;</span>
+	<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://tools.wmflabs.org/wikidata-exports/rdf/exports.html&#39;</span>
+	<span class="n">conn</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+	<span class="n">html</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+	<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">):</span>
+		<span class="n">link</span> <span class="o">=</span> <span class="n">tag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">link</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;exports&#39;</span><span class="p">:</span>
+				<span class="n">top_date</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+				<span class="k">break</span>
+	<span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://tools.wmflabs.org/wikidata-exports/rdf/exports/&#39;</span><span class="o">+</span><span class="n">top_date</span><span class="o">+</span><span class="s1">&#39;/wikidata-statements.nt.gz&#39;</span>
+	<span class="k">return</span> <span class="n">url</span><span class="p">,</span><span class="n">top_date</span></div>
+
+
+<span class="k">def</span> <span class="nf">dumps_path</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;Returns the path where to store the dumps.&#39;&#39;&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">__file__</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/data/&#39;</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="k">if</span> <span class="s1">&#39;dumps.txt&#39;</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+		<span class="n">path</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;dumps.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">path</span>
+
+<div class="viewcode-block" id="check_wddump"><a class="viewcode-back" href="../../johnny5.html#johnny5.check_wddump">[docs]</a><span class="k">def</span> <span class="nf">check_wddump</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Used to check whether the Wikidata dump found on file is up to date.</span>
+<span class="sd">	</span>
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	status : boolean</span>
+<span class="sd">		True if it is necessary to update</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">url</span><span class="p">,</span><span class="n">top_date</span> <span class="o">=</span> <span class="n">latest_wddump</span><span class="p">()</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="n">filename</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="s1">&#39;wikidata-statements&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+	<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="s1">&#39;No dump found, please run:</span><span class="se">\n\t</span><span class="s1">&gt;&gt;&gt; download_latest()&#39;</span>
+		<span class="k">return</span> <span class="kc">True</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="k">if</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">top_date</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Wikidata dump is up to date&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="kc">False</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Wikidata dump is outdated, please update</span><span class="se">\n</span><span class="s1">:&gt;&gt;&gt; download_latest()&#39;</span><span class="p">)</span>
+		<span class="k">return</span> <span class="kc">True</span></div>
+
+
+<span class="k">def</span> <span class="nf">_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+	<span class="n">path_os</span> <span class="o">=</span> <span class="n">path</span><span class="p">[:]</span>
+	<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="s1">&#39;(&#39;</span><span class="p">,</span><span class="s1">&#39;)&#39;</span><span class="p">]:</span>
+		<span class="n">path_os</span> <span class="o">=</span> <span class="n">path_os</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">c</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">c</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">path_os</span>
+
+<div class="viewcode-block" id="download_latest"><a class="viewcode-back" href="../../johnny5.html#johnny5.download_latest">[docs]</a><span class="k">def</span> <span class="nf">download_latest</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Downloads the latest Wikidata RDF dump.</span>
+<span class="sd">	</span>
+<span class="sd">	If the dump is updated, it will delete all the instances files.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">url</span><span class="p">,</span><span class="n">top_date</span> <span class="o">=</span> <span class="n">latest_wddump</span><span class="p">()</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading file from:&quot;</span><span class="p">,</span><span class="n">url</span><span class="p">)</span>
+	<span class="n">filename</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+	<span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;-&#39;</span><span class="o">+</span><span class="n">top_date</span><span class="o">+</span><span class="s1">&#39;.nt.gz&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+
+	<span class="n">drop_instances</span><span class="o">=</span><span class="kc">False</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)))</span><span class="o">&amp;</span><span class="p">(</span><span class="n">filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">))):</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving file into&quot;</span><span class="p">,</span><span class="n">path</span><span class="o">+</span><span class="n">filename</span><span class="p">)</span>
+		<span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="o">+</span><span class="n">filename</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Download aborted, file already exists&quot;</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">filename</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)):</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unzipping file&quot;</span><span class="p">)</span>
+		<span class="n">path_os</span> <span class="o">=</span> <span class="n">_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;gunzip &#39;</span><span class="o">+</span><span class="n">path_os</span><span class="o">+</span><span class="n">filename</span><span class="p">)</span>
+		<span class="n">drop_instances</span><span class="o">=</span><span class="kc">True</span>
+
+	<span class="n">remove</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;wikidata-statements&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">)</span><span class="o">&amp;</span><span class="p">(</span><span class="n">f</span> <span class="o">!=</span> <span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.gz&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">))]</span>
+	<span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">remove</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">|</span><span class="n">drop_instances</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cleaning up&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">remove</span><span class="p">:</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">f</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">drop_instances</span><span class="p">:</span>
+		<span class="n">remove</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">remove</span><span class="p">:</span>
+			<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="o">+</span><span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="wd_instances"><a class="viewcode-back" href="../../johnny5.html#johnny5.wd_instances">[docs]</a><span class="k">def</span> <span class="nf">wd_instances</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets all the instances of the given class.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+<span class="sd">	To get all universities:</span>
+<span class="sd">	&gt;&gt;&gt; wd_instances(&#39;Q3918&#39;)</span>
+<span class="sd">	To get all humans:</span>
+<span class="sd">	&gt;&gt;&gt; wd_instances(&#39;Q5&#39;)</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	instances : set</span>
+<span class="sd">		wd_id for every instance of the given class.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+	<span class="n">path_os</span> <span class="o">=</span> <span class="n">_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="n">instances</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">cl</span><span class="o">+</span><span class="s1">&#39;.nt&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
+		<span class="n">filename</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="s1">&#39;wikidata-statements&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;No dump found, please run:</span><span class="se">\n\t</span><span class="s1">&gt;&gt;&gt; download_latest()&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Parsing the dump &#39;</span><span class="p">,</span><span class="n">filename</span><span class="p">)</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;grep &#39;P31[^\.]&gt;.*&quot;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;&#39; &quot;</span><span class="o">+</span><span class="n">path_os</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;  &gt; &quot;</span><span class="o">+</span><span class="n">path_os</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;.nt&quot;</span><span class="p">)</span>
+
+	<span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;instances/&#39;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;.nt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="n">instances</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">instances</span></div>
+
+
+<div class="viewcode-block" id="wd_subclasses"><a class="viewcode-back" href="../../johnny5.html#johnny5.wd_subclasses">[docs]</a><span class="k">def</span> <span class="nf">wd_subclasses</span><span class="p">(</span><span class="n">cl</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Gets all the subclasses of the given class.</span>
+
+<span class="sd">	Examples</span>
+<span class="sd">	--------</span>
+<span class="sd">	To get all subclasses of musical ensemble:</span>
+<span class="sd">	&gt;&gt;&gt; wd_subclasses(&#39;Q2088357&#39;)</span>
+
+<span class="sd">	Returns</span>
+<span class="sd">	-------</span>
+<span class="sd">	subclasses : set</span>
+<span class="sd">		wd_id for every subclass of the given class.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+	<span class="n">path_os</span> <span class="o">=</span> <span class="n">_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="n">subclasses</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;subclasses/&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">cl</span><span class="o">+</span><span class="s1">&#39;.nt&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">subclasses</span><span class="p">:</span>
+		<span class="n">filename</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span> <span class="k">if</span> <span class="s1">&#39;wikidata-statements&#39;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">]</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;No dump found, please run:</span><span class="se">\n\t</span><span class="s1">&gt;&gt;&gt; download_latest()&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Parsing the dump &#39;</span><span class="p">,</span><span class="n">filename</span><span class="p">)</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;grep &#39;P279[^\.]&gt;.*&quot;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;&#39; &quot;</span><span class="o">+</span><span class="n">path_os</span><span class="o">+</span><span class="n">filename</span><span class="o">+</span><span class="s2">&quot;  &gt; &quot;</span><span class="o">+</span><span class="n">path_os</span><span class="o">+</span><span class="s1">&#39;subclasses/&#39;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;.nt&quot;</span><span class="p">)</span>
+
+	<span class="n">lines</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;subclasses/&#39;</span><span class="o">+</span><span class="n">cl</span><span class="o">+</span><span class="s2">&quot;.nt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="n">subclasses</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span> <span class="k">if</span> <span class="n">line</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">])</span>
+	<span class="k">return</span> <span class="n">subclasses</span></div>
+
+<div class="viewcode-block" id="all_wikipages"><a class="viewcode-back" href="../../johnny5.html#johnny5.all_wikipages">[docs]</a><span class="k">def</span> <span class="nf">all_wikipages</span><span class="p">(</span><span class="n">update</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;Downloads all the names of the Wikipedia articles&#39;&#39;&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+	<span class="n">files</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+	<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;enwiki-allarticles.txt&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span><span class="o">|</span><span class="n">update</span><span class="p">:</span>
+		<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;enwiki-latest-abstract.xml&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span><span class="o">|</span><span class="n">update</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Downloading dump&#39;</span><span class="p">)</span>
+			<span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-abstract.xml&#39;</span><span class="p">,</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-latest-abstract.xml&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="p">(</span><span class="s1">&#39;enwiki-latest-titles.xml&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">files</span><span class="p">)</span><span class="o">|</span><span class="n">update</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Parsing titles from dump&#39;</span><span class="p">)</span>
+			<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;grep &#39;&lt;title&gt;&#39;  &quot;</span><span class="o">+</span><span class="n">_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;enwiki-latest-abstract.xml &gt; &quot;</span><span class="o">+</span><span class="n">_path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;enwiki-latest-titles.xml&quot;</span><span class="p">)</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cleaning titles&#39;</span><span class="p">)</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-latest-titles.xml&#39;</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+		<span class="n">g</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-allarticles.txt&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+		<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+			<span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+			<span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">17</span><span class="p">:</span><span class="o">-</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+			<span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">((</span><span class="n">line</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="p">:</span> <span class="k">break</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+		<span class="n">g</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cleaning up&#39;</span><span class="p">)</span>
+		<span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-latest-titles.xml&#39;</span><span class="p">)</span>
+	<span class="n">titles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">codecs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-allarticles.txt&#39;</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+	<span class="n">titles</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">titles</span></div>
+
+<div class="viewcode-block" id="check_wpdump"><a class="viewcode-back" href="../../johnny5.html#johnny5.check_wpdump">[docs]</a><span class="k">def</span> <span class="nf">check_wpdump</span><span class="p">():</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Used to check the current status of the WikiData Dump.</span>
+<span class="sd">	It returns None, but prints the information.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">path</span> <span class="o">=</span> <span class="n">dumps_path</span><span class="p">()</span>
+	<span class="n">dt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getmtime</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="s1">&#39;enwiki-latest-abstract.xml&#39;</span><span class="p">))</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Dump downloaded on:&#39;</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">dt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">dt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39; &#39;</span><span class="o">+</span><span class="n">dt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;To update run:</span><span class="se">\n\t</span><span class="s1">&gt;&gt;&gt; all_wikipages(update=True)&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="dumps_path"><a class="viewcode-back" href="../../johnny5.html#johnny5.dumps_path">[docs]</a><span class="k">def</span> <span class="nf">dumps_path</span><span class="p">(</span><span class="n">new_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Handle the path to the Wikipedia and Wikidata dumps.</span>
+<span class="sd">    If new_path is provided, it will set the new path.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    new_path : str (optional)</span>
+<span class="sd">    	If provided it will set the dumps path to this path.</span>
+<span class="sd">    	Path where to store the Wikipedia and Wikidata dumps.</span>
+<span class="sd">    	(Must be full path)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">__file__</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;/data/&#39;</span>
+    <span class="n">new_path</span> <span class="o">=</span> <span class="n">new_path</span> <span class="k">if</span> <span class="n">new_path</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;/&#39;</span> <span class="k">else</span> <span class="n">new_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;dumps.txt&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">data_path</span><span class="p">):</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_path</span><span class="o">+</span><span class="s1">&#39;dumps.txt&#39;</span><span class="p">)</span>
+        <span class="n">current_path</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current path to dumps set to &#39;</span><span class="o">+</span><span class="n">current_path</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Current path to dumps set to &#39;</span><span class="o">+</span><span class="n">data_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">new_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">new_path</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_path</span><span class="o">+</span><span class="s1">&#39;dumps.txt&#39;</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">new_path</span><span class="p">)</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;New dumps path set to &#39;</span><span class="o">+</span><span class="n">data_path</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NameError</span><span class="p">(</span><span class="s1">&#39;Directory not found: &#39;</span><span class="o">+</span><span class="n">new_path</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, C. Jara-Figueroa.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
