@@ -36,356 +36,6 @@ def _all_dates(d1,d2):
 		out.append([int(d.year),int(d.month),int(d.day)])
 	return DataFrame(out,columns=['year','month','day'])
 
-def _wd_id(trigger):
-    trigger = unicode(trigger).strip()
-    if trigger[0]!='Q':
-        trigger = 'Q'+trigger
-    return trigger
-
-def get_wd_name(prop,as_df=False):
-	it = not isinstance(prop, six.string_types)
-	#it = hasattr(prop,'__iter__')
-	if it:
-		out = dict(zip(prop,['NA']*len(prop)))
-		for chunk in chunker(prop,50):
-			url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+str.join('|', prop)
-			#url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+'|'.join(prop)
-			r = _rget(url).json()
-			for page in list(r['entities'].values()):
-				out[page['id']] = page['labels']['en']['value']
-		return DataFrame(list(out.items()),columns=['wd_id','name']) if as_df else out
-	else:
-		url = 'https://www.wikidata.org/w/api.php?action=wbgetentities&format=json&languages=en&ids='+prop
-		r = _rget(url).json()
-		return r['entities'][prop]['labels']['en']['value']
-
-def get_wd_coords(wdids,prop = 'P625',as_df=False):
-	it = not isinstance(wdids, six.string_types)
-	#it = hasattr(wdids, '__iter__')
-	wdids = [_wd_id(wdids)] if not it else [_wd_id(wdid) for wdid in wdids]
-	results = {}
-	for wd_ids in chunker(wdids,50):
-		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
-		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = _rget(url)
-		for wdid in wd_ids:
-			wdid_data = r.json()[u'entities'][wdid][u'claims']
-			if prop in wdid_data.keys():
-				mainsnak = wdid_data[prop][0][u'mainsnak']
-				if 'datavalue' in mainsnak.keys():
-					prop_wdid = (mainsnak[u'datavalue'][u'value'][u'latitude'],mainsnak[u'datavalue'][u'value']['longitude'],mainsnak[u'datavalue'][u'value'][u'precision'])
-				else:
-					prop_wdid = ('NA','NA','NA')
-			else:
-				prop_wdid = ('NA','NA','NA')
-			results[wdid] = prop_wdid
-	if not it:
-		return list(results.values())[0]
-	else:
-		return DataFrame([(k,i[0],i[1],i[2]) for  k,i in results.items()],columns=['wd_id','lat','lon','precision']) if as_df else results
-
-
-
-def get_wdprop(wdids,prop,as_df=False,names=False,date=False):
-	'''
-	Queries Wikidata for the property passed as prop for all the provided Wikidata Ids.
-	
-	Parameters
-	----------
-	wdids : list, str or int
-		Wikidata Ids of pages to get the property for.
-	prop : str or int
-		Property code.
-		Examples: 'P106' (occupation), 'P569' (birth date), 'P21' (gender)
-	as_df : boolean (False)
-		If True, returns the properties as a pandas DataFrame.
-	names : boolean (False)
-		If True, returns the name of the property vakye rather than the code of the property value.
-		For example, it will return 'male' instead of 'Q6581097'
-	date : boolean (False)
-		Must be passed as True if the required property is a date.
-		For example, P569 must be requested using date=True.
-
-	Returns
-	-------
-	results : str, tuple, dictionary, or DataFrame
-		Values for the requested property.
-		If wdids is not a list, it will return a string when date=False and a tuple with (time,calendarmodel,precision) when date=True.
-		If as_df=True and wdids is a list, then it will return a pandas DataFrame.
-	'''
-	it = not isinstance(wdids, six.string_types)
-	#it = hasattr(wdids, '__iter__')
-	wdids = [_wd_id(wdids)] if not it else [_wd_id(w) for w in wdids]
-	results = {}
-	values = set([])
-	for wd_ids in chunker(wdids,50):
-		url = wikidata_API+'&languages=en&ids='+str.join('|', wd_ids)
-		#url = wikidata_API+'&languages=en&ids='+'|'.join(wd_ids)
-		r = _rget(url)
-		for wdid in wd_ids:
-			wdid_data = r.json()[u'entities'][wdid][u'claims']
-			if prop in wdid_data.keys():
-				if date:
-					mainsnak = wdid_data[prop][0][u'mainsnak']
-					if 'datavalue' in mainsnak.keys():
-						prop_wdid = (mainsnak[u'datavalue'][u'value'][u'time'],mainsnak[u'datavalue'][u'value']['calendarmodel'].split('/')[-1],mainsnak[u'datavalue'][u'value'][u'precision'])
-					else:
-						prop_wdid = ('NA','NA','NA')
-				else:
-					prop_wdid = []
-					for p in r.json()[u'entities'][wdid][u'claims'][prop]:
-						mainsnak = p[u'mainsnak']
-						if 'datavalue' in mainsnak.keys():
-							prop_wdid.append(_wd_id(mainsnak[u'datavalue'][u'value'][u'id']))
-					prop_wdid = str.join('|', prop_wdid) if len(prop_wdid) != 0 else 'NA'
-					#prop_wdid = '|'.join(prop_wdid) if len(prop_wdid) != 0 else 'NA'
-			else:
-				if date:
-					prop_wdid = ('NA','NA','NA')
-				else:
-					prop_wdid = 'NA'
-			results[wdid] = prop_wdid
-			if date:
-				values.add(prop_wdid[1])
-			else:
-				values.add(prop_wdid)
-	if names:
-		values.discard('NA')
-		val_names = get_wd_name(list(values))
-		val_names['NA'] = 'NA'
-		if date:
-			results = {k:(results[k][0],val_names[results[k][1]],results[k][2]) for k in results}
-		else:
-			results = {k:val_names[results[k]] for k in results}
-	if not it:
-		return list(results.values())[0]
-	else:
-		if date:
-			return DataFrame([(k,i[0],i[1],i[2]) for  k,i in results.items()],columns=['wd_id','time','calendarmodel','precision']) if as_df else results
-		else:
-			return DataFrame(list(results.items()),columns=['wd_id',get_wd_name(prop)]) if as_df else results
-
-
-def langlinks(articles,ret=False,use='curid'):
-	'''
-	Gets the langlinks for the provided set of articles.
-
-	Parameters
-	----------
-	articles : list 
-		List of wiki_tool article objects to query.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and langlinks as values.
-	use : str (default='curid')
-		What identifier to use: 'curid' or 'title'
-
-	Returns
-	-------
-	langlinks : dict
-		Dictionary with curids as keys and langlinks as values.
-	'''
-	if use=='curid':
-		pages = [a.curid() for a in articles if (a._langlinks_dat is None)]
-	elif use == 'title':
-		pages = [a.curid() for a in articles if (a._langlinks_dat is None)]
-	if len(pageids) != 0:
-		if use=='curid':
-			r = wp_q({'prop':'langlinks','lllimit':500,'pageids':pages})
-		elif use == 'title':
-			r = wp_q({'prop':'langlinks','lllimit':500,'titles':pages})
-		for i,a in enumerate(articles):
-			if a._langlinks_dat is None:
-				if 'langlinks' in r['query']['pages'][str(a.curid())].keys():
-					articles[i]._langlinks_dat = r['query']['pages'][str(a.curid())]['langlinks']
-				else:
-					articles[i]._langlinks_dat = []
-			if ('en' not in a._langlinks.keys())&(a.title() is not None):
-				a._langlinks['en'] = a.title()
-	if ret:
-		return {a.curid():a.langlinks() for a in articles}
-
-def extract(articles,ret=False):
-	'''
-	Gets the extracts of a set of articles.
-	It only queries the extracts for the articles without extracts.
-
-	Parameters
-	----------
-	articles : list 
-		List of wiki_tool article objects to query.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and extracts as values.
-
-	Returns
-	-------
-	exs : dict
-		If ret=True it returns a dictionary with curids as keys and extracts as values.
-	'''
-	pageids = [a.curid() for a in articles if (a._ex is None)]
-	if len(pageids) != 0:
-		r = wp_q({'prop':'extracts',"exintro":'',"explaintext":"",'exlimit':20,'pageids':pageids})
-		for i,a in enumerate(articles):
-			if a._ex is None:
-				articles[i]._ex = r['query']['pages'][str(a.curid())]['extract']
-	if ret:
-		return {a.curid():a._ex for a in articles}
-
-
-def infobox(articles,ret=False):
-	'''
-	Gets the infobox of the provided article or list of articles.
-	It only queries the infoboxes for the articles without infobox.
-	It handles redirects by resetting the article to point to the correct page.
-
-	Parameters
-	----------
-	article : wiki_tool article or list of wiki_tool article
-		Article or articles to get the extracts for.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and infoboxes as json objects as values.
-
-	Returns
-	-------
-	iboxs : dict
-		If ret=True it returns a dictionary with curids as keys and infoboxes as json objects as values.
-	'''
-	pageids = [a.curid() for a in articles if (a.raw_box is None)]
-	redirect_list = []
-	if len(pageids) != 0:
-		r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':pageids})
-		for i,a in enumerate(articles):
-			if a.raw_box is None:
-				rp = r['query']['pages'][str(a.curid())]
-				rb = rp['revisions'][0]['*']
-				if '#redirect' in rb.lower(): 
-					title = rb.split('[[')[-1].split(']]')[0].strip()
-					articles[i].__init__(title,Itype='title')
-					redirect_list.append(i)
-				else:
-					articles[i].raw_box = rb
-	if len(redirect_list) != 0:
-		pageids = [a.curid() for a in articles if (a.raw_box is None)]
-		if len(pageids) != 0:
-			r = wp_q({'prop':"revisions",'rvprop':'content','rvsection':0,'pageids':pageids})
-			for i,a in enumerate(articles):
-				if a.raw_box is None:
-					rb = r['query']['pages'][str(a.curid())]['revisions'][0]['*']
-					articles[i].raw_box = rb
-	if ret:
-		return {a.curid():a.infobox() for a in articles}
-
-
-def image_url(article,ret=False):
-	'''
-	Gets the list of urls for the infobox images for the given article or set of articles.
-	It start by getting the infobox of the missing articles.
-	It only queries the articles without the image url.
-
-	Parameters
-	----------
-	article : wiki_tool article or list of wiki_tool article
-		Article or articles to query.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and the urls as a list as values.
-
-	Returns
-	-------
-	urls : dict
-		If ret=True it returns a dictionary with curids as keys and list of urls as values.
-	'''
-	it = not isinstance(article, six.string_types)
-	#it = hasattr(article,'__iter__')
-	if not it:
-		url = article.image_url()
-		if ret:
-			return {article.curid():url}
-	else:
-		infobox(article)
-		I = [i for i,a in enumerate(article) if (a._image_url is None)]
-		if len(I) != 0:
-			img = {}
-			for i in I:
-				images = []
-				ibox = article[i].infobox()
-				for btype in ibox:
-					box = ibox[btype]
-					for tag in ['image','image_name','img','smallimage']:
-						if tag in box.keys():
-							images.append(box[tag])
-				images = ['Image:'+image for image in images]
-				img[i] = images
-			r = wp_q({'titles':list(chain.from_iterable(list(img.values()))),'prop':'imageinfo','iiprop':'url','iilimit':1},continue_override=True)
-			norm = {}
-			if 'normalized' in r['query'].keys(): #This is to keep the order
-				norm = {val['from']:val['to'] for val in r['query']['normalized']}
-			pages = {val['title']:val['imageinfo'][0]['url'] for val in list(r['query']['pages'].values())}
-			for i in I:
-				images = img[i]
-				results = []
-				for image in images:
-					if image in norm.keys():
-						image = norm[image]
-					results.append(pages[image])
-				article[i]._image_url = results
-		if ret:
-			return {a.curid():a._image_url for a in article}
-
-def wp_data(articles,ret=False,full=True):
-	'''
-	Gets all Wikipedia information about the provided list of articles.
-	It gets title, curid and wdid, as well as the extract and the infobox.
-
-	Parameters
-	----------
-	articles : list 
-		List of wiki_tool article objects to query.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and the data as values.
-	full : boolean (True)
-		If True it gets the infobox an extract, if False it only gets the page metadata.
-	'''
-
-	titles = [a.I['title'] for f in articles if a.I['curid'] is None]
-	#Get the curids for the provided titles (and normalize the title if necessary)
-
-	pageids = [a.curid() for a in articles if (a._data['wp'] is None)&(a.curid()!='NA')]
-	if len(pageids) != 0:
-		r = wp_q({'prop':'pageprops','ppprop':'wikibase_item','pageids':pageids})
-		for i,a in enumerate(articles):
-			if (a._data['wd'] is None)&(a.curid()!='NA'):
-				articles[i]._data['wp'] = r['query']['pages'][str(a.curid())]
-	if full:
-		infobox(articles)
-		extract(articles)
-	if ret:
-		return {a.curid():a._data['wp'] for a in articles}
-
-def wd_data(articles,ret=False):
-	'''
-	Gets the Wikidata Data for the provided articles.
-	If the article does not have a wdid it will get it using the wp_data() function.
-
-	Parameters
-	----------
-	article : wiki_tool article or list of wiki_tool article
-		Article or articles to query.
-	ret : boolean (False)
-		If True it will return a dictionary with curids as keys and the data objects as values.
-	'''
-	if any([(a.I['wdid'] is None) for a in articles]):
-		wp_data(articles)
-	wdids = [a.wdid() for a in articles if (a._data['wd'] is None)&(a.wdid()!='NA')]
-
-	if len(wdids) != 0:
-		r = wd_q({'languages':'en','ids':wdids})
-		for i,a in enumerate(articles):
-			if (a._data['wd'] is None)&(a.curid()!='NA'):
-				articles[i]._data['wd'] = r['entities'][a.wdid()]
-	if ret:
-		return {a.curid():a._data['wd'] for a in articles}
-
-
-
 def get_multiple_image(curid):
 	'''
 	Gets the first image that appears in the site (it is often the character's image).
@@ -410,9 +60,10 @@ def get_multiple_image(curid):
 			break #Grab only the first one
 	return box
 
-
 def country(coords,path='',save=True,GAPI_KEY=None):
 	'''
+	WE NEED TO CHANGE THIS FUNCTION TO MAKE IT INDEPENDENT OF GAPI
+
 	Uses the Google geocode API to get the country of a given geographical point.
 
 	Parameters
@@ -470,7 +121,6 @@ def country(coords,path='',save=True,GAPI_KEY=None):
 				break
 	return country
 
-
 def chunker(seq, size):
 	'''
 	Used to iterate a list by chunks.
@@ -497,8 +147,6 @@ def _dms2dd(lat):
         dd *=-1
     return dd
 
-
-
 def check_wddump():
 	'''
 	Used to check whether the Wikidata dump found on file is up to date.
@@ -523,7 +171,6 @@ def check_wddump():
 	else:
 		print('Wikidata dump is outdated, please update\n:>>> download_latest()')
 		return True
-
 
 def _path(path):
 	path_os = path[:]
@@ -763,7 +410,6 @@ def check_wpdump():
 	print('Dump downloaded on:')
 	print('\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1])
 	print('To update run:\n\t>>> all_wikipages(update=True)')
-
 
 def dumps_path(new_path=None):
     '''

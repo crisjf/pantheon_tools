@@ -6,9 +6,12 @@ try:
 	import future
 except:
 	pass
-import json,os,operator,copy,mwparserfromhell,datetime as dt,codecs,re
+import json,os,operator,copy,mwparserfromhell,datetime as dt,codecs,re,warnings
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
+nltk.download('wordnet',quiet=True)
+nltk.download('punkt',quiet=True)
+nltk.download('averaged_perceptron_tagger',quiet=True)
 from dateutil.relativedelta import relativedelta
 from pandas import DataFrame,read_csv,concat,merge
 from .functions import country,_dms2dd,_dt2str,_all_dates
@@ -20,7 +23,7 @@ except:
 try:
 	import spotipy
 except:
-	print('Warning: spotipy module not found')
+	warnings.warn('Warning: spotipy module not found')
 from multiprocessing import cpu_count
 from joblib import Parallel, delayed
 from .query import wd_q,wp_q,_string,_isnum,_rget,get_soup
@@ -28,6 +31,8 @@ from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct
 from collections import defaultdict
 from numpy import mean
 import six
+
+
 
 
 class article(object):
@@ -56,6 +61,7 @@ class article(object):
 			self.I[Itype] = I.strip()
 		else:
 			self.I[Itype] = I
+
 		self._data = {'wp':None,'wd':None}
 		self._curid_nonen = None
 
@@ -83,7 +89,7 @@ class article(object):
 		self.no_wp = False
 		self.no_wd = False
 
-		self._revisions = None
+		self._revisions = {}
 		self._daily_views = {}
 		self._previous_titles = None
 
@@ -807,7 +813,7 @@ class article(object):
 				else:
 					self.__init__(red,Itype='title')
 
-	def revisions(self,user=True):
+	def revisions(self,user=True,lang='en'):
 		'''
 		Gets the timestamps for the edit history of the Wikipedia article.
 
@@ -815,14 +821,22 @@ class article(object):
 		----------
 		user : boolean (True)
 			If True it returns the user who made the edit as well as the edit timestamp.
+		lang : str ('en')
+			Language to get the revisions from
 		'''
-		if self._revisions is None:
-			r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user'],'rvlimit':'500'})
-			self._revisions = [(rev['timestamp'],rev['user']) for rev in list(r['query']['pages'].values())[0]['revisions']]
+		if lang not in self._revisions.keys():
+			if lang=='en':
+				r = wp_q({'prop':'revisions','pageids':self.curid(),'rvprop':["timestamp",'user'],'rvlimit':'500'})
+				self._revisions['en'] = [(rev['timestamp'],rev['user']) for rev in list(r['query']['pages'].values())[0]['revisions']]
+			elif lang in self.langlinks().keys():
+				r = wp_q({'prop':'revisions','titles':self.langlinks(lang),'rvprop':["timestamp",'user'],'rvlimit':'500'},lang=lang)
+				self._revisions[lang] = [(rev['timestamp'],rev['user']) for rev in list(r['query']['pages'].values())[0]['revisions']]
+			else:
+				NameError('The Wikipedia page in '+lang+' does not exist.')
 		if user:
-			return self._revisions
+			return self._revisions[lang]
 		else:
-			return [val[0] for val in self._revisions]
+			return [val[0] for val in self._revisions[lang]]
 
 	def pageviews(self,start_date,end_date=None,lang='en',cdate_override=False,daily=False,get_previous=True):
 		'''
@@ -931,21 +945,22 @@ class article(object):
 		self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
 
 	def _pv_grok(self,start_date,end_date,get_previous=False,lang='en'):
-		days = _all_dates(start_date,end_date)
-		for y,m in days[['year','month']].drop_duplicates().values:
-			self._views[lang] = self._views[lang][(self._views[lang]['year']!=y)|(self._views[lang]['month']!=m)]
-			url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+self.langlinks(lang=lang)).replace(' ','_')
-			r = _rget(url).json()
-			new_views = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views']),how='left').fillna(0)
-			if get_previous:
-				for title in self.previous_titles():
-					url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+title).replace(' ','_')
-					r = _rget(url).json()
-					new_views_t = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views_t']),how='left').fillna(0)
-					new_views = merge(new_views,new_views_t,how='outer').fillna(0)
-					new_views['views'] = new_views['views']+new_views['views_t']
-					new_views = new_views.drop('views_t',1)
-			self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
+		warnings.warn('Grok API is no longer working, so the earliest starting date for pageviews is 2015-07-01')
+		# days = _all_dates(start_date,end_date)
+		# for y,m in days[['year','month']].drop_duplicates().values:
+		# 	self._views[lang] = self._views[lang][(self._views[lang]['year']!=y)|(self._views[lang]['month']!=m)]
+		# 	url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+self.langlinks(lang=lang)).replace(' ','_')
+		# 	r = _rget(url).json()
+		# 	new_views = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views']),how='left').fillna(0)
+		# 	if get_previous:
+		# 		for title in self.previous_titles():
+		# 			url = ('http://stats.grok.se/json/'+lang+'/'+str(y)+('00'+str(m))[-2:]+'/'+title).replace(' ','_')
+		# 			r = _rget(url).json()
+		# 			new_views_t = merge(days[(days['year']==y)&(days['month']==m)],DataFrame([tuple([int(val) for val in (d.split('-')+[v])]) for d,v in r['daily_views'].items()],columns=['year','month','day','views_t']),how='left').fillna(0)
+		# 			new_views = merge(new_views,new_views_t,how='outer').fillna(0)
+		# 			new_views['views'] = new_views['views']+new_views['views_t']
+		# 			new_views = new_views.drop('views_t',1)
+		# 	self._views[lang] = concat([self._views[lang],new_views]).drop_duplicates()
 
 	def find_article(self):
 		'''
@@ -1122,7 +1137,6 @@ class place(article):
 		else:
 			return self._country[1]
 
-
 class song(article):
 	'''Class for songs.'''
 	def __init__(self,I,Itype=None):
@@ -1249,9 +1263,6 @@ class song(article):
 
 	def performer(self):
 		return article(self.wd_prop('P175')[0]['id']).title()
-
-
-
 
 class biography(article):
 	'''
@@ -1568,7 +1579,7 @@ class biography(article):
 		'''
 		if (self._occ is None)|override_train:
 			if C is None:
-				print('Warning: This function will run slow because it needs to load the classifier in each call.')
+				warnings.warn('This function will run slow because it needs to load the classifier in each call.')
 			C = Occ() if C is None else C
 			article = self #copy.deepcopy(self)
 			self._feats = C.feats(article)
@@ -1581,8 +1592,6 @@ class biography(article):
 			else:
 				prob_ratio = self._occ[0][1]/self._occ[1][1]
 				return self._occ[0][0],prob_ratio
-
-
 
 class band(article):
 	'''
@@ -1650,7 +1659,7 @@ class band(article):
 					y = int(i[0]+i[1:].split('-')[0])
 					cal = n['calendarmodel'].split('/')[-1]
 					if cal !='Q1985727':
-						print('Warning: Unrecognized calendar type ',cal)
+						warnings.warn('Unrecognized calendar type '+str(cal))
 					years.append(y)
 				except:
 					pass
@@ -1699,7 +1708,7 @@ class band(article):
 					ctr.append(place(c['id']).wd_prop('P298')[0]['value'])
 				except:
 					pass
-			keep = (len(formation)!=p0)
+			keep = (len(formation)!=p)
 			if keep:
 				keep = keep&(formation[0]!='NA')&(formation[0] is not None)
 			if keep:
@@ -1780,64 +1789,7 @@ class band(article):
 		else:
 			return ('NULL','NULL','NULL')
 
-class CTY(object):
-	'''
-	City classifier.
-	Used to classify coordinates into cities.
-	THIS FUNCTION NEEDS TO BE UPDATED!
-	'''
-	def __init__(self,city_data='geonames'):
-		self.city_data=city_data
-		path = os.path.split(__file__)[0]+'/data/'
-		print('Loading data from:\n'+path)
-		if city_data == 'geonames':
-			header = ['geonameid','name','asciiname','alternatenames','latitude','longitude','feature class','feature code',
-				'country code','cc2','admin1 code','admin2 code','admin3 code','admin4 code','population','elevation',
-				'dem','timezone','modification date']
-			f = codecs.open(path+'cities5000.txt',encoding='utf-8')
-			self.cities = DataFrame([c.split('\t') for c in f.read().split('\n') if c !=''],columns=header)
-			self.c_coords = [tuple(c) for c in self.cities[['geonameid','latitude','longitude']].drop_duplicates().values]
-		elif city_data == 'chandler':
-			self.cities = read_csv(path+'chandler_cities.csv',encoding='utf-8')
-			self.c_coords = [tuple(c) for c in self.cities[['ch_id','Latitude','Longitude']].drop_duplicates().values]
-		self._out = {}
-
-	def city(self,coords):
-		'''Returns the city'''
-		if (len(coords) == 2)&(isinstance(coords[0], six.string_types)):
-		#if (len(coords) == 2)&(not hasattr(coords[0], '__iter__')):
-			if coords not in list(self._out.keys()):
-				self._out[coords] = _city(self,coords)
-			return self._out[coords]
-		else:
-			coords_ = [coord for coord in coords if coord not in list(self._out.keys())]
-			n_jobs = cpu_count()
-			distances = Parallel(n_jobs=n_jobs)(delayed(_city)(self,coord) for coord in coords_)
-			dmap = dict(zip(coords_,distances))
-			out = []
-			for coord in coords:
-				if coord not in list(self._out.keys()):
-					self._out[coord] = dmap[coord]
-				out.append(self._out[coord])
-			return out
-
-def _city(C,coords):
-	out = []
-	for city in C.c_coords:
-		try:
-			out.append((city[0],vincenty(coords,(city[1],city[2])).kilometers))
-		except:
-			pass
-	if len(out)==0:
-		out.append(('NA','NA','NA'))
-	if C.city_data == 'geonames':
-		out = DataFrame(out,columns=['geonameid','dis']).sort_values(by='dis').iloc[0]
-		return int(out['geonameid']),out['dis']
-	elif C.city_data == 'chandler':
-		out = DataFrame(out,columns=['geonameid','dis']).sort_values(by='dis').iloc[0]
-		return int(out['geonameid']),out['dis']
-		
-
+# class CTY(object):
 
 class Occ(object):
 	'''
@@ -2005,7 +1957,6 @@ class Occ(object):
 			article._feats = feats
 		return article._feats
 
-	
 def _id_type(I):
 	if _isnum(I):
 		return 'curid'
@@ -2015,7 +1966,6 @@ def _id_type(I):
 		return 'wdid'
 	else:
 		return 'title'
-
 
 def search(s):
 	'''

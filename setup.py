@@ -8,7 +8,11 @@ install_requires = [
     'pandas',
     'joblib',
     'beautifulsoup4',
-    'geopy'
+    'geopy',
+    'spotipy',
+    'sklearn',
+    'scipy',
+    'nltk'
     ]
 
 setup(
