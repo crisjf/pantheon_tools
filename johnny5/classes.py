@@ -15,7 +15,6 @@ nltk.download('averaged_perceptron_tagger',quiet=True)
 from dateutil.relativedelta import relativedelta
 from pandas import DataFrame,read_csv,concat,merge
 from .functions import country,_dms2dd,_dt2str,_all_dates
-from geopy.distance import vincenty
 try:
     import cPickle as pickle
 except:
@@ -25,7 +24,6 @@ try:
 except:
 	warnings.warn('Warning: spotipy module not found')
 from multiprocessing import cpu_count
-from joblib import Parallel, delayed
 from .query import wd_q,wp_q,_string,_isnum,_rget,get_soup
 from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints,parse_p
 from collections import defaultdict
