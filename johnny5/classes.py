@@ -99,7 +99,7 @@ class article(object):
 		out+= 'curid : '+str(self.I['curid'])+'\n' if self.I['curid'] is not None else 'curid : \n'
 		out+= 'title : '+self.I['title']+'\n' if self.I['title'] is not None else 'title : \n'
 		out+= 'wdid  : '+self.I['wdid'] if self.I['wdid'] is not None else 'wdid  : '
-		return out#.encode('utf-8')
+		return out.encode('utf-8')
 
 	def __str__(self):
 		self.redirect()
