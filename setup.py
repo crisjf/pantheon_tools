@@ -10,11 +10,12 @@ install_requires = ['requests==2.18.4',
                     'beautifulsoup4==4.6.0',
                     'nltk==3.2.5',
                     'python-dateutil==2.6.1',
+                    'spotipy==2.4.4',
                     'urllib3==1.22']
 
 setuptools.setup(
 	name='johnny5',
-	version = '0.0.2',
+	version = '0.0.3',
 	author = "Cristian Jara-Figueroa",
     author_email = "crisjf@mit.edu",
     description = "Tools for getting data on historical characters from Wikipedia and Wikidata.",
