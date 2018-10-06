@@ -1,4 +1,5 @@
-"""Simple tools to query the Wikipedia based on requests"""
+name = "johnny5"
+
 import warnings
 try:
 	import future

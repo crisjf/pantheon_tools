@@ -1,27 +1,21 @@
-import os
-from setuptools import setup,find_packages
-here = os.path.abspath(os.path.dirname(__file__))
+import setuptools
 
-install_requires = [
-    'requests',
-    'mwparserfromhell',
-    'pandas',
-    'joblib',
-    'beautifulsoup4',
-    'geopy',
-    'spotipy',
-    'sklearn',
-    'scipy',
-    'nltk'
-    ]
+with open ('README.md','r') as fh:
+    long_description = fh.read()
 
-setup(
+setuptools.setup(
 	name='johnny5',
 	version = '0.1',
-	author = "C. Jara-Figueroa",
+	author = "Cristian Jara-Figueroa",
     author_email = "crisjf@mit.edu",
-    description = ("Tools for getting data on historical characters from Wikipedia and Wikidata."),
-    install_requires=install_requires,
-    test_suite="nose.collector"
+    description = "Tools for getting data on historical characters from Wikipedia and Wikidata.",
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    url = "https://crisjf.github.io/johnny5/",
+    packages=setuptools.find_packages(),
+    classifiers=[
+    "Programming Language :: Python :: 2.7",
+    "License :: OSI Approved :: MIT License"]
 )
+
 #python setup.py develop
