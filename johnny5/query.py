@@ -2,10 +2,6 @@ try:
 	xrange
 except NameError:
 	xrange = range
-try:
-	import future
-except:
-	pass
 import requests
 from bs4 import BeautifulSoup
 from collections import defaultdict
@@ -15,13 +11,12 @@ try:
 	urlencode = urllib.urlencode
 except:
 	urlencode = urllib.parse.urlencode
-import six
 
 def _isiter(obj):
 	'''
 	Returns True if the object is an iterable, excluding strings.
 	'''
-	if isinstance(obj, six.string_types):
+	if isinstance(obj, str)|isinstance(obj, unicode):
 		return False
 	else:
 		try:

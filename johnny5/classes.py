@@ -2,10 +2,7 @@ try:
 	xrange
 except NameError:
 	xrange = range
-try:
-	import future
-except:
-	pass
+
 import json,os,operator,copy,mwparserfromhell,datetime as dt,codecs,re,warnings
 import nltk.data,nltk
 from nltk.stem import WordNetLemmatizer
@@ -28,10 +25,6 @@ from .query import wd_q,wp_q,_string,_isnum,_rget,get_soup
 from .parse_functions import drop_comments,find_nth,parse_date,get_links,correct_titles,parse_ints,parse_p
 from collections import defaultdict
 from numpy import mean
-import six
-
-
-
 
 class article(object):
 	"""

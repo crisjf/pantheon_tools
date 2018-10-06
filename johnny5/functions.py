@@ -2,11 +2,7 @@ try:
 	xrange
 except NameError:
 	xrange = range
-try:
-	import future
-except:
-	pass
-import six
+
 import os,time,codecs,datetime as dt
 from .parse_functions import drop_comments
 from pandas import DataFrame

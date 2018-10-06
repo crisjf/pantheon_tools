@@ -2,10 +2,7 @@ try:
     xrange
 except NameError:
     xrange = range
-try:
-    import future
-except:
-    pass
+    
 import mwparserfromhell,re
 
 def drop_comments(value):
