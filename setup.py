@@ -15,7 +15,7 @@ install_requires = ['requests==2.18.4',
 
 setuptools.setup(
 	name='johnny5',
-	version = '0.0.4',
+	version = '0.0.5',
 	author = "Cristian Jara-Figueroa",
     author_email = "crisjf@mit.edu",
     description = "Tools for getting data on historical characters from Wikipedia and Wikidata.",
@@ -37,4 +37,4 @@ setuptools.setup(
 #> twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 # To install from pypi:
-#> pip install --index-url https://test.pypi.org/simple/ johnny5==0.0.4
+#> pip install --index-url https://test.pypi.org/simple/ johnny5==0.0.5
