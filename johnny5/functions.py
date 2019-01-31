@@ -143,86 +143,7 @@ def _dms2dd(lat):
         dd *=-1
     return dd
 
-def check_wddump():
-	'''
-	Used to check whether the Wikidata dump found on file is up to date.
-	
-	Returns
-	-------
-	status : boolean
-		True if it is necessary to update
-	'''
-	url,top_date = latest_wddump()
-	path = _dumps_path()
-	files = os.listdir(path)
-	filename = [f for f in files if 'wikidata-statements' in f]
-	if len(filename) == 0:
-		raise 'No dump found, please run:\n\t>>> download_latest()'
-		return True
-	else:
-		filename=filename[0]
-	if filename.split('-')[-1].split('.')[0] == top_date:
-		print('Wikidata dump is up to date')
-		return False
-	else:
-		print('Wikidata dump is outdated, please update\n:>>> download_latest()')
-		return True
 
-def _path(path):
-	path_os = path[:]
-	for c in [' ','(',')']:
-		path_os = path_os.replace(c,'\\'+c)
-	return path_os
-
-def latest_wddump():
-	'''Gets the name latest Wikidata RDF dump.'''
-	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports.html'
-	conn = urllib2.urlopen(url)
-	html = conn.read()
-	soup = BeautifulSoup(html, "html.parser")
-	for tag in soup.find_all('a'):
-		link = tag.get('href',None)
-		if link is not None:
-			if link.split('/')[0] == 'exports':
-				top_date = link.split('/')[1]
-				break
-	url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports/'+top_date+'/wikidata-statements.nt.gz'
-	return url,top_date
-
-def download_latest():
-	'''
-	Downloads the latest Wikidata RDF dump.
-	
-	If the dump is updated, it will delete all the instances files.
-	'''
-	url,top_date = latest_wddump()
-	print("Downloading file from:",url)
-	filename = url.split('/')[-1]
-	filename = filename.split('.')[0]+'-'+top_date+'.nt.gz'
-	path = _dumps_path()
-
-	drop_instances=False
-	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
-		print("Saving file into",path+filename)
-		urlretrieve(url, path+filename)
-	else:
-		print("Download aborted, file already exists")
-
-	if filename in set(os.listdir(path)):
-		print("Unzipping file")
-		path_os = _path(path)
-		os.system('gunzip '+path_os+filename)
-		drop_instances=True
-
-	remove = [f for f in os.listdir(path) if ('wikidata-statements' in f)&(f != filename.replace('.gz',''))]
-	if (len(remove) != 0)|drop_instances:
-		print('Cleaning up')
-	for f in remove:
-		os.remove(path+f)
-	if drop_instances:
-		remove = os.listdir(path+'instances/')
-		for f in remove:
-			os.remove(path+'instances/'+f)
 
 def wd_instances(cl,include_subclasses=False,return_subclasses=False):
 	'''
@@ -396,6 +317,124 @@ def all_wikipages(update=False):
 	titles.discard('')
 	return titles
 
+
+
+def _dumps_path():
+	'''Returns the path where the dumps are stored.'''
+	path = os.path.split(__file__)[0]+'/data/'
+	files = os.listdir(path)
+	if 'dumps.txt' in files:
+		path = open(path+'dumps.txt').read().split('\n')[0]
+	return path
+
+def _set_new_dumps_path(new_path):
+	'''Modifies the dump'''
+	old_path  = _dumps_path()
+	data_path = os.path.split(__file__)[0]+'/data/'
+	if new_path=='default':
+		new_path = data_path
+	else:
+		new_path = os.path.abspath(new_path)+'/'
+	if old_path!=new_path:
+		if os.path.exists(new_path):
+			_move_dumps(old_path,new_path)
+			if new_path==data_path:
+				os.remove(data_path+'dumps.txt')
+			else:
+				f = open(data_path+'dumps.txt',mode='w')
+				f.write(new_path)
+				f.close()
+			print('Dumps path changed from:\n'+old_path+'\nto:\n'+new_path)
+		else:
+			raise NameError('Directory not found:\n'+new_path)
+	else:
+		print('Dumps path not changed.')
+
+
+
+def dumps_path(new_path=None):
+	'''
+	Handle the path to the Wikipedia and Wikidata dumps.
+	If new_path is provided, it will set the new path.
+
+	Parameters
+	----------
+	new_path : str (optional)
+		If provided it will set the dumps path to this path.
+		Path where to store the Wikipedia and Wikidata dumps.
+		(Must be full not relative path)
+		To reset the default path pass new_path='default'
+
+	Returns
+	-------
+	path : str
+		Current path to dumps
+	'''
+	if new_path is not None:
+		_set_new_dumps_path(new_path)
+		return _dumps_path()
+
+
+def _move_dumps(old_path,new_path):
+	'''Moves Wikipedia and Wikidata dumps to a new location.'''
+	wikipedia_dump = _dump_filename('wp')
+	wikidata_dump  = _dump_filename('wd')
+	if wikipedia_dump in os.listdir(old_path):
+		os.rename(old_path+wikipedia_dump, new_path+wikipedia_dump)
+	if (wikidata_dump in os.listdir(old_path))&(wikidata_dump is not None):
+		os.rename(old_path+wikidata_dump,  new_path+wikidata_dump)
+
+
+def _dump_filename(wiki):
+	'''Gets the name of the filename of the given wiki'''
+	path = _dumps_path()
+	if wiki=='wd':
+		files = os.listdir(path)
+		filename = [f for f in files if 'wikidata-statements' in f]
+		print len(filename)
+		print filename
+		if len(filename) == 1:
+			filename=filename[0]
+			return filename
+		elif len(filename)>1:
+			pass 
+			# Handle multiple wikidata dumps
+		else:
+			#Handle missing wikidata dump
+			pass
+	elif wiki=='wp':
+		return 'enwiki-latest-abstract.xml'
+	else:
+		raise NameError('Unknown Wiki referenced')
+
+
+
+def latest_wddump():
+	'''Gets the name latest Wikidata RDF dump.'''
+	# url = 'http://tools.wmflabs.org/wikidata-exports/rdf/exports.html'
+	# url = 'https://dumps.wikimedia.org/other/wikidata/'
+	url = 'https://dumps.wikimedia.org/wikidatawiki/entities/'
+	conn = urllib2.urlopen(url)
+	html = conn.read()
+	soup = BeautifulSoup(html, "html.parser")
+
+	for line in str(soup.find('pre')).split('\n'):
+		link = BeautifulSoup(line, "html.parser").find('a').get('href',None)
+		if link=='latest-all.nt.gz':
+			for d in line.split(' '):
+				if d!='':
+					try:
+						link_date = dt.datetime.strptime(d,'%d-%b-%Y')
+						break
+					except:
+						pass
+			break
+	latest_dump_date = link_date
+	latest_dump_url  = url+link
+	return latest_dump_url,latest_dump_date
+
+
+
 def check_wpdump():
 	'''
 	Used to check the current status of the WikiData Dump.
@@ -407,43 +446,75 @@ def check_wpdump():
 	print('\t'+dt.split(' ')[1]+' '+dt.split(' ')[3]+' '+dt.split(' ')[-1])
 	print('To update run:\n\t>>> all_wikipages(update=True)')
 
-def dumps_path(new_path=None):
-    '''
-    Handle the path to the Wikipedia and Wikidata dumps.
-    If new_path is provided, it will set the new path.
-    (Does not return the path to the dumps)
 
-    Parameters
-    ----------
-    new_path : str (optional)
-    	If provided it will set the dumps path to this path.
-    	Path where to store the Wikipedia and Wikidata dumps.
-    	(Must be full path)
-    '''
-    data_path = os.path.split(__file__)[0]+'/data/'
-    if new_path is not None:
-	    new_path = new_path if new_path[-1]=='/' else new_path + '/'
-    if 'dumps.txt' in os.listdir(data_path):
-        f = open(data_path+'dumps.txt')
-        current_path = f.read().split('\n')[0]
-        f.close()
-        print('Current path to dumps set to '+current_path)
-    else:
-        print('Current path to dumps set to '+data_path)
-    if new_path is not None:
-        try:
-            os.listdir(new_path)
-            f = open(data_path+'dumps.txt',mode='w')
-            f.write(new_path)
-            f.close()
-            print('New dumps path set to '+data_path)
-        except:
-            raise NameError('Directory not found: '+new_path)
 
-def _dumps_path():
-	'''Returns the path where to store the dumps.'''
-	path = os.path.split(__file__)[0]+'/data/'
+def check_wddump():
+	'''
+	Used to check whether the Wikidata dump found on file is up to date.
+	
+	Returns
+	-------
+	status : boolean
+		True if it is necessary to update
+	'''
+	url,top_date = latest_wddump()
+	path = _dumps_path()
 	files = os.listdir(path)
-	if 'dumps.txt' in files:
-		path = open(path+'dumps.txt').read().split('\n')[0]
-	return path
+	filename = [f for f in files if 'wikidata-statements' in f]
+	if len(filename) == 0:
+		return True # No dump found
+	else:
+		filename=filename[0]
+	if filename.split('_')[-1].split('.')[0] == str(top_date).split(' ')[0]:
+		return False #Dump is ip to date
+	else:
+		return True #Dump is outdated
+
+def _path(path):
+	path_os = path[:]
+	for c in [' ','(',')']:
+		path_os = path_os.replace(c,'\\'+c)
+	return path_os
+
+
+
+def download_latest():
+	'''
+	Downloads the latest Wikidata RDF dump.
+	
+	If the dump is updated, it will delete all the instances files.
+	'''
+	url,top_date = latest_wddump()
+	filename = url.split('/')[-1].split('.')[0]+'_'+str(top_date).split(' ')[0]+'.nt.gz'
+	path = _dumps_path()
+
+	drop_instances=False
+	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
+		print("Downloading file from:",url)
+		print("Saving file into",path+filename)
+		urlretrieve(url, path+filename)
+	else:
+		print("No update needed.")
+
+	if (filename in set(os.listdir(path)))&(filename.replace('.gz','') not in set(os.listdir(path))):
+		print("Unzipping file")
+		path_os = _path(path)
+		os.system('gunzip '+path_os+filename)
+		drop_instances=True
+
+	remove = [f for f in os.listdir(path) if ('latest-all' in f)&(f != filename.replace('.gz',''))]
+	if (len(remove) != 0)|drop_instances:
+		print('Cleaning up')
+	for f in remove:
+		os.remove(path+f)
+	if drop_instances:
+		remove = os.listdir(path+'instances/')
+		for f in remove:
+			os.remove(path+'instances/'+f)
+		remove = os.listdir(path+'subclasses/')
+		for f in remove:
+			os.remove(path+'subclasses/'+f)
+
+
+
+
