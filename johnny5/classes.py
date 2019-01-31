@@ -1317,6 +1317,22 @@ class biography(article):
 		sentence = re.sub(r' +',' ',sentence)
 		return sentence
 
+	def gender(self):
+		'''Gets the Gender of the biography'''
+		genders = self.wd_prop('P21')
+		if len(genders)>0:
+			gender_wdid = self.wd_prop('P21')[0]['id']
+			return article(gender_wdid).data_wd()['labels']['en']['value']
+		else:
+			return None
+
+	def twitter_handle(self):
+		twitter = self.wd_prop('P2002')
+		if len(twitter)>0:
+			return twitter[0]['value']
+		else:
+			return None
+
 	def is_bio(self):
 		'''
 		Classifier for biographies
@@ -1437,12 +1453,22 @@ class biography(article):
 				t = 'wd'
 				d = self.wd_prop('P569')[0]['time']
 				if d != 'NA':
-					d = d.split('T')[0][1:].split('-')
+					if d[0]=='-':
+						d = list(d.split('T')[0][1:].split('-'))
+						d[0] = '-'+d[0]
+						d = tuple(d)
+					else:
+						d = d.split('T')[0][1:].split('-')
 			if d[0] == 'NA':
 				t = 'wd' if t =='NA' else t
 				d = self.wd_prop('P569')[0]['time']
 				if d != 'NA':
-					d = d.split('T')[0][1:].split('-')
+					if d[0]=='-':
+						d = list(d.split('T')[0][1:].split('-'))
+						d[0] = '-'+d[0]
+						d = tuple(d)
+					else:
+						d = d.split('T')[0][1:].split('-')
 			self._birth_date = (d,t)
 		d,t = self._birth_date
 		if raw:
@@ -1483,12 +1509,22 @@ class biography(article):
 				t = 'wd'
 				d = self.wd_prop('P570')[0]['time']
 				if d != 'NA':
-					d = d.split('T')[0][1:].split('-')
+					if d[0]=='-':
+						d = list(d.split('T')[0][1:].split('-'))
+						d[0] = '-'+d[0]
+						d = tuple(d)
+					else:
+						d = d.split('T')[0][1:].split('-')
 			if d[0] == 'NA':
 				t = 'wd' if t =='NA' else t
 				d = self.wd_prop('P570')[0]['time']
 				if d != 'NA':
-					d = d.split('T')[0][1:].split('-')
+					if d[0]=='-':
+						d = list(d.split('T')[0][1:].split('-'))
+						d[0] = '-'+d[0]
+						d = tuple(d)
+					else:
+						d = d.split('T')[0][1:].split('-')
 			self._death_date = (d,t)
 		d,t = self._death_date
 		if raw:
