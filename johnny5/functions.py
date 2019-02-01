@@ -257,7 +257,7 @@ def _wd_instances(cl):
 	files = os.listdir(path)
 	instances = os.listdir(path+'instances/')
 	if cl+'.nt' not in instances:
-		filename = [f for f in files if 'wikidata-statements' in f]
+		filename = [f for f in files if 'latest-all' in f]
 		if len(filename) == 0:
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
@@ -277,7 +277,7 @@ def _wd_subclasses(cl):
 	files = os.listdir(path)
 	subclasses = os.listdir(path+'subclasses/')
 	if cl+'.nt' not in subclasses:
-		filename = [f for f in files if 'wikidata-statements' in f]
+		filename = [f for f in files if 'latest-all' in f]
 		if len(filename) == 0:
 			raise NameError('No dump found, please run:\n\t>>> download_latest()')
 		else:
@@ -390,7 +390,7 @@ def _dump_filename(wiki):
 	path = _dumps_path()
 	if wiki=='wd':
 		files = os.listdir(path)
-		filename = [f for f in files if 'wikidata-statements' in f]
+		filename = [f for f in files if 'latest-all' in f]
 		print len(filename)
 		print filename
 		if len(filename) == 1:
@@ -460,7 +460,7 @@ def check_wddump():
 	url,top_date = latest_wddump()
 	path = _dumps_path()
 	files = os.listdir(path)
-	filename = [f for f in files if 'wikidata-statements' in f]
+	filename = [f for f in files if 'latest-all' in f]
 	if len(filename) == 0:
 		return True # No dump found
 	else:
@@ -502,12 +502,13 @@ def download_latest():
 		os.system('gunzip '+path_os+filename)
 		drop_instances=True
 
-	remove = [f for f in os.listdir(path) if ('latest-all' in f)&(f != filename.replace('.gz',''))]
-	if (len(remove) != 0)|drop_instances:
+	remove = [f for f in os.listdir(path) if ('latest-all' in f)&(f != filename.replace('.gz',''))&(f != filename)]
+	if (len(remove) != 0)&drop_instances:
 		print('Cleaning up')
 	for f in remove:
 		os.remove(path+f)
 	if drop_instances:
+		# os.remove(path+filename)
 		remove = os.listdir(path+'instances/')
 		for f in remove:
 			os.remove(path+'instances/'+f)
