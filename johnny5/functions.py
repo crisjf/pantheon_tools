@@ -492,14 +492,15 @@ def download_latest():
 	if (filename.replace('.gz','') not in set(os.listdir(path)))&(filename not in set(os.listdir(path))):
 		print("Downloading file from:",url)
 		print("Saving file into",path+filename)
-		urlretrieve(url, path+filename)
+		# urlretrieve(url, path+filename)
 	else:
 		print("No update needed.")
 
 	if (filename in set(os.listdir(path)))&(filename.replace('.gz','') not in set(os.listdir(path))):
 		print("Unzipping file")
 		path_os = _path(path)
-		os.system('gunzip '+path_os+filename)
+		print 'gunzip '+path_os+filename
+		# os.system('gunzip '+path_os+filename)
 		drop_instances=True
 
 	remove = [f for f in os.listdir(path) if ('latest-all' in f)&(f != filename.replace('.gz',''))&(f != filename)]
@@ -511,10 +512,12 @@ def download_latest():
 		# os.remove(path+filename)
 		remove = os.listdir(path+'instances/')
 		for f in remove:
-			os.remove(path+'instances/'+f)
+			print 'Remove',path+'instances/'+f
+			# os.remove(path+'instances/'+f)
 		remove = os.listdir(path+'subclasses/')
 		for f in remove:
-			os.remove(path+'subclasses/'+f)
+			print 'Remove',path+'subclasses/'+f
+			# os.remove(path+'subclasses/'+f)
 
 
 
