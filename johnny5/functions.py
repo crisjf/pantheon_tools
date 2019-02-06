@@ -264,6 +264,7 @@ def _wd_instances(cl):
 			filename=filename[0]
 		_wd_clear()
 		print('Parsing the dump ',filename)
+		print "grep 'P31[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'instances/'+cl+"_temp.nt"
 		os.system("grep 'P31[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'instances/'+cl+"_temp.nt")
 		os.system("mv "+path_os+'instances/'+cl+"_temp.nt "+path_os+'instances/'+cl+".nt")
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
@@ -284,6 +285,7 @@ def _wd_subclasses(cl):
 			filename=filename[0]
 		_wd_clear()
 		print('Parsing the dump ',filename)
+		print "grep 'P279[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+"_temp.nt"
 		os.system("grep 'P279[^\.]>.*"+cl+">' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+"_temp.nt")
 		os.system("mv "+path_os+'subclasses/'+cl+"_temp.nt "+path_os+'subclasses/'+cl+".nt")
 	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
