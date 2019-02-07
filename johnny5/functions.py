@@ -268,7 +268,7 @@ def _wd_instances(cl):
 		os.system("grep '<[^>]*P31>.*<[^>]*"+cl+"> \.' "+path_os+filename+"  > "+path_os+'instances/'+cl+"_temp.nt")
 		os.system("mv "+path_os+'instances/'+cl+"_temp.nt "+path_os+'instances/'+cl+".nt")
 	lines = open(path+'instances/'+cl+".nt").read().split('\n')
-	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
+	instances = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0].split('-')[0] for line in lines if line != ''])
 	return instances
 
 def _wd_subclasses(cl):
@@ -289,7 +289,7 @@ def _wd_subclasses(cl):
 		os.system("grep '<[^>]*P279>.*<[^>]*"+cl+"> \.' "+path_os+filename+"  > "+path_os+'subclasses/'+cl+"_temp.nt")
 		os.system("mv "+path_os+'subclasses/'+cl+"_temp.nt "+path_os+'subclasses/'+cl+".nt")
 	lines = open(path+'subclasses/'+cl+".nt").read().split('\n')
-	subclasses = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0] for line in lines if line != ''])
+	subclasses = set([line.split(' ')[0].split('/')[-1].split('>')[0].split('S')[0].split('-')[0] for line in lines if line != ''])
 	return subclasses
 
 def all_wikipages(update=False):
