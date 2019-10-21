@@ -8,7 +8,7 @@ install_requires = ['requests==2.18.4',
                     'pandas==0.22.0',
                     'joblib==0.11',
                     'beautifulsoup4==4.6.0',
-                    'nltk==3.2.5',
+                    'nltk==3.4.5',
                     'python-dateutil==2.6.1',
                     'spotipy==2.4.4',
                     'urllib3==1.22']
