@@ -3,7 +3,7 @@ import setuptools
 with open ('README.md','r') as fh:
     long_description = fh.read()
 
-install_requires = ['requests==2.18.4',
+install_requires = ['requests==2.20.0',
                     'mwparserfromhell==0.5',
                     'pandas==0.22.0',
                     'joblib==0.11',
