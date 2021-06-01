@@ -11,7 +11,7 @@ install_requires = ['requests==2.18.4',
                     'nltk==3.4.5',
                     'python-dateutil==2.6.1',
                     'spotipy==2.4.4',
-                    'urllib3==1.22']
+                    'urllib3==1.26.5']
 
 setuptools.setup(
 	name='johnny5',
